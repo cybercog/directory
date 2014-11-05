@@ -1,0 +1,246 @@
+/*----------------------------------------------------------------------------*/
+/*modal-table*/
+.directory-modal-table {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    border-spacing: 0px;
+}
+
+.directory-modal-table tr {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+.directory-modal-table tr td {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+body.directory-layout {
+    padding: 0px !important;
+    margin: 0px !important;
+    background-color: white !important;
+}
+
+.directory-stretch-bar {
+    width: 100%;
+}
+
+.directory-min-width {
+    width: 1px;
+}
+
+.directory-button-block {
+    border-radius: 5px;
+    padding: 5px;
+    border-color: blue;
+    border-style: dotted;
+    border-width: 1px;
+    color: black;
+    cursor: pointer;
+}
+
+.directory-button-block:hover {
+    background-color: blue;
+    border-style: solid;
+    color: white;
+}
+
+.directory-footer {
+    background-color: #f5f5f5;
+    border-radius: 10px 10px 0px 0px;
+    margin: 0px 100px;
+    border-color: #ddd;
+    border-width: 2px;
+    border-bottom-width: 0px;
+    border-style: solid;
+}
+
+.directory-footer div {
+    padding: 10px 50px;
+    height: 50px;
+}
+
+.directory-float-left { float: left; }
+.directory-float-right { float: right; }
+
+.directory-all-content-wrap {
+    min-height: 100%;
+    margin: 0px 0px -52px;
+    padding: 0px 0px 52px;
+    height: auto;
+}
+
+.directory-my-name-class {
+    font-size: 1.3em;
+    color: red;
+    font-weight: bold;
+    font-style: oblique;
+}
+
+.directory-content {
+    padding: 15px 60px;
+}
+
+.directory-nav-panel {
+    background-color: #4B4A45;
+    padding: 10px 15px;
+    padding-bottom: 0px;
+    font-size: 1em;
+}
+
+.directory-nav-panel-item {
+    padding: 0px;
+    margin: 4px;
+}
+
+.directory-nav-panel-item-button {
+    color: #a3a2a2;
+    border-bottom-color: #a3a2a2;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    cursor: pointer;
+}
+
+.directory-nav-panel-item-button:hover {
+    color: white;
+    border-bottom-color: white;
+}
+
+.directory-nav-panel-item-button a {
+    text-decoration: none !important;
+    color: #a3a2a2 !important;
+}
+
+.directory-nav-panel-item-button a:hover {
+    color: white !important;
+}
+
+.directory-nav-panel-item-button-selected {
+    color: blue;
+    font-weight: bold;
+}
+
+.directory-edit-panel {
+    padding: 5px 12px;
+    padding-bottom: 0px;
+    background: #9f9f9f;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.directory-edit-panel-item {
+    padding: 0px;
+    margin: 4px;
+}
+
+.directory-edit-panel-item-button {
+    color: #e4e4e4;
+    border-bottom-color: #e4e4e4;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    cursor: pointer;
+}
+
+.directory-edit-panel-item-button:hover {
+    border-bottom-color: white;
+    color: white;
+}
+
+.directory-edit-panel-item-button a {
+    text-decoration: none !important;
+    color: #e4e4e4 !important;
+}
+
+.directory-edit-panel-item-button a:hover {
+    color: white !important;
+}
+
+.directory-panel-item-cell-selected {
+    background-color: white;
+}
+
+
+h1.directory-h1 {
+    font-weight: bold;
+    font-size: 2em;
+    margin: 0.5em;
+    margin-left: 1em;
+}
+
+.directory-h1-wrap {
+    border-bottom-color: silver;
+    border-bottom-width: 1px;
+    border-bottom-style: double;
+}
+
+.directory-buttons-panel-padding-wrap {
+    padding: 10px 0px;
+}
+
+.directory-dialog-client-area-width {
+    max-width: 400px;
+    min-width: 400px;
+}
+
+.directory-hide-element {
+    display: none;
+}
+
+.directory-table-label {
+    vertical-align: top;
+    text-align: right;
+}
+
+.directory-table-label .directory-right-padding {
+    padding-right: 10px;
+}
+
+.directory-form-label-right-padding:after {
+    content: ":";
+}
+
+.directory-form-item-bottom-padding {
+    padding-bottom: 7px;
+}
+
+.directory-tooltip-message {
+    font-size: 0.7em;
+    color: silver;
+}
+
+.directory-table tr:hover {
+    background-color: #f6f6f6;
+}
+
+.directory-required-input {
+    color: red !important;
+}
+
+.directory-image-right-margin {
+    margin-right: 10px;
+}
+
+.directory-image-item-background {
+    padding: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.directory-image-item-background:hover {
+    background-color: #1ba6ff;
+}
+
+select.directory-grid-filter-control, input.directory-grid-filter-control {
+    height: 27px;
+}
+
+.directory-grid-filter-control {
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    padding: 2px;
+}

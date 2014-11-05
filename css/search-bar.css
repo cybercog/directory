@@ -1,0 +1,28 @@
+.directory-search-input {
+    position: relative;
+}
+
+.directory-search-input input {
+    font-size: 27px;
+    border-radius: 6px;
+    padding: 5px;
+    padding-right: 42px;
+    padding-left: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc;
+    height: 44px;
+}
+
+.directory-search-input div {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+}
+
+.directory-search-params-border {
+    padding: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
