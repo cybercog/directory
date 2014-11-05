@@ -6,6 +6,7 @@ use yii\base\Model;
 
 abstract class FilterModelBase extends Model {
     protected $_dataProvider;
+    public $pagination = 20;
 
     abstract public function search();
 

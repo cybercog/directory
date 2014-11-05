@@ -22,7 +22,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-types-h1-icon {
-        background: url(<?= directoryModule::getImagePath().'/types32.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/types32.png'); ?>) no-repeat;
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -130,7 +130,7 @@ Dialog::begin([
     <div>
         <span id="waitDlgQueryDataType" class="directory-hide-element">
             <nobr>
-                <img src="<?= directoryModule::getImagePath().'/wait.gif'?>">
+                <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
                 <span><?= directoryModule::t('search', 'processing request')?></span>
             </nobr>
         </span>
@@ -148,7 +148,7 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#createNewType").click(
+    $("#createNewType").button().click(
             function()  {
                 $("#type-data-form").trigger('reset');
                 $("#editDialog").
@@ -243,18 +243,18 @@ Dialog::begin([
     <tr>
         <td class="directory-min-width">
             <div class="directory-buttons-panel-padding-wrap">
-                <div class="directory-button-block" id="createNewType" title="<?= directoryModule::t('edit', 'Create new type')?>...">
+                <button id="createNewType" title="<?= directoryModule::t('edit', 'Create new type')?>...">
                     <nobr>
                         <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Create new type')?>...</span>
                     </nobr>
-                </div>
+                </button>
             </div>
         </td>
         <td>&nbsp;</td>
         <td class="directory-min-width">
             <span id="waitQueryDataType" class="directory-hide-element">
                 <nobr>
-                    <img src="<?= directoryModule::getImagePath().'/../../img/wait.gif'?>">
+                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
                     <span><?= directoryModule::t('search', 'processing request')?></span>
                 </nobr>
             </span>

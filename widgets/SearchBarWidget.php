@@ -16,7 +16,7 @@ class SearchBarWidget extends Widget {
         $this->getView()->registerCssFile(
                     isset($this->css) ? 
                         $this->css : 
-                        directoryModule::getCSSPath().'/search-bar.css');    
+                        directoryModule::getPublishPath('/css/search-bar.css'));    
     }
     
     public function run() {

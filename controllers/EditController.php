@@ -88,7 +88,10 @@ class EditController extends Controller {
     }
     
     public function actionData(){
-        return $this->render('data', ['formModel' => new DataForm]);
+        $typesData = new \app\modules\directory\models\search\TypesSearch();
+        $typesData->pagination = 10;
+        
+        return $this->render('data', ['formModel' => new DataForm, 'typesDataModel' => $typesData]);
     }
     
     public function actionRecords(){

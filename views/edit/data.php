@@ -22,7 +22,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-data-h1-icon {
-        background: url(<?= directoryModule::getImagePath().'/data32.png' ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/data32.png') ?>) no-repeat;
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -66,18 +66,26 @@ Dialog::begin([
                 </td>
                 <td>
                     <div class="directory-form-item-bottom-padding">
-                    <?= Html::activeDropDownList($formModel, 'typeId', 
-                                                ['gjjjg'=> 'frefger'], 
-                                                ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
+                        <table class="directory-modal-table directory-stretch-bar directory-table">
+                            <tr>
+                                <td><?= Html::activeInput('text', $formModel, 'typeId', 
+                                                            ['class' => 'directory-stretch-bar directory-grid-filter-control', 'readonly' => 'readonly']) ; ?></td>
+                                <td>&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <button id="selectDataTypeButton">
+                                        <nobr>...</nobr>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
                         <span id="waitDlgQueryDataTypeList" class="directory-hide-element">
                             <nobr>
-                                <img src="<?= directoryModule::getImagePath().'/wait.gif'?>">
+                                <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
                                 <span><?= directoryModule::t('search', 'processing request')?></span>
                             </nobr>
                         </span>
                         <div id="errorQueryDataTypeList" class="directory-error-msg directory-hide-element"></div>
                         <div id="okQueryDataTypeList" class="directory-ok-msg directory-hide-element"></div>
-                        <?= CoolComboBoxWidget::widget([])?>
                     </div>
                 </td>
             </tr>
@@ -91,7 +99,7 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#addDataItem").click(
+    $("#addDataItem").button().click(
             function() {
                 $("#edit-data-form").trigger('reset');
                 $("#editDataDialog").
@@ -132,6 +140,10 @@ Dialog::begin([
                                         }).
                         dialog("open");
             });
+            
+            $("#selectDataTypeButton").button().click(function(eventObject) {
+                eventObject.preventDefault();
+            });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 
@@ -139,18 +151,18 @@ Dialog::begin([
     <tr>
         <td class="directory-min-width">
             <div class="directory-buttons-panel-padding-wrap">
-                <div class="directory-button-block" id="addDataItem" title="<?= directoryModule::t('edit', 'Add data item')?>...">
+                <button id="addDataItem" title="<?= directoryModule::t('edit', 'Add data item')?>...">
                     <nobr>
                         <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Add data item')?>...</span>
                     </nobr>
-                </div>
+                </button>
             </div>
         </td>
         <td>&nbsp;</td>
         <td class="directory-min-width">
             <span id="waitQueryData" class="directory-hide-element">
                 <nobr>
-                    <img src="<?= directoryModule::getImagePath().'/wait.gif'?>">
+                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
                     <span><?= directoryModule::t('search', 'processing request')?></span>
                 </nobr>
             </span>

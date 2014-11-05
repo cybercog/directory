@@ -4,12 +4,12 @@
 
     .directory-error-msg {
         color: red !important;
-        background: url(<?= directoryModule::getImagePath().'/error.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/error.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     .directory-ok-msg {
         color: green !important;
-        background: url(<?= directoryModule::getImagePath().'/ok.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/ok.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     

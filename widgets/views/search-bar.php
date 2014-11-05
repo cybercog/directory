@@ -15,7 +15,7 @@ use app\modules\directory\directoryModule;
 
     <?php if(false) { ?><style><?php } ob_start(); ?>
         .directory-search-bar-ext-search-button {
-            background: url(<?= directoryModule::getImagePath().'/ext-search.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/ext-search.png'); ?>) no-repeat;
             padding-left: 20px;
         }
     <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -27,7 +27,7 @@ use app\modules\directory\directoryModule;
             <div class="directory-search-input">
                 <?= Html::activeInput('text', $model, 'query', ['class'=>'directory-stretch-bar']) ; ?>
                 <div>
-                    <img src="<?= directoryModule::getImagePath().'/search-icon.png'; ?>">
+                    <img src="<?= directoryModule::getPublishPath('/img/search-icon.png'); ?>">
                 </div>
             </div>
         </td>

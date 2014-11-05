@@ -27,7 +27,7 @@ class TypesSearch extends FilterModelBase {
 
         $this->_dataProvider = new \yii\data\ActiveDataProvider([
                     'query' => $query, 
-                    'pagination' => ['pageSize' => 20]]);
+                    'pagination' => ['pageSize' => $this->pagination]]);
                 
         return $this->_dataProvider;
     }

@@ -6,11 +6,11 @@ use app\modules\directory\helpers\typesViewHelper;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 10000, 'id' => 'typesGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => 10000, 'id' => 'typesCompactGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
-                'dataProvider' => $dataModel->search(),
-                'filterModel' => $dataModel,
+                'dataProvider' => $typesDataModel->search(),
+                'filterModel' => $typesDataModel,
                 'columns' => [
                     [
                         'class' => 'yii\grid\DataColumn',
@@ -48,31 +48,6 @@ use app\modules\directory\helpers\typesViewHelper;
                             return typesViewHelper::getTextString($data['description']);
                         }
                     ],
-                    [
-                        'class' => 'yii\grid\DataColumn',
-                        'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
-                        'format' => 'raw',
-                        'attribute' => 'validate',
-                        'label' => directoryModule::t('edit', 'Validate'),
-                        'value' => function($data) {
-                            return typesViewHelper::getTextString($data['validate']);
-                        }
-                    ],
-                    [
-                        'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
-                        'format' => 'raw',
-                        'value' => function($data) {
-                            return '<nobr>'
-                                    . '<img class="directory-image-right-margin directory-image-item-background directory-edit-type-button" src="'.
-                                    directoryModule::getImagePath().'/edit-item.png'.
-                                    '" title="'.directoryModule::t('edit', 'Edit data type').'" />'
-                                    . '<img class="directory-image-item-background directory-delete-type-button" src="'.
-                                    directoryModule::getImagePath().'/delete-item.png'
-                                    .'" title="'.directoryModule::t('edit', 'Delete data type').'" />'
-                                    . '</nobr>';
-                        },
-                    ]
                 ]
             ]) ?>
             <?php yii\widgets\Pjax::end(); ?>

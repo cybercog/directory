@@ -29,31 +29,31 @@ AppAsset::register($this);
 
     <?php if(false) { ?><style><?php } ob_start(); ?>
         .directory-search-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/search-button-icon.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/search-button-icon.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-types-edit-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/types16.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/types16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-data-edit-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/data16.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/data16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-record-edit-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/record16.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/record16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-directory-edit-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/directory16.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/directory16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-hierarchy-edit-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/hierarchy16.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/hierarchy16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-add-button-icon {
-            background: url(<?= directoryModule::getImagePath().'/add.png'; ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishPath('/img/add.png'); ?>) no-repeat;
             padding-left: 20px;
         }
     <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>

@@ -13,7 +13,7 @@ return [
     'Validate' => 'Проверка',
     'Description' => 'Описание',
     'Create new type' => 'Создать новый тип',
-    'Add data item' => 'Добавить эелемент',
+    'Add data item' => 'Добавить элемент',
     'Edit type' => 'Редактировать тип',
     'Close' => 'Закрыть',
     'Delete data type' => 'Удалить тип',

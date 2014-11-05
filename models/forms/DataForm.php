@@ -41,7 +41,7 @@ class DataForm extends Model {
     
     public function attributeLabels() {
         return [
-            'name' => directoryModule::t('edit', 'Name'),
+            'typeId' => directoryModule::t('edit', 'Type'),
             'type' => directoryModule::t('edit', 'Type'),
             'validate' => directoryModule::t('edit', 'Validate'),
             'description' => directoryModule::t('edit', 'Description'),

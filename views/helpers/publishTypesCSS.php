@@ -3,19 +3,19 @@
 <?php if(false) { ?><style><?php } ob_start(); ?>
 
     .directory-string-type {
-        background: url(<?= directoryModule::getImagePath().'/string16.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/string16.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     .directory-text-type {
-        background: url(<?= directoryModule::getImagePath().'/text16.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/text16.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     .directory-image-type {
-        background: url(<?= directoryModule::getImagePath().'/image16.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/image16.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     .directory-file-type {
-        background: url(<?= directoryModule::getImagePath().'/file16.png'; ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishPath('/img/file16.png'); ?>) no-repeat;
         padding-left: 20px;
     }
     

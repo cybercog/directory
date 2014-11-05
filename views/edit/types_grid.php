@@ -65,10 +65,10 @@ use app\modules\directory\helpers\typesViewHelper;
                         'value' => function($data) {
                             return '<nobr>'
                                     . '<img class="directory-image-right-margin directory-image-item-background directory-edit-type-button" src="'.
-                                    directoryModule::getImagePath().'/edit-item.png'.
+                                    directoryModule::getPublishPath('/img/edit-item.png').
                                     '" title="'.directoryModule::t('edit', 'Edit data type').'" />'
                                     . '<img class="directory-image-item-background directory-delete-type-button" src="'.
-                                    directoryModule::getImagePath().'/delete-item.png'
+                                    directoryModule::getPublishPath('/img/delete-item.png')
                                     .'" title="'.directoryModule::t('edit', 'Delete data type').'" />'
                                     . '</nobr>';
                         },

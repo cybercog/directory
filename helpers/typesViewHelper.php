@@ -22,6 +22,6 @@ class typesViewHelper {
                         substr($text, 0, 20)
                         .'...&nbsp;<img class="directory-show-full-text" title="'
                         .directoryModule::t('edit', 'Show completely').'" '
-                        . 'src="'.directoryModule::getImagePath().'/info16.png" />').'</div>';
+                        . 'src="'.directoryModule::getPublishPath('/img/info16.png').'" />').'</div>';
     }
 }

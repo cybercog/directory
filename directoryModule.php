@@ -8,29 +8,21 @@ class directoryModule extends \yii\base\Module
     
     public $showFooter = false;
     
-    private static $cssPublishPath;
-    private static $imgPublishPath;
-    
-    public static function getCSSPath() {
-        if(!isset(directoryModule::$cssPublishPath)) {
-            directoryModule::$cssPublishPath = \Yii::$app->assetManager->publish(__DIR__.'/css')[1];
-        }
-        
-        return directoryModule::$cssPublishPath;
-    }
-    public static function getImagePath() {
-        if(!isset(directoryModule::$imgPublishPath)) {
-            directoryModule::$imgPublishPath = \Yii::$app->assetManager->publish(__DIR__.'/img')[1];
-        }
-        
-        return directoryModule::$imgPublishPath;
-    }
+    private static $publishPath;
 
+    public static function getPublishPath($resId) {
+        if(!isset(directoryModule::$publishPath)) {
+            directoryModule::$publishPath = \Yii::$app->assetManager->publish(__DIR__.'/assets')[1];
+        }
+        
+        return directoryModule::$publishPath.$resId;
+    }
+    
     public function init() {
         parent::init();
         
         \Yii::$app->getView()->registerCssFile(
-                directoryModule::getCSSPath().'/directory-style.css');
+                directoryModule::getPublishPath('/css/directory-style.css'));
         
         \Yii::$app->i18n->translations['modules/directory/*'] = [
             'class'          => 'yii\i18n\PhpMessageSource',
@@ -41,6 +33,7 @@ class directoryModule extends \yii\base\Module
                 'modules/directory/edit' => 'edit.php',
             ],
         ];
+               
     }
     
     public static function t($category, $message, $params = [], $language = null) {
