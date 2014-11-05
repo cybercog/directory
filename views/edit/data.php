@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
+use app\modules\directory\widgets\CoolComboBoxWidget;
 
 
 $this->title = directoryModule::t('search', 'Directory').' - '.directoryModule::t('edit', 'Data');
@@ -76,6 +77,7 @@ Dialog::begin([
                         </span>
                         <div id="errorQueryDataTypeList" class="directory-error-msg directory-hide-element"></div>
                         <div id="okQueryDataTypeList" class="directory-ok-msg directory-hide-element"></div>
+                        <?= CoolComboBoxWidget::widget([])?>
                     </div>
                 </td>
             </tr>
@@ -95,7 +97,7 @@ Dialog::begin([
                 $("#editDataDialog").
                         dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
                         dialog({open : function(event, ui) {
-                                ajaxPostHelper({
+                                /*ajaxPostHelper({
                                     url : "<?= Url::toRoute(['/directory/edit/typeslist'])?>",
                                     data : 'query types list',
                                     waitTag : "#waitDlgQueryDataTypeList",
@@ -109,7 +111,7 @@ Dialog::begin([
                                             types_list.append('<option value="' + item.id + '">' + item.name + ' - [' + item.type + ']</option>');
                                         }
                                     }
-                                });
+                                });*/
                         }}).
                         dialog("option", "buttons", 
                                         {

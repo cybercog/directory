@@ -3,10 +3,9 @@
 namespace app\modules\directory\widgets;
 
 use yii\base\Widget;
+use app\modules\directory\directoryModule;
 
 class CoolComboBoxWidget extends Widget {
-    public $htmlOptions;
-    
     public function init() {
         parent::init();
         
@@ -17,6 +16,6 @@ class CoolComboBoxWidget extends Widget {
     }
     
     public function run() {
-        
+        return $this->render('cool-combo-box', ['cool' => $this]);
     }
 }
