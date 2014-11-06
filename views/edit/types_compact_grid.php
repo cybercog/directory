@@ -6,7 +6,7 @@ use app\modules\directory\helpers\typesViewHelper;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 10000, 'id' => 'typesCompactGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'id' => 'typesCompactGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
                 'dataProvider' => $typesDataModel->search(),

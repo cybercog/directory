@@ -187,8 +187,8 @@ Dialog::begin([
         $("#type-data-form [name='<?=Html::getInputName($formModel, 'validate')?>']").val(field.find("div.row-value").text());
         field = field.next();
         $("#type-data-form [name='<?=Html::getInputName($formModel, 'description')?>']").val(field.find("div.row-value").text());
-        $("#editDialog").data("row-id", $(this).closest("tr").find("td").first().find("div.row-id").text());
         $("#editDialog").
+                data("row-id", $(this).closest("tr").find("td").first().find("div.row-id").text()).
                 dialog("option", "title", "<?= directoryModule::t('edit', 'Edit type')?>").
                 dialog("option", "buttons", 
                                 {

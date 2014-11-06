@@ -33,19 +33,22 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#typesGridWidget tr").click(function() {
-        
+    $("#selectTypeDialog").dialog("option", "buttons", {
+            "<?= directoryModule::t('edit', 'Close')?>" : function() { 
+                $(this).dialog("close").data("resultCallback")(false); 
+            }
+    }).find("tbody tr").addClass("directory-row-selector").click(function() {
+        alert("UUU");
     });
+    
+<?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+
+<?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     function SelectDataType(resultCallback) {
         $("#selectTypeDialog").
-                dialog("option", "buttons", {
-                    "<?= directoryModule::t('edit', 'Close')?>" : function() { 
-                        $(this).dialog("close");
-                        resultCallback(false); 
-                    }
-                }).
+                data("resultCallback", resultCallback).
                 dialog("open");
     }
     
-<?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+<?php $this->registerJs(ob_get_clean(), View::POS_END); if(false) { ?></script><?php } ?>

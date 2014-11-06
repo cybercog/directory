@@ -248,3 +248,11 @@ select.directory-grid-filter-control, input.directory-grid-filter-control {
 button.directory-small-button {
     font-size: 0.6em;
 }
+
+.directory-row-selector {
+    cursor: pointer;
+}
+
+.directory-row-selector:hover td {
+    background-color: yellow !important;
+}
