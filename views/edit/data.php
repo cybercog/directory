@@ -41,6 +41,9 @@ $uid = mt_rand(0, mt_getrandmax());
     <h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::t('edit', 'Data')?></h1>
 </div>
 
+
+<?php require('select_type_dialog.php'); ?>
+
 <div class="directory-hide-element">
     
 <?php 
@@ -123,7 +126,7 @@ Dialog::begin([
                         }}).
                         dialog("option", "buttons", 
                                         {
-                                            "<?= directoryModule::t('edit', 'Add data item')?>": function() {
+                                            "<?= directoryModule::t('edit', 'Add data item')?>" : function() {
                                                 ajaxPostHelper({
                                                     url : "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>",
                                                     data : $("#edit-data-form").serialize(),
@@ -136,13 +139,18 @@ Dialog::begin([
                                                     }
                                                 });
                                             },
-                                            "<?= directoryModule::t('edit', 'Close')?>": function() { $(this).dialog("close"); }
+                                            "<?= directoryModule::t('edit', 'Close')?>" : function() { $(this).dialog("close"); }
                                         }).
                         dialog("open");
             });
             
             $("#selectDataTypeButton").button().click(function(eventObject) {
                 eventObject.preventDefault();
+                SelectDataType(function(returnType) {
+                    if(returnType === false) {
+                        alert('false');
+                    }
+                });
             });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

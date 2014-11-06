@@ -6,7 +6,7 @@ use app\modules\directory\helpers\typesViewHelper;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 10000, 'id' => 'typesGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'id' => 'typesGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
                 'dataProvider' => $dataModel->search(),
@@ -64,13 +64,13 @@ use app\modules\directory\helpers\typesViewHelper;
                         'format' => 'raw',
                         'value' => function($data) {
                             return '<nobr>'
-                                    . '<img class="directory-image-right-margin directory-image-item-background directory-edit-type-button" src="'.
+                                    . '<button class="directory-edit-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::t('edit', 'Edit data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/edit-item.png').
-                                    '" title="'.directoryModule::t('edit', 'Edit data type').'" />'
-                                    . '<img class="directory-image-item-background directory-delete-type-button" src="'.
+                                    '" /></button><button class="directory-delete-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::t('edit', 'Delete data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/delete-item.png')
-                                    .'" title="'.directoryModule::t('edit', 'Delete data type').'" />'
-                                    . '</nobr>';
+                                    .'" /></button></nobr>';
                         },
                     ]
                 ]

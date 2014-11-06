@@ -164,14 +164,18 @@ Dialog::begin([
                                                     errorWaitTimeout : 5,
                                                     onSuccess : function(dataObject) { 
                                                         $("#editDialog").dialog("close");
-                                                        $.pjax.reload('#typesGridPjaxWidget', {timeout : 10000});
+                                                        $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
                                                     }
                                                 });
                                             },
                                             "<?= directoryModule::t('edit', 'Close')?>": function() { $(this).dialog("close"); }
                                         }).
                         dialog("open");
-            });
+    }).tooltip({
+        content : function() { return $(this).attr("title"); }
+    });
+    
+    $(".directory-edit-type-button, .directory-delete-type-button").button();
             
     $("#typesGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
         $("#type-data-form").trigger('reset');
@@ -198,7 +202,7 @@ Dialog::begin([
                                             errorWaitTimeout: 5,
                                             onSuccess: function(dataObject) { 
                                                 $("#editDialog").dialog("close");
-                                                $.pjax.reload('#typesGridPjaxWidget', {timeout : 10000});
+                                                $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
                                             }
                                         });
                                     },
@@ -207,7 +211,26 @@ Dialog::begin([
                 dialog("open");
     });
     
-    $("#typesGridPjaxWidget").on("click", ".directory-delete-type-button", function() {
+    $("body").tooltip({
+        content : function() { return $(this).attr("title"); },
+        items : ".directory-edit-type-button, .directory-delete-type-button"
+    });
+    
+    $("#typesGridPjaxWidget").on("pjax:start", function() {
+        $("#waitQueryDataType").removeClass("directory-hide-element");
+    }).on("pjax:end", function() {
+        $("#waitQueryDataType").addClass("directory-hide-element");
+    }).on("pjax:error", function(eventObject) {
+        eventObject.preventDefault();
+        $("#waitQueryDataType").addClass("directory-hide-element");
+        $("#errorQueryDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::t('search', 'Error connecting to server.')?></nobr>");
+        setTimeout(function() { $("#errorQueryDataType").addClass("directory-hide-element"); }, 5000);
+    }).on("pjax:timeout", function(eventObject) {
+        eventObject.preventDefault();
+    }).tooltip({
+        content : function() { return $(this).closest("td").find(".row-value").text(); },
+        items : ".directory-show-full-text"
+    }).on("click", ".directory-delete-type-button", function() {
         var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>";
         ajaxPostHelper({
             url : url.replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),
@@ -216,25 +239,10 @@ Dialog::begin([
             errorTag: "#errorQueryDataType",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                $.pjax.reload('#typesGridPjaxWidget', {timeout : 10000});
+                $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
             }
         });
     });
-    
-    $("#typesGridPjaxWidget").tooltip({
-        content : function() { return $(this).closest("td").find(".row-value").text(); },
-        items : ".directory-show-full-text"
-        });
-
-    $("body").tooltip({
-        content : function() { return $(this).attr("title"); },
-        items : ".directory-edit-type-button, .directory-delete-type-button"
-        });
-
-    $("#createNewType").tooltip({
-        content : function() { return $(this).attr("title"); }
-        });
-    
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 

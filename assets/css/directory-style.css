@@ -245,3 +245,6 @@ select.directory-grid-filter-control, input.directory-grid-filter-control {
     padding: 2px;
 }
 
+button.directory-small-button {
+    font-size: 0.6em;
+}
