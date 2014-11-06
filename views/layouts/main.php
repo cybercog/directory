@@ -160,6 +160,9 @@ AppAsset::register($this);
             </div>
         </nav>
         <div class="directory-content">
+            <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
             <?= $content ?>
         </div>
     </div>

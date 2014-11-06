@@ -38,7 +38,13 @@ Dialog::begin([
                 $(this).dialog("close").data("resultCallback")(false); 
             }
     }).find("tbody tr").addClass("directory-row-selector").click(function() {
-        alert("UUU");
+        $("#selectTypeDialog").dialog("close").data("resultCallback")(
+                {
+                    id : $(this).find("td:first .row-id").text(),
+                    name : $(this).find("td:first .row-display").text(),
+                    type : $(this).find("td:eq(1) .row-value").text(),
+                    typeDiaplay : $(this).find("td:eq(1) .row-display").text()
+        }); 
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

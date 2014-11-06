@@ -14,6 +14,13 @@ $this->title = directoryModule::t('search', 'Directory').' - '.directoryModule::
 
 $uid = mt_rand(0, mt_getrandmax());
 
+$this->params['breadcrumbs'] = [
+        [
+            'label' => directoryModule::t('search', 'Search'),
+            'url' => Url::toRoute('/directory/search/index')
+        ],
+        directoryModule::t('edit', 'Data types')
+    ];
 ?>
 
 <?php require(__DIR__.'/../helpers/ajaxClientHelper.php');?>
@@ -26,16 +33,6 @@ $uid = mt_rand(0, mt_getrandmax());
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
-
-<?= Breadcrumbs::widget([
-                'links' => [
-                    [
-                        'label' => directoryModule::t('search', 'Search'),
-                        'url' => Url::toRoute('/directory/search/index')
-                    ],
-                    directoryModule::t('edit', 'Data types')
-                ]
-            ]) ?>
 
 <div class="directory-h1-wrap">
     <h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::t('edit', 'Data types')?></h1>
