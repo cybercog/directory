@@ -12,6 +12,9 @@ class DataForm extends Model {
     public $text;
     public $description;
     public $visible;
+    public $keywords;
+    public $file;
+    public $image;
     
     private $type_item;
     
@@ -36,15 +39,21 @@ class DataForm extends Model {
                             directoryModule::t('edit', 'The data type is set incorrectly').'.');
                 }
             }],
+            [['value'], 'required'],
+            ['value', 'string', 'min' => 3, 'max' => 255],
         ];
     }
     
     public function attributeLabels() {
         return [
             'typeId' => directoryModule::t('edit', 'Type'),
-            'type' => directoryModule::t('edit', 'Type'),
-            'validate' => directoryModule::t('edit', 'Validate'),
+            'value' => directoryModule::t('edit', 'Value'),
+            'text' => directoryModule::t('edit', 'Value'),
+            'visible' => directoryModule::t('edit', 'show'),
             'description' => directoryModule::t('edit', 'Description'),
+            'keywords' => directoryModule::t('edit', 'Keywords'),
+            'file' => directoryModule::t('edit', 'File'),
+            'image' => directoryModule::t('edit', 'Image'),
         ];
     }
 }

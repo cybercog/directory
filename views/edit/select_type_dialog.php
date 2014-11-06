@@ -57,4 +57,4 @@ Dialog::begin([
                 dialog("open");
     }
     
-<?php $this->registerJs(ob_get_clean(), View::POS_END); if(false) { ?></script><?php } ?>
+<?php $this->registerJs(ob_get_clean(), View::POS_HEAD); if(false) { ?></script><?php } ?>
