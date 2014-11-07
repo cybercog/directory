@@ -24,7 +24,20 @@ Dialog::begin([
 ]); ?>
 
 
+<div>
+    
 <?php require('types_compact_grid.php');?>
+    
+    <span id="waitDlgQueryCompactDataType" class="directory-hide-element">
+        <nobr>
+            <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+            <span><?= directoryModule::t('search', 'processing request')?></span>
+        </nobr>
+    </span>
+    <div id="errorDlgQueryCompactDataType" class="directory-error-msg directory-hide-element"></div>
+    <div id="okDlgQueryCompactDataType" class="directory-ok-msg directory-hide-element"></div>
+
+</div>
 
 
 <?php Dialog::end(); ?>
@@ -37,14 +50,6 @@ Dialog::begin([
             "<?= directoryModule::t('edit', 'Close')?>" : function() { 
                 $(this).dialog("close").data("resultCallback")(false); 
             }
-    }).find("tbody tr").addClass("directory-row-selector").click(function() {
-        $("#selectTypeDialog").dialog("close").data("resultCallback")(
-                {
-                    id : $(this).find("td:first .row-id").text(),
-                    name : $(this).find("td:first .row-display").text(),
-                    type : $(this).find("td:eq(1) .row-value").text(),
-                    typeDiaplay : $(this).find("td:eq(1) .row-display").text()
-        }); 
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
@@ -55,6 +60,7 @@ Dialog::begin([
         $("#selectTypeDialog").
                 data("resultCallback", resultCallback).
                 dialog("open");
+        $.pjax.reload("#typesCompactGridPjaxWidget", {timeout : 30000});
     }
     
 <?php $this->registerJs(ob_get_clean(), View::POS_HEAD); if(false) { ?></script><?php } ?>

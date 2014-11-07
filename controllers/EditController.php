@@ -89,7 +89,14 @@ class EditController extends Controller {
     
     public function actionData(){
         $typesData = new \app\modules\directory\models\search\TypesSearch();
-        $typesData->pagination = 10;
+        $typesData->pagination = 7;
+        
+        if(\Yii::$app->request->isPjax) {
+            switch (\Yii::$app->request->get('_pjax')) {
+                case '#typesCompactGridPjaxWidget':
+                    return $this->renderPartial('types_compact_grid', ['typesDataModel' => $typesData]);
+            }
+        }
         
         return $this->render('data', ['formModel' => new DataForm, 'typesDataModel' => $typesData]);
     }
@@ -104,23 +111,6 @@ class EditController extends Controller {
     
     public function actionHierarchies(){
         return $this->render('hierarchies');
-    }
-    
-    public function actionTypeslist() {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        
-        $typesList = [];
-        
-        try {
-            $types = Types::find()->all();
-            foreach ($types as $type) {
-                $typesList[] = ['id' => $type['id'], 'name' => $type['name'], 'type' => $type['type']];
-            }
-        } catch (Exception $ex) {
-            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
-        }
-        
-        return ajaxJSONResponseHelper::createResponse(true, 'ok', $typesList);
     }
 }
 

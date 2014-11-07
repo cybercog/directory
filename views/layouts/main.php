@@ -56,6 +56,10 @@ AppAsset::register($this);
             background: url(<?= directoryModule::getPublishPath('/img/add.png'); ?>) no-repeat;
             padding-left: 20px;
         }
+        .directory-update-button-icon {
+            background: url(<?= directoryModule::getPublishPath('/img/update.png'); ?>) no-repeat;
+            padding-left: 20px;
+        }
     <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
     
     <div class="directory-all-content-wrap">

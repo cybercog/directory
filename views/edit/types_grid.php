@@ -2,11 +2,12 @@
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\typesViewHelper;
+use yii\helpers\Url;
 
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'id' => 'typesGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
                 'dataProvider' => $dataModel->search(),
@@ -67,7 +68,7 @@ use app\modules\directory\helpers\typesViewHelper;
                                     . '<button class="directory-edit-type-button directory-small-button" '
                                     . 'title="'.directoryModule::t('edit', 'Edit data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/edit-item.png').
-                                    '" /></button><button class="directory-delete-type-button directory-small-button" '
+                                    '" /></button>&nbsp;<button class="directory-delete-type-button directory-small-button" '
                                     . 'title="'.directoryModule::t('edit', 'Delete data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/delete-item.png')
                                     .'" /></button></nobr>';

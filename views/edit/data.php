@@ -35,9 +35,7 @@ $this->params['breadcrumbs'] = [
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-<div class="directory-h1-wrap">
     <h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::t('edit', 'Data')?></h1>
-</div>
 
 
 <?php require('select_type_dialog.php'); ?>
@@ -265,7 +263,7 @@ Dialog::begin([
             
     $("#addDataItem").button().click(
             function() {
-                $("#edit-data-form").trigger('reset');
+                $("#data-edit-form").trigger('reset');
                 $("#editDataDialog").
                         dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
                         dialog({open : function(event, ui) {
@@ -326,6 +324,31 @@ Dialog::begin([
     $("#selectImageButton").button().click(function(eventObject) {
         eventObject.preventDefault();
         $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").click();
+    });
+    
+    $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
+        $("#waitDlgQueryCompactDataType").removeClass("directory-hide-element");
+    }).on("pjax:end", function() {
+        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
+        $("#typesCompactGridWidget").
+                find("tbody tr").
+                addClass("directory-row-selector").
+                click(function() {
+                    $("#selectTypeDialog").dialog("close").data("resultCallback")(
+                            {
+                                id : $(this).find("td:first .row-id").text(),
+                                name : $(this).find("td:first .row-display").text(),
+                                type : $(this).find("td:eq(1) .row-value").text(),
+                                typeDiaplay : $(this).find("td:eq(1) .row-display").text()
+                            }); 
+                });
+    }).on("pjax:error", function(eventObject) {
+        eventObject.preventDefault();
+        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
+        $("#errorDlgQueryCompactDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::t('search', 'Error connecting to server.')?></nobr>");
+        setTimeout(function() { $("#errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
+    }).on("pjax:timeout", function(eventObject) {
+        eventObject.preventDefault();
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

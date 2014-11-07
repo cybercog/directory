@@ -34,9 +34,7 @@ $this->params['breadcrumbs'] = [
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-<div class="directory-h1-wrap">
-    <h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::t('edit', 'Data types')?></h1>
-</div>
+<h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::t('edit', 'Data types')?></h1>
 
 <div class="directory-hide-element">
 
@@ -145,7 +143,7 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#createNewType").button().click(
+    $("#createNewType").button({text : false}).click(
             function()  {
                 $("#type-data-form").trigger('reset');
                 $("#editDialog").
@@ -161,7 +159,7 @@ Dialog::begin([
                                                     errorWaitTimeout : 5,
                                                     onSuccess : function(dataObject) { 
                                                         $("#editDialog").dialog("close");
-                                                        $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
+                                                        $("#updateTypesTable").click();
                                                     }
                                                 });
                                             },
@@ -172,7 +170,20 @@ Dialog::begin([
         content : function() { return $(this).attr("title"); }
     });
     
-    $(".directory-edit-type-button, .directory-delete-type-button").button();
+    $("#updateTypesTable").button({text : false}).click(
+        function() {
+            $.pjax.reload('#typesGridPjaxWidget', 
+                            {
+                                push : false,
+                                replace : false,
+                                timeout : 30000, 
+                                url : $("#typesGridWidget").yiiGridView("data").settings.filterUrl
+                            });
+    }).tooltip({
+        content : function() { return $(this).attr("title"); }
+    });
+    
+    $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
             
     $("#typesGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
         $("#type-data-form").trigger('reset');
@@ -199,7 +210,7 @@ Dialog::begin([
                                             errorWaitTimeout: 5,
                                             onSuccess: function(dataObject) { 
                                                 $("#editDialog").dialog("close");
-                                                $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
+                                                $("#updateTypesTable").click();
                                             }
                                         });
                                     },
@@ -217,6 +228,7 @@ Dialog::begin([
         $("#waitQueryDataType").removeClass("directory-hide-element");
     }).on("pjax:end", function() {
         $("#waitQueryDataType").addClass("directory-hide-element");
+        $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
     }).on("pjax:error", function(eventObject) {
         eventObject.preventDefault();
         $("#waitQueryDataType").addClass("directory-hide-element");
@@ -236,7 +248,7 @@ Dialog::begin([
             errorTag: "#errorQueryDataType",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                $.pjax.reload('#typesGridPjaxWidget', {timeout : 30000});
+                $("#updateTypesTable").click();
             }
         });
     });
@@ -247,28 +259,42 @@ Dialog::begin([
 <table class="directory-modal-table directory-stretch-bar">
     <tr>
         <td class="directory-min-width">
-            <div class="directory-buttons-panel-padding-wrap">
-                <button id="createNewType" title="<?= directoryModule::t('edit', 'Create new type')?>...">
-                    <nobr>
-                        <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Create new type')?>...</span>
-                    </nobr>
-                </button>
+            <div class="directory-buttons-panel-padding-wrap ui-widget-header ui-corner-all">
+                <table class="directory-modal-table directory-stretch-bar">
+                    <tr>
+                        <td class="directory-min-width">
+                            <button id="createNewType" title="<?= directoryModule::t('edit', 'Create new type')?>...">
+                                <nobr>
+                                    <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Create new type')?>...</span>
+                                </nobr>
+                            </button>
+                        </td>
+                        <td class="directory-min-width">&nbsp;</td>
+                        <td class="directory-min-width">
+                            <button id="updateTypesTable" title="<?= directoryModule::t('edit', 'Update table')?>">
+                                <nobr>
+                                    <span class="directory-update-button-icon"><?= directoryModule::t('edit', 'Update table')?></span>
+                                </nobr>
+                            </button>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td class="directory-min-width">
+                            <span id="waitQueryDataType" class="directory-hide-element">
+                                <nobr>
+                                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                                    <span><?= directoryModule::t('search', 'processing request')?></span>
+                                </nobr>
+                            </span>
+                            <div id="errorQueryDataType" class="directory-error-msg directory-hide-element"></div>
+                            <div id="okQueryDataType" class="directory-ok-msg directory-hide-element"></div>
+                        </td>
+                    </tr>
+                </table>
             </div>
-        </td>
-        <td>&nbsp;</td>
-        <td class="directory-min-width">
-            <span id="waitQueryDataType" class="directory-hide-element">
-                <nobr>
-                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
-                    <span><?= directoryModule::t('search', 'processing request')?></span>
-                </nobr>
-            </span>
-            <div id="errorQueryDataType" class="directory-error-msg directory-hide-element"></div>
-            <div id="okQueryDataType" class="directory-ok-msg directory-hide-element"></div>
         </td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td>
             <?php require('types_grid.php'); ?>
         </td>
     </tr>

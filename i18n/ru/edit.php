@@ -25,5 +25,6 @@ return [
     'Edit data type' => 'Редактировать тип',
     'Show completely' => 'Показать полностью',
     'Apply' => 'Применить',
+    'Update table' => 'Обновить таблицу',
     'The data type is set incorrectly' => 'Тип данных задан некорректно',
 ];

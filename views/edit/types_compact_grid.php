@@ -5,10 +5,9 @@ use app\modules\directory\helpers\typesViewHelper;
 
 ?>
 
-
-            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'id' => 'typesCompactGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesCompactGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
-                'id' => 'typesGridWidget',
+                'id' => 'typesCompactGridWidget',
                 'dataProvider' => $typesDataModel->search(),
                 'filterModel' => $typesDataModel,
                 'columns' => [
