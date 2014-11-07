@@ -88,6 +88,10 @@ class EditController extends Controller {
     }
     
     public function actionData(){
+        
+        $model = new \app\modules\directory\models\search\DataSearch();
+        $model->attributes = \Yii::$app->request->get('DataSearch');
+        
         $typesData = new \app\modules\directory\models\search\TypesSearch();
         $typesData->pagination = 7;
         
@@ -98,7 +102,7 @@ class EditController extends Controller {
             }
         }
         
-        return $this->render('data', ['formModel' => new DataForm, 'typesDataModel' => $typesData]);
+        return $this->render('data', ['formModel' => new DataForm, 'typesDataModel' => $typesData, 'dataModel' => $model]);
     }
     
     public function actionRecords(){
