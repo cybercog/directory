@@ -176,7 +176,7 @@ Dialog::begin([
                             {
                                 push : false,
                                 replace : false,
-                                timeout : 30000, 
+                                timeout : <?=$this->context->module->pjaxDefaultTimeout?>, 
                                 url : $("#typesGridWidget").yiiGridView("data").settings.filterUrl
                             });
     }).tooltip({

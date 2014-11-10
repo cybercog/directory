@@ -11,6 +11,6 @@ class Data extends ActiveRecord {
     }
     
     public function getType() {
-        return $this->hasMany(Types::className(), ['id' => 'type_id']);
+        return $this->hasOne(Types::className(), ['id' => 'type_id']);
     }
 }

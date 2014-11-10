@@ -27,4 +27,5 @@ return [
     'Apply' => 'Применить',
     'Update table' => 'Обновить таблицу',
     'The data type is set incorrectly' => 'Тип данных задан некорректно',
+    'The field <{field}> must not be empty' => 'Поле <{field}> должно быть не пустое',
 ];

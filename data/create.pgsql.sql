@@ -25,8 +25,8 @@ CREATE TABLE types_t
     id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('types_t_id_counter'),
     name VARCHAR(255) NOT NULL,
     type types_t_types NOT NULL DEFAULT 'string',
-    description text DEFAULT NULL,
-    validate text DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    validate TEXT DEFAULT NULL,
     UNIQUE (name)
 );
 -- ESQLDDLCMD
@@ -47,6 +47,18 @@ CREATE TYPE visible_type AS ENUM ('N', 'Y');
 -- ESQLDDLCMD
 
 
+-- BSQLDDLCMD
+CREATE FUNCTION check_data_input (INTEGER, VARCHAR(255), TEXT) RETURNS BOOLEAN AS $$
+BEGIN 
+    RETURN 
+        CASE 
+            WHEN (SELECT MAX(type) FROM types_t WHERE id=$1)='string' THEN $2 IS NOT NULL
+            ELSE $3 IS NOT NULL
+        END;
+END;
+$$ LANGUAGE plpgsql;
+-- ESQLDDLCMD
+
 
 -- BSQLDDLCMD
 CREATE SEQUENCE data_t_id_counter CYCLE;
@@ -56,10 +68,11 @@ CREATE TABLE data_t
 (
     id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('data_t_id_counter'),
     type_id INTEGER NOT NULL REFERENCES types_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-    value VARCHAR(255) NOT NULL,
-    text text DEFAULT NULL,
-    description text DEFAULT NULL,
-    visible visible_type NOT NULL DEFAULT 'Y'
+    value VARCHAR(255) DEFAULT NULL,
+    text TEXT DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    visible visible_type NOT NULL DEFAULT 'Y',
+    CHECK (  check_data_input(type_id, value, text) )
 );
 -- ESQLDDLCMD
 -- BSQLDDLCMD

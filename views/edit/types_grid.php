@@ -7,7 +7,7 @@ use yii\helpers\Url;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin(['timeout' => $this->context->module->pjaxDefaultTimeout, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
                 'dataProvider' => $dataModel->search(),

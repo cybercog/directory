@@ -8,8 +8,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
-use app\modules\directory\widgets\CoolComboBoxWidget;
 
+$uid = mt_rand(0, mt_getrandmax());
 
 $this->title = directoryModule::t('search', 'Directory').' - '.directoryModule::t('edit', 'Data');
 
@@ -35,10 +35,16 @@ $this->params['breadcrumbs'] = [
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-    <h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::t('edit', 'Data')?></h1>
+<h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::t('edit', 'Data')?></h1>
 
 
 <?php require('select_type_dialog.php'); ?>
+
+
+<div class="directory-hide-element">
+    <iframe id="file_upload_<?=$uid?>"></iframe>
+</div>
+
 
 <div class="directory-hide-element">
     
@@ -55,181 +61,192 @@ Dialog::begin([
     
 <?php $form = ActiveForm::begin([
     'id' => 'data-edit-form',
+    'options' => ['enctype' => 'multipart/form-data', 'target' => 'file_upload_'.$uid]
         ]); ?>
     
-    <div>
-        <table class="directory-modal-table directory-stretch-bar directory-table">
-            <tr>
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'typeId')?><span class="directory-required-input">*</span></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <table class="directory-modal-table directory-stretch-bar directory-table">
-                            <tr>
-                                <td>
-                                    <?= Html::activeHiddenInput($formModel, 'typeId')?>
-                                    <?= Html::input('text', 'typeId.display', null,
-                                                            ['class' => 'directory-stretch-bar directory-grid-filter-control', 
-                                                                'readonly' => 'readonly', 
-                                                                'id' => Html::getInputId($formModel, 'typeId').'text']) ; ?></td>
-                                <td class="directory-min-width">&nbsp;</td>
-                                <td class="directory-min-width">
-                                    <button id="selectDataTypeButton">
-                                        <nobr>...</nobr>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            
-            <tr class="directory-variant directory-variant-value">
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'value')?><span class="directory-required-input">*</span></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <?= Html::activeInput('text', $formModel, 'value', ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
-                    </div>
-                </td>
-            </tr>
-            
-            <tr class="directory-variant directory-variant-keywords">
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'keywords')?></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <?= Html::activeInput('text', $formModel, 'keywords', ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
-                    </div>
-                </td>
-            </tr>
-            
+<div>
+    <table class="directory-modal-table directory-stretch-bar directory-table">
+        <tr>
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'typeId')?><span class="directory-required-input">*</span></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <table class="directory-modal-table directory-stretch-bar directory-table">
+                        <tr>
+                            <td>
+                                <?= Html::activeHiddenInput($formModel, 'typeId')?>
+                                <?= Html::input('text', 'typeId.display', null,
+                                                        ['class' => 'directory-stretch-bar directory-grid-filter-control', 
+                                                            'readonly' => 'readonly', 
+                                                            'id' => Html::getInputId($formModel, 'typeId').'text']) ; ?></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <button id="selectDataTypeButton">
+                                    <nobr>...</nobr>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        
+        <tr class="directory-variant directory-variant-value">
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'value')?><span class="directory-required-input">*</span></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <?= Html::activeInput('text', $formModel, 'value', ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
+                </div>
+            </td>
+        </tr>
+        
+        <tr class="directory-variant directory-variant-keywords">
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'keywords')?></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <?= Html::activeInput('text', $formModel, 'keywords', ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
+                </div>
+            </td>
+        </tr>
+        
 
-            
-            <tr class="directory-variant directory-variant-file">
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'file')?><span class="directory-required-input">*</span></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <table class="directory-modal-table directory-stretch-bar directory-table">
-                            <tr>
-                                <td>
-                                    <div class="directory-hide-element">
-                                    <?= Html::activeFileInput($formModel, 'file')?>
-                                    </div>
-                                    <?= Html::input('text', 'file.display', null,
-                                                            ['class' => 'directory-stretch-bar directory-grid-filter-control', 
-                                                                'readonly' => 'readonly', 
-                                                                'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
-                                <td class="directory-min-width">&nbsp;</td>
-                                <td class="directory-min-width">
-                                    <button id="selectFileButton">
-                                        <nobr>...</nobr>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            <tr class="directory-variant directory-variant-image">
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'image')?><span class="directory-required-input">*</span></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <table class="directory-modal-table directory-stretch-bar directory-table">
-                            <tr>
-                                <td>
-                                    <div class="directory-hide-element">
-                                    <?= Html::activeFileInput($formModel, 'image')?>
-                                    </div>
-                                    <?= Html::input('text', 'image.display', null,
-                                                            ['class' => 'directory-stretch-bar directory-grid-filter-control', 
-                                                                'readonly' => 'readonly', 
-                                                                'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
-                                <td class="directory-min-width">&nbsp;</td>
-                                <td class="directory-min-width">
-                                    <button id="selectImageButton">
-                                        <nobr>...</nobr>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-            
-            
-            
-            <tr class="directory-variant directory-variant-text">
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'text')?><span class="directory-required-input">*</span></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <?= Html::activeTextarea($formModel, 'text', ['class'=>'directory-stretch-bar directory-grid-filter-control', 'rows' => 4]) ; ?>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="directory-min-width directory-table-label">
-                    <div class="directory-right-padding">
-                        <nobr>
-                            <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'description')?></span>
-                        </nobr>
-                    </div>
-                </td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <?= Html::activeTextarea($formModel, 'description', ['class'=>'directory-stretch-bar directory-grid-filter-control', 'rows' => 4]) ; ?>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <div class="directory-form-item-bottom-padding">
-                        <table class="directory-modal-table directory-stretch-bar directory-table">
-                            <tr>
-                                <td class="directory-min-width"><?= Html::activeCheckbox($formModel, 'visible', ['label' => null])?></td>
-                                <td class="directory-min-width">&nbsp;</td>
-                                <td>- <?= Html::activeLabel($formModel, 'visible')?></td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-            </tr>
-        </table>
+        
+        <tr class="directory-variant directory-variant-file">
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'file')?><span class="directory-required-input">*</span></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <table class="directory-modal-table directory-stretch-bar directory-table">
+                        <tr>
+                            <td>
+                                <div class="directory-hide-element">
+                                <?= Html::activeFileInput($formModel, 'file')?>
+                                </div>
+                                <?= Html::input('text', 'file.display', null,
+                                                        ['class' => 'directory-stretch-bar directory-grid-filter-control', 
+                                                            'readonly' => 'readonly', 
+                                                            'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <button id="selectFileButton">
+                                    <nobr>...</nobr>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr class="directory-variant directory-variant-image">
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'image')?><span class="directory-required-input">*</span></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <table class="directory-modal-table directory-stretch-bar directory-table">
+                        <tr>
+                            <td>
+                                <div class="directory-hide-element">
+                                <?= Html::activeFileInput($formModel, 'image')?>
+                                </div>
+                                <?= Html::input('text', 'image.display', null,
+                                                        ['class' => 'directory-stretch-bar directory-grid-filter-control', 
+                                                            'readonly' => 'readonly', 
+                                                            'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <button id="selectImageButton">
+                                    <nobr>...</nobr>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        
+        
+        
+        <tr class="directory-variant directory-variant-text">
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'text')?><span class="directory-required-input">*</span></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <?= Html::activeTextarea($formModel, 'text', ['class'=>'directory-stretch-bar directory-grid-filter-control', 'rows' => 4]) ; ?>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="directory-min-width directory-table-label">
+                <div class="directory-right-padding">
+                    <nobr>
+                        <span class="directory-form-label-right-padding"><?= Html::activeLabel($formModel, 'description')?></span>
+                    </nobr>
+                </div>
+            </td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <?= Html::activeTextarea($formModel, 'description', ['class'=>'directory-stretch-bar directory-grid-filter-control', 'rows' => 4]) ; ?>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <div class="directory-form-item-bottom-padding">
+                    <table class="directory-modal-table directory-stretch-bar directory-table">
+                        <tr>
+                            <td class="directory-min-width"><?= Html::activeCheckbox($formModel, 'visible', ['label' => null])?></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td>- <?= Html::activeLabel($formModel, 'visible')?></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <span id="waitDlgQueryData" class="directory-hide-element">
+            <nobr>
+                <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                <span><?= directoryModule::t('search', 'processing request')?></span>
+            </nobr>
+        </span>
+        <div id="errorDlgQueryData" class="directory-error-msg directory-hide-element"></div>
+        <div id="okDlgQueryData" class="directory-ok-msg directory-hide-element"></div>
     </div>
+</div>
 
 <?php ActiveForm::end(); ?>
 
@@ -268,36 +285,12 @@ Dialog::begin([
                         dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
                         dialog({open : function(event, ui) {
                                 updateFormState(false);
-                                /*ajaxPostHelper({
-                                    url : "<?= Url::toRoute(['/directory/edit/typeslist'])?>",
-                                    data : 'query types list',
-                                    waitTag : "#waitDlgQueryDataTypeList",
-                                    errorTag : "#errorDlgQueryDataTypeList",
-                                    errorWaitTimeout : 5,
-                                    onSuccess : function(dataObject) {
-                                        var types_list = $("#editDataDialog #<?=Html::getInputId($formModel, 'typeId')?>");
-                                        types_list.empty();
-                                        for (var i = 0; i < dataObject.<?=ajaxJSONResponseHelper::additionalField?>.length; ++i) {
-                                            var item = dataObject.<?=ajaxJSONResponseHelper::additionalField?>[i];
-                                            types_list.append('<option value="' + item.id + '">' + item.name + ' - [' + item.type + ']</option>');
-                                        }
-                                    }
-                                });*/
                         }}).
                         dialog("option", "buttons", 
                                         {
                                             "<?= directoryModule::t('edit', 'Add data item')?>" : function() {
-                                                ajaxPostHelper({
-                                                    url : "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>",
-                                                    data : $("#edit-data-form").serialize(),
-                                                    waitTag : "#waitDlgQueryData",
-                                                    errorTag : "#errorDlgQueryData",
-                                                    errorWaitTimeout : 5,
-                                                    onSuccess : function(dataObject) { 
-                                                        $("#editDataDialog").dialog("close");
-                                                        $.pjax.reload('#typesGridPjaxWidget', {timeout : 10000});
-                                                    }
-                                                });
+                                                $("#waitDlgQueryData").removeClass("directory-hide-element");
+                                                $("#data-edit-form").submit();
                                             },
                                             "<?= directoryModule::t('edit', 'Close')?>" : function() { $(this).dialog("close"); }
                                         }).
@@ -316,6 +309,15 @@ Dialog::begin([
         });
     });
     
+    $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").change(function(eventObject) {
+        if(eventObject.target.files.length > 0) {
+            $("#<?=Html::getInputId($formModel, 'file').'text'?>").val(
+                    eventObject.target.files[0].name);
+        } else {
+            $("#<?=Html::getInputId($formModel, 'file').'text'?>").val("");
+        }
+    });
+    
     $("#selectFileButton").button().click(function(eventObject) {
         eventObject.preventDefault();
         $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").click();
@@ -323,7 +325,7 @@ Dialog::begin([
     
     $("#selectImageButton").button().click(function(eventObject) {
         eventObject.preventDefault();
-        $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").click();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").trigger('reset').click();
     });
     
     $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
@@ -349,6 +351,25 @@ Dialog::begin([
         setTimeout(function() { $("#errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
     }).on("pjax:timeout", function(eventObject) {
         eventObject.preventDefault();
+    });
+    
+    $("#file_upload_<?=$uid?>").load(function(){
+        try {
+            var response = $.parseJSON($('#file_upload_<?=$uid?>').contents().find('body').text());
+            if(response.<?=ajaxJSONResponseHelper::resultField?> === "<?=ajaxJSONResponseHelper::okResult?>") {
+                $("#editDataDialog").dialog("close");
+                $("#waitDlgQueryData").addClass("directory-hide-element");
+                $.pjax.reload('#dataGridPjaxWidget', {timeout : <?=$this->context->module->pjaxDefaultTimeout?>});
+            } else {
+                $("#waitDlgQueryData").addClass("directory-hide-element");
+                $("#errorDlgQueryData").removeClass("directory-hide-element").text(response.<?= ajaxJSONResponseHelper::messageField?>);
+                setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
+            }
+        } catch(err) {
+            $("#waitDlgQueryData").addClass("directory-hide-element");
+            $("#errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::t('search', 'Error connecting to server.')?>");
+            setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
+        }
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

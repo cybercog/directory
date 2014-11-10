@@ -7,8 +7,8 @@ use yii\helpers\Url;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => 30000, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'dataGridPjaxWidget']); ?>
-            <?= yii\grid\GridView::widget([
+            <?php yii\widgets\Pjax::begin(['timeout' => $this->context->module->pjaxDefaultTimeout, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'dataGridPjaxWidget']); ?>
+            <!--<?php/* yii\grid\GridView::widget([
                 'id' => 'dataGridWidget',
                 'dataProvider' => $dataModel->search(),
                 'filterModel' => $dataModel,
@@ -75,5 +75,5 @@ use yii\helpers\Url;
                         },
                     ]
                 ]
-            ]) ?>
+            ]) */?>-->
             <?php yii\widgets\Pjax::end(); ?>

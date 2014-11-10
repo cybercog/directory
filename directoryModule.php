@@ -7,8 +7,15 @@ class directoryModule extends \yii\base\Module
     public $controllerNamespace = 'app\modules\directory\controllers';
     
     public $showFooter = false;
+    public $pjaxDefaultTimeout = 30000;
+    public $uploadDir;
     
     private static $publishPath;
+    
+    public function __construct($id, $parent = null, $config = array()) {
+        parent::__construct($id, $parent, $config);
+        $this->uploadDir = \Yii::getAlias('@webroot').'/upload';
+    }
 
     public static function getPublishPath($resId) {
         if(!isset(directoryModule::$publishPath)) {
