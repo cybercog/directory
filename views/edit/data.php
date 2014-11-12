@@ -42,7 +42,7 @@ $this->params['breadcrumbs'] = [
 
 
 <div class="directory-hide-element">
-    <iframe id="file_upload_<?=$uid?>"></iframe>
+    <iframe id="file_upload_<?=$uid?>" name="file_upload_<?=$uid?>_name"></iframe>
 </div>
 
 
@@ -61,9 +61,10 @@ Dialog::begin([
     
 <?php $form = ActiveForm::begin([
     'id' => 'data-edit-form',
-    'options' => ['enctype' => 'multipart/form-data', 'target' => 'file_upload_'.$uid]
+    //'method' => 'get',
+    'options' => ['enctype' => 'multipart/form-data', 'target' => 'file_upload_'.$uid.'_name']
         ]); ?>
-    
+   
 <div>
     <table class="directory-modal-table directory-stretch-bar directory-table">
         <tr>
@@ -86,9 +87,9 @@ Dialog::begin([
                                                             'id' => Html::getInputId($formModel, 'typeId').'text']) ; ?></td>
                             <td class="directory-min-width">&nbsp;</td>
                             <td class="directory-min-width">
-                                <button id="selectDataTypeButton">
+                                <div id="selectDataTypeButton">
                                     <nobr>...</nobr>
-                                </button>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -144,15 +145,15 @@ Dialog::begin([
                                 <div class="directory-hide-element">
                                 <?= Html::activeFileInput($formModel, 'file')?>
                                 </div>
-                                <?= Html::input('text', 'file.display', null,
+                                <?= Html::input('text', 'file_display', null,
                                                         ['class' => 'directory-stretch-bar directory-grid-filter-control', 
                                                             'readonly' => 'readonly', 
                                                             'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
                             <td class="directory-min-width">&nbsp;</td>
                             <td class="directory-min-width">
-                                <button id="selectFileButton">
+                                <div id="selectFileButton">
                                     <nobr>...</nobr>
-                                </button>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -175,15 +176,15 @@ Dialog::begin([
                                 <div class="directory-hide-element">
                                 <?= Html::activeFileInput($formModel, 'image')?>
                                 </div>
-                                <?= Html::input('text', 'image.display', null,
+                                <?= Html::input('text', 'image_display', null,
                                                         ['class' => 'directory-stretch-bar directory-grid-filter-control', 
                                                             'readonly' => 'readonly', 
                                                             'id' => Html::getInputId($formModel, 'file').'text']) ; ?></td>
                             <td class="directory-min-width">&nbsp;</td>
                             <td class="directory-min-width">
-                                <button id="selectImageButton">
+                                <div id="selectImageButton">
                                     <nobr>...</nobr>
-                                </button>
+                                </div>
                             </td>
                         </tr>
                     </table>
@@ -283,17 +284,22 @@ Dialog::begin([
                 $("#data-edit-form").trigger('reset');
                 $("#editDataDialog").
                         dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
-                        dialog({open : function(event, ui) {
-                                updateFormState(false);
-                        }}).
+                        dialog({open : function(event, ui) { updateFormState(false); }}).
                         dialog("option", "buttons", 
-                                        {
-                                            "<?= directoryModule::t('edit', 'Add data item')?>" : function() {
-                                                $("#waitDlgQueryData").removeClass("directory-hide-element");
-                                                $("#data-edit-form").submit();
+                                        [
+                                            {
+                                                text : "<?= directoryModule::t('edit', 'Add data item')?>",
+                                                click : function() {
+                                                    $("#data-edit-form").
+                                                            attr("action", "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>")[0].
+                                                            submit();
+                                                }
                                             },
-                                            "<?= directoryModule::t('edit', 'Close')?>" : function() { $(this).dialog("close"); }
-                                        }).
+                                            {
+                                                text : "<?= directoryModule::t('edit', 'Close')?>",
+                                                click : function() { $(this).dialog("close"); }
+                                            }
+                                        ]).
                         dialog("open");
     });
     
@@ -320,12 +326,12 @@ Dialog::begin([
     
     $("#selectFileButton").button().click(function(eventObject) {
         eventObject.preventDefault();
-        $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").click();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").trigger('reset').click();
     });
     
     $("#selectImageButton").button().click(function(eventObject) {
         eventObject.preventDefault();
-        $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").trigger('reset').click();
+        //$("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").trigger('reset').click();
     });
     
     $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
@@ -353,8 +359,13 @@ Dialog::begin([
         eventObject.preventDefault();
     });
     
+    //var j=true;
+    
     $("#file_upload_<?=$uid?>").load(function(){
-        try {
+        
+        alert($('#file_upload_<?=$uid?>').contents().find('body').text());
+        //if(j){$('#file_upload_<?=$uid?>').attr("src", "/directory/edit/data");j=false;}
+        /*try {
             var response = $.parseJSON($('#file_upload_<?=$uid?>').contents().find('body').text());
             if(response.<?=ajaxJSONResponseHelper::resultField?> === "<?=ajaxJSONResponseHelper::okResult?>") {
                 $("#editDataDialog").dialog("close");
@@ -369,7 +380,7 @@ Dialog::begin([
             $("#waitDlgQueryData").addClass("directory-hide-element");
             $("#errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::t('search', 'Error connecting to server.')?>");
             setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
-        }
+        }*/
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

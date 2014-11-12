@@ -11,6 +11,7 @@ use app\modules\directory\models\db\Data;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
 use app\modules\directory\helpers\modelErrorsToStringHelper;
 use app\modules\directory\helpers\boolSaveHelper;
+use yii\web\UploadedFile;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -115,10 +116,14 @@ class EditController extends Controller {
                                         break;
                                     case 'file':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
-                                        $form->file->saveAs('uploads/'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension);
+                                        $form->file = UploadedFile::getInstance($form, 'file');
+                                        $m=$form->file->saveAs('uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension);
+                                        $e = new \Exception(print_r($form->file, true));
+                                        throw $e;
                                         break;
                                     case 'image':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
+                                        $form->image = UploadedFile::getInstance($form, 'image');
                                         $form->image->saveAs('uploads/'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension);
                                         break;
                                 }
