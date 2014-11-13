@@ -12,7 +12,7 @@ class typesViewHelper {
     
     public static function getTypeString($data) {
         return '<div class="directory-hide-element row-value">'.$data['type'].'</div>'
-                . '<div class="directory-'.$data['type'].'-type row-display">'.directoryModule::t('edit', $data['type']).'</div>';
+                . '<div class="directory-'.$data['type'].'-type row-display">'.directoryModule::ht('edit', $data['type']).'</div>';
     }
     
     public static function getTextString($text) {
@@ -21,7 +21,7 @@ class typesViewHelper {
                 .(strlen($text) <= 20 ? $text : 
                         substr($text, 0, 20)
                         .'...&nbsp;<img class="directory-show-full-text" title="'
-                        .directoryModule::t('edit', 'Show completely').'" '
+                        .directoryModule::ht('edit', 'Show completely').'" '
                         . 'src="'.directoryModule::getPublishPath('/img/info16.png').'" />').'</div>';
     }
 }

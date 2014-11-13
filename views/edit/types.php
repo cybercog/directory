@@ -10,16 +10,16 @@ use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
 
-$this->title = directoryModule::t('search', 'Directory').' - '.directoryModule::t('edit', 'Data types');
+$this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Data types');
 
 $uid = mt_rand(0, mt_getrandmax());
 
 $this->params['breadcrumbs'] = [
         [
-            'label' => directoryModule::t('search', 'Search'),
+            'label' => directoryModule::ht('search', 'Search'),
             'url' => Url::toRoute('/directory/search/index')
         ],
-        directoryModule::t('edit', 'Data types')
+        directoryModule::ht('edit', 'Data types')
     ];
 ?>
 
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'] = [
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-<h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::t('edit', 'Data types')?></h1>
+<h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::ht('edit', 'Data types')?></h1>
 
 <div class="directory-hide-element">
 
@@ -80,10 +80,10 @@ Dialog::begin([
             <td>
                 <div class="directory-form-item-bottom-padding">
                 <?= Html::activeDropDownList($formModel, 'type', 
-                                            ['string' => directoryModule::t('edit', 'string'), 
-                                                'text' => directoryModule::t('edit', 'text'), 
-                                                'image' => directoryModule::t('edit', 'image'), 
-                                                'file' => directoryModule::t('edit', 'file')], 
+                                            ['string' => directoryModule::ht('edit', 'string'), 
+                                                'text' => directoryModule::ht('edit', 'text'), 
+                                                'image' => directoryModule::ht('edit', 'image'), 
+                                                'file' => directoryModule::ht('edit', 'file')], 
                                             ['class'=>'directory-stretch-bar directory-grid-filter-control']) ; ?>
                 </div>
             </td>
@@ -102,7 +102,7 @@ Dialog::begin([
                     <?= Html::activeTextarea($formModel, 'validate', ['class'=>'directory-stretch-bar directory-grid-filter-control', 'rows' => 4]) ; ?>
                     </div>
                     <div class="directory-tooltip-message directory-form-item-bottom-padding">
-                        <?= directoryModule::t('edit', 'regular expression to validate the entered string')?>
+                        <?= directoryModule::ht('edit', 'regular expression to validate the entered string')?>
                     </div>
                 </div>
             </td>
@@ -126,7 +126,7 @@ Dialog::begin([
         <span id="waitDlgQueryDataType" class="directory-hide-element">
             <nobr>
                 <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
-                <span><?= directoryModule::t('search', 'processing request')?></span>
+                <span><?= directoryModule::ht('search', 'processing request')?></span>
             </nobr>
         </span>
         <div id="errorDlgQueryDataType" class="directory-error-msg directory-hide-element"></div>
@@ -147,10 +147,10 @@ Dialog::begin([
             function()  {
                 $("#type-data-form").trigger('reset');
                 $("#editDialog").
-                        dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
+                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new type')?>").
                         dialog("option", "buttons", 
                                         {
-                                            "<?= directoryModule::t('edit', 'Create new type')?>": function() {
+                                            "<?= directoryModule::ht('edit', 'Create new type')?>": function() {
                                                 ajaxPostHelper({
                                                     url : "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'create'])?>",
                                                     data : $("#type-data-form").serialize(),
@@ -163,7 +163,7 @@ Dialog::begin([
                                                     }
                                                 });
                                             },
-                                            "<?= directoryModule::t('edit', 'Close')?>": function() { $(this).dialog("close"); }
+                                            "<?= directoryModule::ht('edit', 'Close')?>": function() { $(this).dialog("close"); }
                                         }).
                         dialog("open");
     }).tooltip({
@@ -197,10 +197,10 @@ Dialog::begin([
         $("#type-data-form [name='<?=Html::getInputName($formModel, 'description')?>']").val(field.find("div.row-value").text());
         $("#editDialog").
                 data("row-id", $(this).closest("tr").find("td").first().find("div.row-id").text()).
-                dialog("option", "title", "<?= directoryModule::t('edit', 'Edit type')?>").
+                dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
                 dialog("option", "buttons", 
                                 {
-                                    "<?= directoryModule::t('edit', 'Apply')?>": function() {
+                                    "<?= directoryModule::ht('edit', 'Apply')?>": function() {
                                         var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>";
                                         ajaxPostHelper({
                                             url : url.replace("<?=$uid?>", $(this).data("row-id")),
@@ -214,7 +214,7 @@ Dialog::begin([
                                             }
                                         });
                                     },
-                                    "<?= directoryModule::t('edit', 'Close')?>": function() { $(this).dialog("close"); }
+                                    "<?= directoryModule::ht('edit', 'Close')?>": function() { $(this).dialog("close"); }
                                 }).
                 dialog("open");
     });
@@ -232,7 +232,7 @@ Dialog::begin([
     }).on("pjax:error", function(eventObject) {
         eventObject.preventDefault();
         $("#waitQueryDataType").addClass("directory-hide-element");
-        $("#errorQueryDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::t('search', 'Error connecting to server.')?></nobr>");
+        $("#errorQueryDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
         setTimeout(function() { $("#errorQueryDataType").addClass("directory-hide-element"); }, 5000);
     }).on("pjax:timeout", function(eventObject) {
         eventObject.preventDefault();
@@ -263,17 +263,17 @@ Dialog::begin([
                 <table class="directory-modal-table directory-stretch-bar">
                     <tr>
                         <td class="directory-min-width">
-                            <button id="createNewType" title="<?= directoryModule::t('edit', 'Create new type')?>...">
+                            <button id="createNewType" title="<?= directoryModule::ht('edit', 'Create new type')?>...">
                                 <nobr>
-                                    <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Create new type')?>...</span>
+                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
                                 </nobr>
                             </button>
                         </td>
                         <td class="directory-min-width">&nbsp;</td>
                         <td class="directory-min-width">
-                            <button id="updateTypesTable" title="<?= directoryModule::t('edit', 'Update table')?>">
+                            <button id="updateTypesTable" title="<?= directoryModule::ht('edit', 'Update table')?>">
                                 <nobr>
-                                    <span class="directory-update-button-icon"><?= directoryModule::t('edit', 'Update table')?></span>
+                                    <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
                                 </nobr>
                             </button>
                         </td>
@@ -282,7 +282,7 @@ Dialog::begin([
                             <span id="waitQueryDataType" class="directory-hide-element">
                                 <nobr>
                                     <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
-                                    <span><?= directoryModule::t('search', 'processing request')?></span>
+                                    <span><?= directoryModule::ht('search', 'processing request')?></span>
                                 </nobr>
                             </span>
                             <div id="errorQueryDataType" class="directory-error-msg directory-hide-element"></div>

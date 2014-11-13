@@ -52,7 +52,7 @@ class EditController extends Controller {
                                             ], 'id = :id', [':id' => \Yii::$app->request->get('id')]);
                                 } else {
                                     return ajaxJSONResponseHelper::createResponse(false, 
-                                            directoryModule::t('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
+                                            directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
                                 }
                                 return ajaxJSONResponseHelper::createResponse(true);
                             } catch (\Exception $ex) {
@@ -73,7 +73,7 @@ class EditController extends Controller {
                         }
                     } else {
                         return ajaxJSONResponseHelper::createResponse(false, 
-                                directoryModule::t('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
+                                directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
                     }
                     return ajaxJSONResponseHelper::createResponse(true);
             }
@@ -83,7 +83,13 @@ class EditController extends Controller {
         $model->attributes = \Yii::$app->request->get('TypesSearch');
         
         if(\Yii::$app->request->isPjax) {
-            return $this->renderPartial('types_grid', ['dataModel' => $model]);
+            switch(\Yii::$app->request->get('_pjax')) {
+                case '#typesGridPjaxWidget':
+                    return $this->renderPartial('types_grid', ['dataModel' => $model]);
+                case '#typesCompactGridPjaxWidget':
+                    $model->pagination = 7;
+                    return $this->renderPartial('types_compact_grid', ['typesDataModel' => $model]);
+            }
         }
         
         return $this->render('types', ['formModel' => new TypeForm, 'dataModel' => $model]);
@@ -117,14 +123,22 @@ class EditController extends Controller {
                                     case 'file':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->file = UploadedFile::getInstance($form, 'file');
-                                        $m=$form->file->saveAs('uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension);
-                                        $e = new \Exception(print_r($form->file, true));
-                                        throw $e;
+                                        $path = \Yii::getAlias('@webroot').'/uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
+                                        if($form->file->saveAs($path)) {
+                                            $data->text = $path;
+                                        } else {
+                                            throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                        }
                                         break;
                                     case 'image':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->image = UploadedFile::getInstance($form, 'image');
-                                        $form->image->saveAs('uploads/'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension);
+                                        $path = \Yii::getAlias('@webroot').'/uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
+                                        if($form->image->saveAs($path)) {
+                                            $data->text = $path;
+                                        } else {
+                                            throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                        }
                                         break;
                                 }
                                 $data->save();

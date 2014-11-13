@@ -2,14 +2,22 @@
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\typesViewHelper;
+use yii\helpers\Url;
 
 ?>
 
-            <?php yii\widgets\Pjax::begin(['timeout' => $this->context->module->pjaxDefaultTimeout, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesCompactGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin([
+                'timeout' => $this->context->module->pjaxDefaultTimeout, 
+                'enablePushState' => false, 
+                'enableReplaceState' => false, 
+                'id' => 'typesCompactGridPjaxWidget',
+                'clientOptions' => ['url' => Url::toRoute(['/directory/edit/types'])]
+                ]); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesCompactGridWidget',
                 'dataProvider' => $typesDataModel->search(),
                 'filterModel' => $typesDataModel,
+                'filterUrl' => Url::toRoute(['/directory/edit/types']),
                 'columns' => [
                     [
                         'class' => 'yii\grid\DataColumn',
@@ -17,7 +25,7 @@ use app\modules\directory\helpers\typesViewHelper;
                         'format' => 'raw',
                         'attribute' => 'name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
-                        'label' => directoryModule::t('edit', 'Name'),
+                        'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
                             return typesViewHelper::getNameString($data);
                         }
@@ -28,11 +36,11 @@ use app\modules\directory\helpers\typesViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'type',
-                        'filter' => ['string' => directoryModule::t('edit', 'string'), 
-                                                'text' => directoryModule::t('edit', 'text'), 
-                                                'image' => directoryModule::t('edit', 'image'), 
-                                                'file' => directoryModule::t('edit', 'file')],
-                        'label' => directoryModule::t('edit', 'Type'),
+                        'filter' => ['string' => directoryModule::ht('edit', 'string'), 
+                                                'text' => directoryModule::ht('edit', 'text'), 
+                                                'image' => directoryModule::ht('edit', 'image'), 
+                                                'file' => directoryModule::ht('edit', 'file')],
+                        'label' => directoryModule::ht('edit', 'Type'),
                         'value' => function($data) {
                             return typesViewHelper::getTypeString($data);
                         }
@@ -42,7 +50,7 @@ use app\modules\directory\helpers\typesViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'description',
-                        'label' => directoryModule::t('edit', 'Description'),
+                        'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
                             return typesViewHelper::getTextString($data['description']);
                         }

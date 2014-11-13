@@ -5,7 +5,7 @@ use yii\web\View;
 ?>
 
 <?php if(0) { ?><script type="text/javascript"><?php } ob_start(); ?>
-    
+
 function ajaxPostHelper(p) {
     var setPostData = function(p) {
         if(p.waitTag !== undefined) {
@@ -136,4 +136,4 @@ function ajaxPostHelper(p) {
     }
 }
 
-<?php if(0) { ?></script><?php } $this->registerJs(ob_get_clean(), View::POS_READY); 
+<?php if(0) { ?></script><?php } $this->registerJs(ob_get_clean(), View::POS_HEAD); 

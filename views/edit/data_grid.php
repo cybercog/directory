@@ -19,7 +19,7 @@ use yii\helpers\Url;
                         'format' => 'raw',
                         'attribute' => 'name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
-                        'label' => directoryModule::t('edit', 'Name'),
+                        'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
                             return typesViewHelper::getNameString($data);
                         }
@@ -30,11 +30,11 @@ use yii\helpers\Url;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'type',
-                        'filter' => ['string' => directoryModule::t('edit', 'string'), 
-                                                'text' => directoryModule::t('edit', 'text'), 
-                                                'image' => directoryModule::t('edit', 'image'), 
-                                                'file' => directoryModule::t('edit', 'file')],
-                        'label' => directoryModule::t('edit', 'Type'),
+                        'filter' => ['string' => directoryModule::ht('edit', 'string'), 
+                                                'text' => directoryModule::ht('edit', 'text'), 
+                                                'image' => directoryModule::ht('edit', 'image'), 
+                                                'file' => directoryModule::ht('edit', 'file')],
+                        'label' => directoryModule::ht('edit', 'Type'),
                         'value' => function($data) {
                             return typesViewHelper::getTypeString($data);
                         }
@@ -44,7 +44,7 @@ use yii\helpers\Url;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'description',
-                        'label' => directoryModule::t('edit', 'Description'),
+                        'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
                             return typesViewHelper::getTextString($data['description']);
                         }
@@ -54,7 +54,7 @@ use yii\helpers\Url;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'validate',
-                        'label' => directoryModule::t('edit', 'Validate'),
+                        'label' => directoryModule::ht('edit', 'Validate'),
                         'value' => function($data) {
                             return typesViewHelper::getTextString($data['validate']);
                         }
@@ -66,10 +66,10 @@ use yii\helpers\Url;
                         'value' => function($data) {
                             return '<nobr>'
                                     . '<button class="directory-edit-type-button directory-small-button" '
-                                    . 'title="'.directoryModule::t('edit', 'Edit data type').'"><img src="'.
+                                    . 'title="'.directoryModule::ht('edit', 'Edit data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/edit-item.png').
                                     '" /></button>&nbsp;<button class="directory-delete-type-button directory-small-button" '
-                                    . 'title="'.directoryModule::t('edit', 'Delete data type').'"><img src="'.
+                                    . 'title="'.directoryModule::ht('edit', 'Delete data type').'"><img src="'.
                                     directoryModule::getPublishPath('/img/delete-item.png')
                                     .'" /></button></nobr>';
                         },

@@ -46,4 +46,8 @@ class directoryModule extends \yii\base\Module
     public static function t($category, $message, $params = [], $language = null) {
         return \Yii::t('modules/directory/' . $category, $message, $params, $language);
     }
+
+    public static function ht($category, $message, $params = [], $language = null) {
+        return \yii\helpers\Html::encode(\Yii::t('modules/directory/' . $category, $message, $params, $language));
+    }
 }

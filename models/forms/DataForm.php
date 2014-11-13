@@ -37,7 +37,7 @@ class DataForm extends Model {
                 $type = $this->getTypeItem();
                 if(empty($type)) {
                     $this->addError($attribute, 
-                            directoryModule::t('edit', 'The data type is set incorrectly').'.');
+                            directoryModule::ht('edit', 'The data type is set incorrectly').'.');
                 }
             }],
             [['value'], function($attribute, $params) {
@@ -45,7 +45,7 @@ class DataForm extends Model {
                 if($type->type == 'string') {
                     if(empty($this->value)) {
                         $this->addError($attribute, 
-                                Html::encode(directoryModule::t('edit', 'The field <{field}> must not be empty', ['field' => 'value'])).'.');
+                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'value'])).'.');
                     }
                 }
             }],
@@ -55,7 +55,7 @@ class DataForm extends Model {
                 if($type->type == 'text') {
                     if(empty($this->text)) {
                         $this->addError($attribute, 
-                                Html::encode(directoryModule::t('edit', 'The field <{field}> must not be empty', ['field' => 'text'])).'.');
+                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'text'])).'.');
                     }
                 }
             }],
@@ -68,7 +68,7 @@ class DataForm extends Model {
                 if($type->type == 'string') {
                     if(empty($this->file)) {
                         $this->addError($attribute, 
-                                Html::encode(directoryModule::t('edit', 'The field <{field}> must not be empty', ['field' => 'file'])).'.');
+                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'file'])).'.');
                     }
                 }
             }],
@@ -78,7 +78,7 @@ class DataForm extends Model {
                 if($type->type == 'string') {
                     if(empty($this->image)) {
                         $this->addError($attribute, 
-                                Html::encode(directoryModule::t('edit', 'The field <{field}> must not be empty', ['field' => 'image'])).'.');
+                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'image'])).'.');
                     }
                 }
             }]
@@ -87,14 +87,14 @@ class DataForm extends Model {
     
     public function attributeLabels() {
         return [
-            'typeId' => directoryModule::t('edit', 'Type'),
-            'value' => directoryModule::t('edit', 'Value'),
-            'text' => directoryModule::t('edit', 'Value'),
-            'visible' => directoryModule::t('edit', 'show'),
-            'description' => directoryModule::t('edit', 'Description'),
-            'keywords' => directoryModule::t('edit', 'Keywords'),
-            'file' => directoryModule::t('edit', 'File'),
-            'image' => directoryModule::t('edit', 'Image'),
+            'typeId' => directoryModule::ht('edit', 'Type'),
+            'value' => directoryModule::ht('edit', 'Value'),
+            'text' => directoryModule::ht('edit', 'Value'),
+            'visible' => directoryModule::ht('edit', 'show'),
+            'description' => directoryModule::ht('edit', 'Description'),
+            'keywords' => directoryModule::ht('edit', 'Keywords'),
+            'file' => directoryModule::ht('edit', 'File'),
+            'image' => directoryModule::ht('edit', 'Image'),
         ];
     }
 }

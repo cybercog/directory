@@ -22,10 +22,10 @@ class TypeForm extends Model {
     
     public function attributeLabels() {
         return [
-            'name' => directoryModule::t('edit', 'Name'),
-            'type' => directoryModule::t('edit', 'Type'),
-            'validate' => directoryModule::t('edit', 'Validate'),
-            'description' => directoryModule::t('edit', 'Description'),
+            'name' => directoryModule::ht('edit', 'Name'),
+            'type' => directoryModule::ht('edit', 'Type'),
+            'validate' => directoryModule::ht('edit', 'Validate'),
+            'description' => directoryModule::ht('edit', 'Description'),
         ];
     }
 }

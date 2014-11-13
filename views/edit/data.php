@@ -11,16 +11,16 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
 
-$this->title = directoryModule::t('search', 'Directory').' - '.directoryModule::t('edit', 'Data');
+$this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Data');
 
 $uid = mt_rand(0, mt_getrandmax());
 
 $this->params['breadcrumbs'] = [
         [
-            'label' => directoryModule::t('search', 'Search'),
+            'label' => directoryModule::ht('search', 'Search'),
             'url' => Url::toRoute('/directory/search/index')
         ],
-        directoryModule::t('edit', 'Data')
+        directoryModule::ht('edit', 'Data')
     ];
 ?>
 
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'] = [
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-<h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::t('edit', 'Data')?></h1>
+<h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::ht('edit', 'Data')?></h1>
 
 
 <?php require('select_type_dialog.php'); ?>
@@ -241,7 +241,7 @@ Dialog::begin([
         <span id="waitDlgQueryData" class="directory-hide-element">
             <nobr>
                 <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
-                <span><?= directoryModule::t('search', 'processing request')?></span>
+                <span><?= directoryModule::ht('search', 'processing request')?></span>
             </nobr>
         </span>
         <div id="errorDlgQueryData" class="directory-error-msg directory-hide-element"></div>
@@ -256,6 +256,17 @@ Dialog::begin([
 </div>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
+    
+    (function($){
+  $.responsiveBlock = function(){
+      
+      alert("responsiveBlock");
+    return $; 
+    // в итоге, метод responsiveBlock вернет текущий объект jQuery обратно
+  };
+})(jQuery);
+    
+    $.responsiveBlock();
     
     var updateFormState = function(type) {
         $("#data-edit-form .directory-variant").addClass("directory-hide-element");
@@ -283,12 +294,12 @@ Dialog::begin([
             function() {
                 $("#data-edit-form").trigger('reset');
                 $("#editDataDialog").
-                        dialog("option", "title", "<?= directoryModule::t('edit', 'Create new type')?>").
+                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new type')?>").
                         dialog({open : function(event, ui) { updateFormState(false); }}).
                         dialog("option", "buttons", 
                                         [
                                             {
-                                                text : "<?= directoryModule::t('edit', 'Add data item')?>",
+                                                text : "<?= directoryModule::ht('edit', 'Add data item')?>",
                                                 click : function() {
                                                     $("#data-edit-form").
                                                             attr("action", "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>")[0].
@@ -296,8 +307,8 @@ Dialog::begin([
                                                 }
                                             },
                                             {
-                                                text : "<?= directoryModule::t('edit', 'Close')?>",
-                                                click : function() { $(this).dialog("close"); }
+                                                text : "<?= directoryModule::ht('edit', 'Close')?>",
+                                                click : function() { $(this).dialog("close"); $.ajaxPostHelper();}
                                             }
                                         ]).
                         dialog("open");
@@ -323,41 +334,26 @@ Dialog::begin([
             $("#<?=Html::getInputId($formModel, 'file').'text'?>").val("");
         }
     });
+
+    $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").change(function(eventObject) {
+        if(eventObject.target.files.length > 0) {
+            $("#<?=Html::getInputId($formModel, 'image').'text'?>").val(
+                    eventObject.target.files[0].name);
+        } else {
+            $("#<?=Html::getInputId($formModel, 'image').'text'?>").val("");
+        }
+    });
     
     $("#selectFileButton").button().click(function(eventObject) {
         eventObject.preventDefault();
-        $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").trigger('reset').click();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").click();
     });
     
     $("#selectImageButton").button().click(function(eventObject) {
         eventObject.preventDefault();
-        //$("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").trigger('reset').click();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").click();
     });
     
-    $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
-        $("#waitDlgQueryCompactDataType").removeClass("directory-hide-element");
-    }).on("pjax:end", function() {
-        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
-        $("#typesCompactGridWidget").
-                find("tbody tr").
-                addClass("directory-row-selector").
-                click(function() {
-                    $("#selectTypeDialog").dialog("close").data("resultCallback")(
-                            {
-                                id : $(this).find("td:first .row-id").text(),
-                                name : $(this).find("td:first .row-display").text(),
-                                type : $(this).find("td:eq(1) .row-value").text(),
-                                typeDiaplay : $(this).find("td:eq(1) .row-display").text()
-                            }); 
-                });
-    }).on("pjax:error", function(eventObject) {
-        eventObject.preventDefault();
-        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
-        $("#errorDlgQueryCompactDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::t('search', 'Error connecting to server.')?></nobr>");
-        setTimeout(function() { $("#errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
-    }).on("pjax:timeout", function(eventObject) {
-        eventObject.preventDefault();
-    });
     
     //var j=true;
     
@@ -378,7 +374,7 @@ Dialog::begin([
             }
         } catch(err) {
             $("#waitDlgQueryData").addClass("directory-hide-element");
-            $("#errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::t('search', 'Error connecting to server.')?>");
+            $("#errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::ht('search', 'Error connecting to server.')?>");
             setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
         }*/
     });
@@ -389,9 +385,9 @@ Dialog::begin([
     <tr>
         <td class="directory-min-width">
             <div class="directory-buttons-panel-padding-wrap">
-                <button id="addDataItem" title="<?= directoryModule::t('edit', 'Add data item')?>...">
+                <button id="addDataItem" title="<?= directoryModule::ht('edit', 'Add data item')?>...">
                     <nobr>
-                        <span class="directory-add-button-icon"><?= directoryModule::t('edit', 'Add data item')?>...</span>
+                        <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add data item')?>...</span>
                     </nobr>
                 </button>
             </div>
@@ -401,7 +397,7 @@ Dialog::begin([
             <span id="waitQueryData" class="directory-hide-element">
                 <nobr>
                     <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
-                    <span><?= directoryModule::t('search', 'processing request')?></span>
+                    <span><?= directoryModule::ht('search', 'processing request')?></span>
                 </nobr>
             </span>
             <div id="errorQueryData" class="directory-error-msg directory-hide-element"></div>
