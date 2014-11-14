@@ -6,8 +6,8 @@ use yii\helpers\Html;
 use app\modules\directory\directoryModule;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use yii\widgets\Breadcrumbs;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
+use app\modules\directory\widgets\SingletonRenderHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
 
@@ -24,9 +24,11 @@ $this->params['breadcrumbs'] = [
     ];
 ?>
 
-<?php require(__DIR__.'/../helpers/ajaxClientHelper.php');?>
-<?php require(__DIR__.'/../helpers/publishResultCSS.php');?>
-<?php require(__DIR__.'/../helpers/publishTypesCSS.php');?>
+<?= SingletonRenderHelper::widget(['viewsRequire' => [
+    ['name' => '/helpers/ajax-post-helper'],
+    ['name' => '/helpers/publish-result-css'],
+    ['name' => '/helpers/publish-types-css']
+    ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-data-h1-icon {
@@ -61,7 +63,6 @@ Dialog::begin([
     
 <?php $form = ActiveForm::begin([
     'id' => 'data-edit-form',
-    //'method' => 'get',
     'options' => ['enctype' => 'multipart/form-data', 'target' => 'file_upload_'.$uid.'_name']
         ]); ?>
    
@@ -256,17 +257,31 @@ Dialog::begin([
 </div>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([
+			"jquery",
+			"./core"
+		], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+})
+
+(function($){
+    $.ajaxPostHelper = function(){
+        alert("ajaxPostHelper");
+        return $;
+    };
+});<?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+
+
+<?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    (function($){
-  $.responsiveBlock = function(){
-      
-      alert("responsiveBlock");
-    return $; 
-    // в итоге, метод responsiveBlock вернет текущий объект jQuery обратно
-  };
-})(jQuery);
-    
-    $.responsiveBlock();
     
     var updateFormState = function(type) {
         $("#data-edit-form .directory-variant").addClass("directory-hide-element");

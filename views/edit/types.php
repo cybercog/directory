@@ -7,7 +7,7 @@ use yii\helpers\Html;
 use app\modules\directory\directoryModule;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use yii\widgets\Breadcrumbs;
+use app\modules\directory\widgets\SingletonRenderHelper;
 
 
 $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Data types');
@@ -23,9 +23,11 @@ $this->params['breadcrumbs'] = [
     ];
 ?>
 
-<?php require(__DIR__.'/../helpers/ajaxClientHelper.php');?>
-<?php require(__DIR__.'/../helpers/publishResultCSS.php');?>
-<?php require(__DIR__.'/../helpers/publishTypesCSS.php');?>
+<?= SingletonRenderHelper::widget(['viewsRequire' => [
+    ['name' => '/helpers/ajax-post-helper'],
+    ['name' => '/helpers/publish-result-css'],
+    ['name' => '/helpers/publish-types-css']
+    ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-types-h1-icon {

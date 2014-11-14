@@ -12,7 +12,7 @@ use app\modules\directory\directoryModule;
 
 
 AppAsset::register($this);
-//$this->registerJsFile(directoryModule::getPublishPath('/js/ajaxPostHelper.js'), ['position' => \yii\web\View::POS_END]);
+//$this->registerJsFile(directoryModule::getPublishPath('/js/ajaxPostHelper.js'), ['position' => \yii\web\View::POS_HEAD]);
 
 ?>
 <?php $this->beginPage() ?>
