@@ -13,7 +13,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Data');
 
-$uid = mt_rand(0, mt_getrandmax());
+//$uid = mt_rand(0, mt_getrandmax());
 
 $this->params['breadcrumbs'] = [
         [

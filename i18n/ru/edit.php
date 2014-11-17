@@ -25,6 +25,7 @@ return [
     'Edit data type' => 'Редактировать тип',
     'Show completely' => 'Показать полностью',
     'Apply' => 'Применить',
+    'Error: invalid call parameters.' => 'Ошибка: некоррекные параметры вызова.',
     'Update table' => 'Обновить таблицу',
     'The data type is set incorrectly' => 'Тип данных задан некорректно',
     'The field <{field}> must not be empty' => 'Поле <{field}> должно быть не пустое',

@@ -13,15 +13,21 @@ class SingletonRenderHelper extends Widget {
         $require = function($view) {
             if(!isset(self::$globalViews[$view['name']])) {
                 self::$globalViews[$view['name']] = $view;
-                $this->render($view['name'], isset($view['params']) ? $view['params'] : []);
+                return $this->render($view['name'], isset($view['params']) ? $view['params'] : []);
             }
+            
+            return '';
         };
+        
+        $render = '';
         
         if(isset($this->viewsRequire) && 
                 is_array($this->viewsRequire)) {
             foreach ($this->viewsRequire as $view) {
-                $require($view);
+                $render .= $require($view);
             }
         }
+        
+        return $render;
     }
 }
