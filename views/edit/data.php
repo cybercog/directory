@@ -27,7 +27,9 @@ $this->params['breadcrumbs'] = [
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
-    ['name' => '/helpers/publish-types-css']
+    ['name' => '/helpers/publish-types-css'],
+    //['name' => '/edit/dialogs/edit-type-dialog', 'params' => ['formModel' => $formModel]],
+    //['name' => '/edit/dialogs/edit-type-dialog', 'params' => ['formModel' => $formModel]]
     ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
@@ -421,7 +423,7 @@ Dialog::begin([
     </tr>
     <tr>
         <td colspan="3">
-            <?php require('data_grid.php'); ?>
+            <?=$this->render('data_grid', ['dataModel' => $dataModel]);?>
         </td>
     </tr>
 </table>

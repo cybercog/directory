@@ -1,8 +1,7 @@
 <?php 
 
 use app\modules\directory\directoryModule;
-use app\modules\directory\helpers\typesViewHelper;
-use yii\helpers\Url;
+use app\modules\directory\helpers\dataGridCellViewHelper;
 
 ?>
 
@@ -21,7 +20,7 @@ use yii\helpers\Url;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
-                            return typesViewHelper::getNameString($data);
+                            return dataGridCellViewHelper::getDataString($data->name, false, $data->id);
                         }
                     ],
                     [
@@ -36,7 +35,7 @@ use yii\helpers\Url;
                                                 'file' => directoryModule::ht('edit', 'file')],
                         'label' => directoryModule::ht('edit', 'Type'),
                         'value' => function($data) {
-                            return typesViewHelper::getTypeString($data);
+                            return dataGridCellViewHelper::getDataTypeString($data->type);
                         }
                     ],
                     [
@@ -46,7 +45,7 @@ use yii\helpers\Url;
                         'attribute' => 'description',
                         'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
-                            return typesViewHelper::getTextString($data['description']);
+                            return dataGridCellViewHelper::getTextString($data->description);
                         }
                     ],
                     [
@@ -56,7 +55,7 @@ use yii\helpers\Url;
                         'attribute' => 'validate',
                         'label' => directoryModule::ht('edit', 'Validate'),
                         'value' => function($data) {
-                            return typesViewHelper::getTextString($data['validate']);
+                            return dataGridCellViewHelper::getTextString($data->validate);
                         }
                     ],
                     [

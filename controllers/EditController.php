@@ -37,7 +37,18 @@ class EditController extends Controller {
                                 $type->description = !isset($form->description) || strlen($form->description) === 0 ? null : $form->description;
                                 $type->validate = !isset($form->validate) || strlen($form->validate) === 0 ? null : $form->validate;
                                 $type->save();
-                                return ajaxJSONResponseHelper::createResponse();
+                                if(\Yii::$app->request->get('return', false)) {
+                                    $createdType = Types::find()->where('name=:name', [':name' => $form->name])->one();
+                                    $ct = [];
+                                    $ct['id'] = $createdType->id;
+                                    $ct['name'] = $createdType->name;
+                                    $ct['type'] = $createdType->type;
+                                    $ct['description'] = $createdType->description;
+                                    $ct['validate'] = $createdType->validate;
+                                    return ajaxJSONResponseHelper::createResponse(true, 'ok', $ct);
+                                } else {
+                                    return ajaxJSONResponseHelper::createResponse();
+                                }
                             } catch (\Exception $ex) {
                                 return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                             }
@@ -50,11 +61,20 @@ class EditController extends Controller {
                                         'description' => !isset($form->description) || strlen($form->description) === 0 ? null : $form->description,
                                         'validate' => !isset($form->validate) || strlen($form->validate) === 0 ? null : $form->validate,
                                             ], 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                    if(\Yii::$app->request->get('return', false)) {
+                                        $ct = [];
+                                        $ct['id'] = \Yii::$app->request->get('id');
+                                        $ct['name'] = $form->name;
+                                        $ct['type'] = $form->type;
+                                        $ct['description'] = $form->description;
+                                        $ct['validate'] = $form->validate;
+                                        return ajaxJSONResponseHelper::createResponse(true, 'ok', $ct);
+                                    }
                                 } else {
                                     return ajaxJSONResponseHelper::createResponse(false, 
                                             directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
                                 }
-                                return ajaxJSONResponseHelper::createResponse(true);
+                                return ajaxJSONResponseHelper::createResponse();
                             } catch (\Exception $ex) {
                                 return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                             }

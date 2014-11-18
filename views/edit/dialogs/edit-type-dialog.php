@@ -8,6 +8,7 @@ use yii\helpers\Url;
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
 
@@ -139,15 +140,20 @@ Dialog::begin([
                                                 text : "<?= directoryModule::ht('edit', 'Create new type')?>",
                                                 click : function() {
                                                     $.ajaxPostHelper({
-                                                        url : "<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create'])?>",
+                                                        url : "<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create', 'return' => 'ok'])?>",
                                                         data : $("#type-data-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
                                                         errorWaitTimeout : 5,
-                                                        onSuccess : function() { 
+                                                        onSuccess : function(dataObject) { 
                                                             $("#editDialog<?=$uid?>").dialog("close");
                                                             if(p.onSuccess !== undefined) {
-                                                                p.onSuccess();
+                                                                if((dataObject !== undefined) &&
+                                                                        (dataObject.<?=ajaxJSONResponseHelper::additionalField?> !== undefined)) {
+                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::additionalField?>);
+                                                                } else {
+                                                                   p.onSuccess();
+                                                                }
                                                             }
                                                         }
                                                     });
@@ -165,6 +171,10 @@ Dialog::begin([
                         case "edit":
                             (function(p) {
                                 $("#type-data-form<?=$uid?>").trigger('reset');
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.name);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").val(p.data.type);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'validate')?>']").val(p.data.validate);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.description);
                                 $("#editDialog<?=$uid?>").
                                     dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
                                     dialog("option", "buttons", 
@@ -172,23 +182,29 @@ Dialog::begin([
                                             {
                                                 text : "<?= directoryModule::ht('edit', 'Apply')?>",
                                                 click : function() {
-                                                    //var url = "<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>";
                                                     $.ajaxPostHelper({
-                                                        url : "<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>".replace("<?=$uid?>", p.dta.id),
+                                                        url : ("<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id),
                                                         data : $("#type-data-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
                                                         errorWaitTimeout: 5,
                                                         onSuccess: function(dataObject) { 
-                                                            $(this).dialog("close");
-                                                            //$("#updateTypesTable").click();
+                                                            $("#editDialog<?=$uid?>").dialog("close");
+                                                            if(p.onSuccess !== undefined) {
+                                                                if((dataObject !== undefined) &&
+                                                                        (dataObject.<?=ajaxJSONResponseHelper::additionalField?> !== undefined)) {
+                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::additionalField?>);
+                                                                } else {
+                                                                   p.onSuccess();
+                                                                }
+                                                            }
                                                         }
                                                     });
                                                 }
                                             },
                                             {
                                                 text : "<?= directoryModule::ht('edit', 'Close')?>",
-                                                click : function() { $(this).dialog("close"); }
+                                                click : function() { $("#editDialog<?=$uid?>").dialog("close"); }
                                             }
                                         ]).
                                     dialog("open");

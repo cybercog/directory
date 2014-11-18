@@ -81,37 +81,6 @@ $this->params['breadcrumbs'] = [
                         },
                         onSuccess : function() { $("#updateTypesTable").click(); } 
                     });
-        /*$("#type-data-form").trigger('reset');
-        var field = $(this).closest("tr").find("td").first();
-        $("#type-data-form [name='<?=Html::getInputName($formModel, 'name')?>']").val(field.find("div.row-value").text());
-        field = field.next();
-        $("#type-data-form [name='<?=Html::getInputName($formModel, 'type')?>']").val(field.find("div.row-value").text());
-        field = field.next();
-        $("#type-data-form [name='<?=Html::getInputName($formModel, 'validate')?>']").val(field.find("div.row-value").text());
-        field = field.next();
-        $("#type-data-form [name='<?=Html::getInputName($formModel, 'description')?>']").val(field.find("div.row-value").text());
-        $("#editDialog").
-                data("row-id", $(this).closest("tr").find("td").first().find("div.row-id").text()).
-                dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
-                dialog("option", "buttons", 
-                                {
-                                    "<?= directoryModule::ht('edit', 'Apply')?>": function() {
-                                        var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>";
-                                        ajaxPostHelper({
-                                            url : url.replace("<?=$uid?>", $(this).data("row-id")),
-                                            data : $("#type-data-form").serialize(),
-                                            waitTag: "#waitDlgQueryDataType",
-                                            errorTag: "#errorDlgQueryDataType",
-                                            errorWaitTimeout: 5,
-                                            onSuccess: function(dataObject) { 
-                                                $("#editDialog").dialog("close");
-                                                $("#updateTypesTable").click();
-                                            }
-                                        });
-                                    },
-                                    "<?= directoryModule::ht('edit', 'Close')?>": function() { $(this).dialog("close"); }
-                                }).
-                dialog("open");*/
     });
     
     $("body").tooltip({
@@ -132,11 +101,11 @@ $this->params['breadcrumbs'] = [
     }).on("pjax:timeout", function(eventObject) {
         eventObject.preventDefault();
     }).tooltip({
-        content : function() { return $(this).closest("td").find(".row-value").text(); },
+        content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
         var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>";
-        ajaxPostHelper({
+        $.ajaxPostHelper({
             url : url.replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),
             data : $("#type-data-form").serialize(),
             waitTag: "#waitQueryDataType",
@@ -190,7 +159,9 @@ $this->params['breadcrumbs'] = [
     </tr>
     <tr>
         <td>
-            <?php require('types_grid.php'); ?>
+            <div class="directory-table-wrap">
+                <?=$this->render('types_grid', ['dataModel' => $dataModel])?>
+            </div>
         </td>
     </tr>
 </table>

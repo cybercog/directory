@@ -1,14 +1,13 @@
 <?php 
 
 use app\modules\directory\directoryModule;
-use app\modules\directory\helpers\typesViewHelper;
-use yii\helpers\Url;
+use app\modules\directory\helpers\dataGridCellViewHelper;
 
 ?>
 
 
             <?php yii\widgets\Pjax::begin(['timeout' => $this->context->module->pjaxDefaultTimeout, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'dataGridPjaxWidget']); ?>
-            <!--<?php/* yii\grid\GridView::widget([
+            <?= yii\grid\GridView::widget([
                 'id' => 'dataGridWidget',
                 'dataProvider' => $dataModel->search(),
                 'filterModel' => $dataModel,
@@ -17,14 +16,25 @@ use yii\helpers\Url;
                         'class' => 'yii\grid\DataColumn',
                         'contentOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
-                        'attribute' => 'name',
+                        'attribute' => 'type.name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
-                        'label' => directoryModule::ht('edit', 'Name'),
+                        'label' => directoryModule::ht('edit', 'Тип'),
                         'value' => function($data) {
-                            return typesViewHelper::getNameString($data);
+                            return dataGridCellViewHelper::getDataString($data->type->name, false, $data->id);
                         }
                     ],
                     [
+                        'class' => 'yii\grid\DataColumn',
+                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'format' => 'raw',
+                        'attribute' => 'visible',
+                        'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
+                        'label' => directoryModule::ht('edit', 'Тип'),
+                        /*'value' => function($data) {
+                            return dataGridCellViewHelper::getDataString($data->type->name, false, $data->id);
+                        }*/
+                    ]
+                    /*[
                         'class' => 'yii\grid\DataColumn',
                         'contentOptions' => ['class' => 'directory-min-width'],
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
@@ -73,7 +83,7 @@ use yii\helpers\Url;
                                     directoryModule::getPublishPath('/img/delete-item.png')
                                     .'" /></button></nobr>';
                         },
-                    ]
+                    ]*/
                 ]
-            ]) */?>-->
+            ])?>
             <?php yii\widgets\Pjax::end(); ?>
