@@ -6,7 +6,11 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 ?>
 
 
-            <?php yii\widgets\Pjax::begin(['timeout' => $this->context->module->pjaxDefaultTimeout, 'enablePushState' => false, 'enableReplaceState' => false, 'id' => 'typesGridPjaxWidget']); ?>
+            <?php yii\widgets\Pjax::begin([
+                'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
+                'enablePushState' => false, 
+                'enableReplaceState' => false, 
+                'id' => 'typesGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesGridWidget',
                 'dataProvider' => $dataModel->search(),

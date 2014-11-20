@@ -260,3 +260,5 @@ button.directory-small-button {
 .directory-row-selector:hover td {
     background-color: yellow !important;
 }
+
+.directory-ui-menu { position: absolute; }

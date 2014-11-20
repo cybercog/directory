@@ -57,7 +57,7 @@ $this->params['breadcrumbs'] = [
                             {
                                 push : false,
                                 replace : false,
-                                timeout : <?=$this->context->module->pjaxDefaultTimeout?>, 
+                                timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
                                 url : $("#typesGridWidget").yiiGridView("data").settings.filterUrl
                             });
     }).tooltip({

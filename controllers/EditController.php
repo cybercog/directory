@@ -143,9 +143,9 @@ class EditController extends Controller {
                                     case 'file':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->file = UploadedFile::getInstance($form, 'file');
-                                        $path = \Yii::getAlias('@webroot').'/uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
-                                        if($form->file->saveAs($path)) {
-                                            $data->text = $path;
+                                        $file =  '/file_'.mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
+                                        if($form->file->saveAs(\Yii::getAlias(\Yii::$app->params['uploadPathLocal']).$file)) {
+                                            $data->text = \Yii::getAlias(\Yii::$app->params['uploadPathWeb']).$file;
                                         } else {
                                             throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                         }
@@ -153,9 +153,9 @@ class EditController extends Controller {
                                     case 'image':
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->image = UploadedFile::getInstance($form, 'image');
-                                        $path = \Yii::getAlias('@webroot').'/uploads/file_'. mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
-                                        if($form->image->saveAs($path)) {
-                                            $data->text = $path;
+                                        $file =  '/image_'.mt_rand(0, mt_getrandmax()).'.'.$form->image->extension;
+                                        if($form->image->saveAs(\Yii::getAlias(\Yii::$app->params['uploadPathLocal']).$file)) {
+                                            $data->text = \Yii::getAlias(\Yii::$app->params['uploadPathWeb']).$file;
                                         } else {
                                             throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                         }
@@ -191,7 +191,7 @@ class EditController extends Controller {
             }
         }
         
-        return $this->render('data', ['formModel' => new DataForm, 'typesDataModel' => $typesData, 'dataModel' => $model]);
+        return $this->render('data', ['formModel' => new DataForm, /*'typeFormModel' => new TypeForm,*/ 'typesDataModel' => $typesData, 'dataModel' => $model]);
     }
     
     public function actionRecords(){

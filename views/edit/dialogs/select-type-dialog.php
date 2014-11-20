@@ -4,6 +4,8 @@ use yii\jui\Dialog;
 use yii\web\View;
 use app\modules\directory\directoryModule;
 
+$uid = mt_rand(0, mt_getrandmax());
+
 ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
@@ -14,7 +16,7 @@ use app\modules\directory\directoryModule;
 
 <?php 
 Dialog::begin([
-    'id' => 'selectTypeDialog',
+    'id' => 'selectTypeDialog'.$uid,
     'clientOptions' => [
         'modal' => true,
         'autoOpen' => false,
@@ -26,7 +28,7 @@ Dialog::begin([
 
 <div>
     
-<?php require('types_compact_grid.php');?>
+<?php //require('types_compact_grid.php');?>
     
     <span id="waitDlgQueryCompactDataType" class="directory-hide-element">
         <nobr>
@@ -46,11 +48,23 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#selectTypeDialog").dialog("option", "buttons", {
-            "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
-                $(this).dialog("close").data("resultCallback")(false); 
+    (function($) {
+        $.selectTypeDialog = function(p) {
+            if(p !== undefined) {
+                $("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
+                    "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
+                    $("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
+                    }
+                }).dialog("open");
             }
-    });
+        }
+    })(jQuery);
+    
+    /*$("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
+            "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
+                $("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
+            }
+    });*/
     
     $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
         $("#waitDlgQueryCompactDataType").removeClass("directory-hide-element");
@@ -86,7 +100,7 @@ Dialog::begin([
                 data("resultCallback", resultCallback).
                 dialog("open");
         $("#typesCompactGridWidget").remove();
-        $.pjax.reload("#typesCompactGridPjaxWidget", {timeout : <?=$this->context->module->pjaxDefaultTimeout?>});
+        $.pjax.reload("#typesCompactGridPjaxWidget", {timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>});
     }
     
 <?php $this->registerJs(ob_get_clean(), View::POS_HEAD); if(false) { ?></script><?php } ?>

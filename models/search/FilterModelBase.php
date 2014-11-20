@@ -10,9 +10,9 @@ abstract class FilterModelBase extends Model {
 
     abstract public function search();
 
-    public function buildModels() {
+    /*public function buildModels() {
         return $this->_dataProvider->getModels();
-    }
+    }*/
 
     public function getDataProvider() {
         return $this->_dataProvider;

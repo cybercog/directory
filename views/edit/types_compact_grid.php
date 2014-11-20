@@ -7,7 +7,7 @@ use yii\helpers\Url;
 ?>
 
             <?php yii\widgets\Pjax::begin([
-                'timeout' => $this->context->module->pjaxDefaultTimeout, 
+                'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
                 'id' => 'typesCompactGridPjaxWidget',
