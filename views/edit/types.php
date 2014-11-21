@@ -26,7 +26,7 @@ $this->params['breadcrumbs'] = [
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
-    ['name' => '/edit/dialogs/edit-type-dialog', 'params' => ['formModel' => $formModel]]
+    ['name' => '/edit/dialogs/edit-type-dialog']
     ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>

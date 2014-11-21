@@ -108,11 +108,11 @@ class EditController extends Controller {
                     return $this->renderPartial('types_grid', ['dataModel' => $model]);
                 case '#typesCompactGridPjaxWidget':
                     $model->pagination = 7;
-                    return $this->renderPartial('types_compact_grid', ['typesDataModel' => $model]);
+                    return $this->renderPartial('dialogs/types-compact-grid', ['typesDataModel' => $model]);
             }
         }
         
-        return $this->render('types', ['formModel' => new TypeForm, 'dataModel' => $model]);
+        return $this->render('types', ['dataModel' => $model]);
     }
     
     public function actionData(){

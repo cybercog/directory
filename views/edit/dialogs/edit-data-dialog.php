@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 
-use app\modules\directory\models\forms\TypeForm;
 use app\modules\directory\directoryModule;
 use app\modules\directory\widgets\SingletonRenderHelper;
 
@@ -17,7 +16,8 @@ $uid = mt_rand(0, mt_getrandmax());
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
-    ['name' => '/edit/dialogs/edit-type-dialog', 'params' => ['formModel' => new TypeForm]]
+    ['name' => '/edit/dialogs/edit-type-dialog'],
+    ['name' => '/edit/dialogs/select-type-dialog']
     ]]) ?>
 
 <div class="directory-hide-element">
@@ -248,7 +248,13 @@ Dialog::begin([
                     updateFormState(returnType.type);
                 }
             });*/
-        }).next().menu().hide().children().first().click(function(){alert($(this).text());}).next().click(function(){alert($(this).text());});
+        }).next().menu().hide().children().first().click(
+                function() {
+                    $.selectTypeDialog(1);
+        }).next().click(
+                function() {
+                    alert($(this).text());
+        });
 
         $.editDataDialog = function(p) {
             

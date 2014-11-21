@@ -6,6 +6,9 @@ use app\modules\directory\directoryModule;
 
 $uid = mt_rand(0, mt_getrandmax());
 
+$typeSearch = new \app\modules\directory\models\search\TypesSearch();
+$typeSearch->pagination = 0;
+
 ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
@@ -28,7 +31,9 @@ Dialog::begin([
 
 <div>
     
-<?php //require('types_compact_grid.php');?>
+    <div id="typesCompactGridWrap<?=$uid?>">
+        <?=$this->render('types-compact-grid', ['typesDataModel' => $typeSearch])?>
+    </div>
     
     <span id="waitDlgQueryCompactDataType" class="directory-hide-element">
         <nobr>
@@ -53,9 +58,21 @@ Dialog::begin([
             if(p !== undefined) {
                 $("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
                     "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
-                    $("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
+                    //$("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
                     }
-                }).dialog("open");
+                }).
+                dialog({
+                        open: function() {
+                            $.pjax.reload('#typesCompactGridPjaxWidget', 
+                                            {
+                                                push : false,
+                                                replace : false,
+                                                timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
+                                                url : $("#typesCompactGridWrap<?=$uid?> #typesCompactGridWidget").yiiGridView("data").settings.filterUrl
+                                            });
+                        }
+                }).
+                dialog("open");
             }
         }
     })(jQuery);

@@ -12,6 +12,8 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
 
+$formModel = new \app\modules\directory\models\forms\TypeForm;
+
 ?>
 
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
