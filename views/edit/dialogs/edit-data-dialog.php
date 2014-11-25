@@ -8,8 +8,11 @@ use yii\web\View;
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
+
+$formModel = new \app\modules\directory\models\forms\DataForm;
 
 ?>
 
@@ -250,7 +253,13 @@ Dialog::begin([
             });*/
         }).next().menu().hide().children().first().click(
                 function() {
-                    $.selectTypeDialog(1);
+                    $.selectTypeDialog(
+                            {
+                                onSuccess : function(data) {
+                                    if(data !== undefined) {
+                                    }
+                                }
+                            });
         }).next().click(
                 function() {
                     alert($(this).text());
@@ -314,5 +323,73 @@ Dialog::begin([
             }
         };
     })(jQuery);
+    
+    
+    
+    
+   /*$("#selectDataTypeButton").button().click(function(eventObject) {
+        eventObject.preventDefault();
+        SelectDataType(function(returnType) {
+            if(returnType !== false) {
+                $("#data-edit-form #<?=Html::getInputId($formModel, 'typeId')?>").val(returnType.id);
+                $("#data-edit-form #<?=Html::getInputId($formModel, 'typeId').'text'?>").val(
+                        returnType.name + " - [" + returnType.type + "]");
+                updateFormState(returnType.type);
+            }
+        });
+    });*/
+    
+    $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").change(function(eventObject) {
+        if(eventObject.target.files.length > 0) {
+            $("#<?=Html::getInputId($formModel, 'file').'text'?>").val(
+                    eventObject.target.files[0].name);
+        } else {
+            $("#<?=Html::getInputId($formModel, 'file').'text'?>").val("");
+        }
+    });
+
+    $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").change(function(eventObject) {
+        if(eventObject.target.files.length > 0) {
+            $("#<?=Html::getInputId($formModel, 'image').'text'?>").val(
+                    eventObject.target.files[0].name);
+        } else {
+            $("#<?=Html::getInputId($formModel, 'image').'text'?>").val("");
+        }
+    });
+    
+    $("#selectFileButton").button().click(function(eventObject) {
+        eventObject.preventDefault();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'file')?>").click();
+    });
+    
+    $("#selectImageButton").button().click(function(eventObject) {
+        eventObject.preventDefault();
+        $("#data-edit-form #<?=Html::getInputId($formModel, 'image')?>").click();
+    });
+    
+    
+    //var j=true;
+    
+    $("#file_upload_<?=$uid?>").load(function(){
+        
+        alert($('#file_upload_<?=$uid?>').contents().find('body').text());
+        //if(j){$('#file_upload_<?=$uid?>').attr("src", "/directory/edit/data");j=false;}
+        /*try {
+            var response = $.parseJSON($('#file_upload_<?=$uid?>').contents().find('body').text());
+            if(response.<?=ajaxJSONResponseHelper::resultField?> === "<?=ajaxJSONResponseHelper::okResult?>") {
+                $("#editDataDialog").dialog("close");
+                $("#waitDlgQueryData").addClass("directory-hide-element");
+                $.pjax.reload('#dataGridPjaxWidget', {timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>});
+            } else {
+                $("#waitDlgQueryData").addClass("directory-hide-element");
+                $("#errorDlgQueryData").removeClass("directory-hide-element").text(response.<?= ajaxJSONResponseHelper::messageField?>);
+                setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
+            }
+        } catch(err) {
+            $("#waitDlgQueryData").addClass("directory-hide-element");
+            $("#errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::ht('search', 'Error connecting to server.')?>");
+            setTimeout(function(){ $("#errorDlgQueryData").removeClass("directory-hide-element"); }, 5000);
+        }*/
+    });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

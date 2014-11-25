@@ -40,6 +40,13 @@ CREATE INDEX types_t_name_index ON types_t (name);
 CREATE INDEX types_t_type_index ON types_t (type);
 -- ESQLDDLCMD
 
+-- BSQLDDLCMD
+CREATE VIEW types_tolower_v (id, name, type, description, validate) AS
+SELECT t.id AS id, lower(t.name) AS name, 
+        t.type AS type, lower(t.description) AS description, 
+        lower(t.validate) AS validate
+FROM types_t t;
+-- ESQLDDLCMD
 
 
 -- BSQLDDLCMD
@@ -83,6 +90,15 @@ CREATE INDEX data_t_type_index ON data_t (type_id);
 -- ESQLDDLCMD
 -- BSQLDDLCMD
 CREATE INDEX data_t_value_index ON data_t (value);
+-- ESQLDDLCMD
+
+-- BSQLDDLCMD
+CREATE VIEW data_tolower_v AS
+SELECT d.id AS id, t.id AS type_id, lower(t.name) AS type_name,
+        t.type AS type_type, lower(d.value) AS value, lower(d.text) AS text,
+        lower(d.description) AS description, d.visible AS visible
+FROM data_t d
+    INNER JOIN types_t t ON t.id = d.type_id;
 -- ESQLDDLCMD
 
 

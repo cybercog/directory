@@ -135,6 +135,8 @@ use yii\web\View;
                 deleteData: ( erasePostData({ waitTag: p.waitTag, errorTag: p.errorTag}) )
             });
         }
+        
+        return this;
     }
 })(jQuery);
 

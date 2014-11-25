@@ -6,9 +6,6 @@ use app\modules\directory\directoryModule;
 
 $uid = mt_rand(0, mt_getrandmax());
 
-$typeSearch = new \app\modules\directory\models\search\TypesSearch();
-$typeSearch->pagination = 0;
-
 ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
@@ -24,6 +21,7 @@ Dialog::begin([
         'modal' => true,
         'autoOpen' => false,
         'resizable' => false,
+        'title' => directoryModule::ht('edit', 'Select type'),
         'width' => 600
     ],
 ]); ?>
@@ -31,9 +29,7 @@ Dialog::begin([
 
 <div>
     
-    <div id="typesCompactGridWrap<?=$uid?>">
-        <?=$this->render('types-compact-grid', ['typesDataModel' => $typeSearch])?>
-    </div>
+    <?=$this->render('types-compact-grid', ['uid' => $uid])?>
     
     <span id="waitDlgQueryCompactDataType" class="directory-hide-element">
         <nobr>
@@ -54,22 +50,54 @@ Dialog::begin([
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     (function($) {
+        $("#typesCompactGridPjaxWidget<?=$uid?>").on("pjax:start", function() {
+            $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").removeClass("directory-hide-element");
+            $(this).addClass("directory-hide-element");
+            //alert("pjax:start");
+        }).on("pjax:end", function() {
+            //alert("pjax:end");
+            $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").addClass("directory-hide-element");
+            $(this).removeClass("directory-hide-element").find("#typesCompactGridWidget<?=$uid?> tbody tr").addClass("directory-row-selector");
+        }).on("pjax:error", function(eventObject) {
+            eventObject.preventDefault();
+            $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").addClass("directory-hide-element");
+            $("#selectTypeDialog<?=$uid?> #errorDlgQueryCompactDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
+            setTimeout(function() { $("#selectTypeDialog<?=$uid?> #errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
+        }).on("pjax:timeout", function(eventObject) {
+            eventObject.preventDefault();
+        });
+        
         $.selectTypeDialog = function(p) {
             if(p !== undefined) {
+                $("#typesCompactGridPjaxWidget<?=$uid?>").on(
+                        "click", 
+                        "#typesCompactGridWidget<?=$uid?> tbody tr", 
+                        { params : p }, 
+                        function(eventObject) {
+                            $("#selectTypeDialog<?=$uid?>").dialog("close");
+                            /*$("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(
+-                            {
+-                                id : $(this).find("td:first .row-id").text(),
+-                                name : $(this).find("td:first .row-display").text(),
+-                                type : $(this).find("td:eq(1) .row-value").text(),
+-                                typeDiaplay : $(this).find("td:eq(1) .row-display").text()
+-                            });*/
+                });
+                
                 $("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
                     "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
-                    //$("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
+                        $("#selectTypeDialog<?=$uid?>").dialog("close");
                     }
                 }).
                 dialog({
                         open: function() {
-                            $.pjax.reload('#typesCompactGridPjaxWidget', 
+                            /*$.pjax.reload('#typesCompactGridPjaxWidget<?=$uid?>', 
                                             {
                                                 push : false,
                                                 replace : false,
                                                 timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
-                                                url : $("#typesCompactGridWrap<?=$uid?> #typesCompactGridWidget").yiiGridView("data").settings.filterUrl
-                                            });
+                                                url : $("#typesCompactGridPjaxWidget<?=$uid?> #typesCompactGridWidget<?=$uid?>").yiiGridView("data").settings.filterUrl
+                                            });*/
                         }
                 }).
                 dialog("open");
@@ -77,47 +105,16 @@ Dialog::begin([
         }
     })(jQuery);
     
-    /*$("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
-            "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
-                $("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(false); 
-            }
-    });*/
-    
-    $("#typesCompactGridPjaxWidget").on("pjax:start", function() {
-        $("#waitDlgQueryCompactDataType").removeClass("directory-hide-element");
-    }).on("pjax:end", function() {
-        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
-        $("#typesCompactGridWidget").
-                find("tbody tr").
-                addClass("directory-row-selector").
-                click(function() {
-                    $("#selectTypeDialog").dialog("close").data("resultCallback")(
-                            {
-                                id : $(this).find("td:first .row-id").text(),
-                                name : $(this).find("td:first .row-display").text(),
-                                type : $(this).find("td:eq(1) .row-value").text(),
-                                typeDiaplay : $(this).find("td:eq(1) .row-display").text()
-                            }); 
-                });
-    }).on("pjax:error", function(eventObject) {
-        eventObject.preventDefault();
-        $("#waitDlgQueryCompactDataType").addClass("directory-hide-element");
-        $("#errorDlgQueryCompactDataType").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
-        setTimeout(function() { $("#errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
-    }).on("pjax:timeout", function(eventObject) {
-        eventObject.preventDefault();
-    });
-    
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    function SelectDataType(resultCallback) {
+    /*function SelectDataType(resultCallback) {
         $("#selectTypeDialog").
                 data("resultCallback", resultCallback).
                 dialog("open");
         $("#typesCompactGridWidget").remove();
         $.pjax.reload("#typesCompactGridPjaxWidget", {timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>});
-    }
+    }*/
     
 <?php $this->registerJs(ob_get_clean(), View::POS_HEAD); if(false) { ?></script><?php } ?>

@@ -2,7 +2,13 @@
 
 namespace app\modules\directory\models\search;
 
-use app\modules\directory\models\db\Types;
+use yii\db\ActiveRecord;
+
+class LowerTypes extends ActiveRecord {
+    public static function tableName() {
+        return 'types_tolower_v';
+    }
+}
 
 class TypesSearch extends FilterModelBase {
     public $name;
@@ -18,12 +24,12 @@ class TypesSearch extends FilterModelBase {
     }
     
     public function search() {
-        $query = Types::find();
+        $query = LowerTypes::find();
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', mb_strtolower($this->name, 'UTF-8')]);
         $query->andFilterWhere(['type' => $this->type]);
-        $query->andFilterWhere(['like', 'description', $this->description]);
-        $query->andFilterWhere(['like', 'validate', $this->validate]);
+        $query->andFilterWhere(['like', 'description', mb_strtolower($this->description, 'UTF-8')]);
+        $query->andFilterWhere(['like', 'validate', mb_strtolower($this->validate, 'UTF-8')]);
 
         $this->_dataProvider = new \yii\data\ActiveDataProvider([
                     'query' => $query, 

@@ -102,14 +102,28 @@ class EditController extends Controller {
         $model = new \app\modules\directory\models\search\TypesSearch();
         $model->attributes = \Yii::$app->request->get('TypesSearch');
         
-        if(\Yii::$app->request->isPjax) {
-            switch(\Yii::$app->request->get('_pjax')) {
+        if(\Yii::$app->request->isAjax) {
+            $control = \Yii::$app->request->post('ajaxWidget');
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            if($control == 'ajaxTypesGrid') {
+                return ajaxJSONResponseHelper::createResponse(true, 
+                        $this->renderPartial('types_grid', ['dataModel' => $model]));
+            } elseif(preg_match('/#typesCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) == 1) {
+                return $this->renderPartial('dialogs/types-compact-grid', ['typesDataModel' => $model, 'uid' => $matches['uid']]);
+            } else {
+                throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+            }
+            
+            /*switch(\Yii::$app->request->get('_pjax')) {
                 case '#typesGridPjaxWidget':
                     return $this->renderPartial('types_grid', ['dataModel' => $model]);
                 case '#typesCompactGridPjaxWidget':
                     $model->pagination = 7;
                     return $this->renderPartial('dialogs/types-compact-grid', ['typesDataModel' => $model]);
-            }
+                default:
+                    throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+            }*/
         }
         
         return $this->render('types', ['dataModel' => $model]);
@@ -181,17 +195,17 @@ class EditController extends Controller {
         $model = new \app\modules\directory\models\search\DataSearch();
         $model->attributes = \Yii::$app->request->get('DataSearch');
         
-        $typesData = new \app\modules\directory\models\search\TypesSearch();
-        $typesData->pagination = 7;
+       /* $typesData = new \app\modules\directory\models\search\TypesSearch();
+        $typesData->pagination = 7;*/
         
         if(\Yii::$app->request->isPjax) {
-            switch (\Yii::$app->request->get('_pjax')) {
+            /*switch (\Yii::$app->request->get('_pjax')) {
                 case '#typesCompactGridPjaxWidget':
                     return $this->renderPartial('types_compact_grid', ['typesDataModel' => $typesData]);
-            }
+            }*/
         }
         
-        return $this->render('data', ['formModel' => new DataForm, /*'typeFormModel' => new TypeForm,*/ 'typesDataModel' => $typesData, 'dataModel' => $model]);
+        return $this->render('data', [/*'formModel' => new DataForm, *//*'typeFormModel' => new TypeForm,*/ /*'typesDataModel' => $typesData,*/ 'dataModel' => $model]);
     }
     
     public function actionRecords(){

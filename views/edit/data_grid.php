@@ -9,7 +9,8 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
             <?php yii\widgets\Pjax::begin([
                 'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
-                'enableReplaceState' => false, 
+                'enableReplaceState' => false,
+                'linkSelector' => 'a:not(.directory-data-file-download)',
                 'id' => 'dataGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'dataGridWidget',
@@ -24,7 +25,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Type name'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getDataString($data->type->name, false, $data->id);
+                            return dataGridCellViewHelper::getDataString($data->type_name, false, $data->id);
                         }
                     ],
                     [
@@ -39,7 +40,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Type'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getDataTypeString($data->type->type);
+                            return dataGridCellViewHelper::getDataTypeString($data->type_type);
                         }
                     ],
                     [
@@ -49,7 +50,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Value'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getValueDataString($data->type->type, $data->value, $data->text);
+                            return dataGridCellViewHelper::getValueDataString($data->type_type, $data->value, $data->text);
                         }
                     ],
                     [

@@ -4,17 +4,23 @@ use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\typesViewHelper;
 use yii\helpers\Url;
 
+if(!isset($typeSearch)) {
+    $typesDataModel = new \app\modules\directory\models\search\TypesSearch();
+}
+
+$typesDataModel->pagination = 7;
+
 ?>
 
             <?php yii\widgets\Pjax::begin([
                 'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
-                'id' => 'typesCompactGridPjaxWidget',
+                'id' => 'typesCompactGridPjaxWidget'.$uid,
                 'clientOptions' => ['url' => Url::toRoute(['/directory/edit/types'])]
-                ]); ?>
+                ]);?>
             <?= yii\grid\GridView::widget([
-                'id' => 'typesCompactGridWidget',
+                'id' => 'typesCompactGridWidget'.$uid,
                 'dataProvider' => $typesDataModel->search(),
                 'filterModel' => $typesDataModel,
                 'filterUrl' => Url::toRoute(['/directory/edit/types']),

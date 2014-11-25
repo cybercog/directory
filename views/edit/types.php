@@ -26,6 +26,7 @@ $this->params['breadcrumbs'] = [
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
+    ['name' => '/helpers/ajax-widget-reload-helper'],
     ['name' => '/edit/dialogs/edit-type-dialog']
     ]]) ?>
 
@@ -88,7 +89,7 @@ $this->params['breadcrumbs'] = [
         items : ".directory-edit-type-button, .directory-delete-type-button"
     });
     
-    $("#typesGridPjaxWidget").on("pjax:start", function() {
+   /* $("#typesGridPjaxWidget").on("pjax:start", function() {
         $("#waitQueryDataType").removeClass("directory-hide-element");
     }).on("pjax:end", function() {
         $("#waitQueryDataType").addClass("directory-hide-element");
@@ -100,7 +101,7 @@ $this->params['breadcrumbs'] = [
         setTimeout(function() { $("#errorQueryDataType").addClass("directory-hide-element"); }, 5000);
     }).on("pjax:timeout", function(eventObject) {
         eventObject.preventDefault();
-    }).tooltip({
+    }).tooltip({//????????????
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
@@ -115,6 +116,21 @@ $this->params['breadcrumbs'] = [
                 $("#updateTypesTable").click();
             }
         });
+    });*/
+    
+    $("#ajaxTypesGrid").ajaxWidgetReloadHelper({
+        ajaxParams : {
+            url : "<?=Url::toRoute(['/directory/edit/types'])?>",
+            waitTag : "#waitQueryDataType",
+            errorTag : "#errorQueryDataType",
+            errorWaitTimeout: 5,
+            data : { ajaxWidget : 'ajaxTypesGrid' },
+            onSuccess : function() { 
+                $(".directory-edit-type-button, .directory-delete-type-button").button({text : false}); 
+            }
+    }}).tooltip({
+        content : function() { return $(this).closest("td").find(".row-value").html(); },
+        items : ".directory-show-full-text"
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
@@ -159,7 +175,7 @@ $this->params['breadcrumbs'] = [
     </tr>
     <tr>
         <td>
-            <div class="directory-table-wrap">
+            <div class="directory-table-wrap" id="ajaxTypesGrid">
                 <?=$this->render('types_grid', ['dataModel' => $dataModel])?>
             </div>
         </td>

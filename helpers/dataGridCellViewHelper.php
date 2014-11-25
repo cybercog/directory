@@ -79,7 +79,8 @@ class dataGridCellViewHelper {
                         . '<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" src="'
                         .directoryModule::getPublishPath('/img/info16.png').'" />'
-                    . '&nbsp;<a href="'.$text.'">'.  directoryModule::ht('search', 'Download').'</a></div>'
+                    . '&nbsp;<a href="'.$text.'" class="directory-data-file-download">'
+                    .  directoryModule::ht('search', 'Download').'</a></div>'
                         .'<div class="directory-hide-element row-value"><div>'
                     .$value
                     .'</div><div>'
@@ -91,7 +92,8 @@ class dataGridCellViewHelper {
                         . '<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" src="'
                         .directoryModule::getPublishPath('/img/info16.png').'" />'
-                    . '&nbsp;<a href="'.$text.'">'.  directoryModule::ht('search', 'Download').'</a></div>'
+                    . '&nbsp;<a href="'.$text.'" class="directory-data-file-download">'
+                    .  directoryModule::ht('search', 'Download').'</a></div>'
                         .'<div class="directory-hide-element row-value"><div>'
                     .$value
                     .'</div><div>'
