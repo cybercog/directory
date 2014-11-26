@@ -4,7 +4,7 @@ use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\typesViewHelper;
 use yii\helpers\Url;
 
-if(!isset($typeSearch)) {
+if(!isset($typesDataModel)) {
     $typesDataModel = new \app\modules\directory\models\search\TypesSearch();
 }
 

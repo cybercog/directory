@@ -53,9 +53,7 @@ Dialog::begin([
         $("#typesCompactGridPjaxWidget<?=$uid?>").on("pjax:start", function() {
             $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").removeClass("directory-hide-element");
             $(this).addClass("directory-hide-element");
-            //alert("pjax:start");
         }).on("pjax:end", function() {
-            //alert("pjax:end");
             $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").addClass("directory-hide-element");
             $(this).removeClass("directory-hide-element").find("#typesCompactGridWidget<?=$uid?> tbody tr").addClass("directory-row-selector");
         }).on("pjax:error", function(eventObject) {
@@ -75,13 +73,14 @@ Dialog::begin([
                         { params : p }, 
                         function(eventObject) {
                             $("#selectTypeDialog<?=$uid?>").dialog("close");
-                            /*$("#selectTypeDialog<?=$uid?>").dialog("close").data("resultCallback")(
--                            {
--                                id : $(this).find("td:first .row-id").text(),
--                                name : $(this).find("td:first .row-display").text(),
--                                type : $(this).find("td:eq(1) .row-value").text(),
--                                typeDiaplay : $(this).find("td:eq(1) .row-display").text()
--                            });*/
+                            if(eventObject.data.params.onSuccess !== undefined) {
+                                eventObject.data.params.onSuccess({
+                                    id : $(this).find("td:first .row-id").text(),
+                                    name : $(this).find("td:first .row-display").text(),
+                                    type : $(this).find("td:eq(1) .row-value").text(),
+                                    typeDiaplay : $(this).find("td:eq(1) .row-display").text()
+                                });
+                            }
                 });
                 
                 $("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {

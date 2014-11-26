@@ -261,4 +261,4 @@ button.directory-small-button {
     background-color: yellow !important;
 }
 
-.directory-ui-menu { position: absolute; }
+.directory-ui-menu { position: absolute; z-index: 1000; }

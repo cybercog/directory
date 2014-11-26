@@ -112,16 +112,6 @@ class EditController extends Controller {
             } else {
                 throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
             }
-            
-            /*switch(\Yii::$app->request->get('_pjax')) {
-                case '#typesGridPjaxWidget':
-                    return $this->renderPartial('types_grid', ['dataModel' => $model]);
-                case '#typesCompactGridPjaxWidget':
-                    $model->pagination = 7;
-                    return $this->renderPartial('dialogs/types-compact-grid', ['typesDataModel' => $model]);
-                default:
-                    throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
-            }*/
         }
         
         return $this->render('types', ['dataModel' => $model]);

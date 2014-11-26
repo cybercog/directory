@@ -45,11 +45,6 @@ $this->params['breadcrumbs'] = [
 <?php //require('select_type_dialog.php'); ?>
 
 
-<div class="directory-hide-element">
-    <iframe id="file_upload_<?=$uid?>" name="file_upload_<?=$uid?>_name"></iframe>
-</div>
-
-
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
@@ -57,7 +52,7 @@ $this->params['breadcrumbs'] = [
         function() {
             $.editDataDialog({
                 type : "new",
-                onSuccess : function() { $("#updateTypesTable").click(); } 
+                onSuccess : function() { $("#updateDataTable").click(); } 
             });
     }).tooltip({
         content : function() { return $(this).attr("title"); }
