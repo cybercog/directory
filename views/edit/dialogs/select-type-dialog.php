@@ -91,13 +91,13 @@ Dialog::begin([
                 }).
                 dialog({
                         open: function() {
-                            /*$.pjax.reload('#typesCompactGridPjaxWidget<?=$uid?>', 
+                            $.pjax.reload('#typesCompactGridPjaxWidget<?=$uid?>', 
                                             {
                                                 push : false,
                                                 replace : false,
                                                 timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
                                                 url : $("#typesCompactGridPjaxWidget<?=$uid?> #typesCompactGridWidget<?=$uid?>").yiiGridView("data").settings.filterUrl
-                                            });*/
+                                            });
                         }
                 }).
                 dialog("open");

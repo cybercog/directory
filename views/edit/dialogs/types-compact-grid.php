@@ -17,7 +17,7 @@ $typesDataModel->pagination = 7;
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
                 'id' => 'typesCompactGridPjaxWidget'.$uid,
-                'clientOptions' => ['url' => Url::toRoute(['/directory/edit/types'])]
+                //'clientOptions' => ['url' => Url::toRoute(['/directory/edit/types'])]
                 ]);?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesCompactGridWidget'.$uid,

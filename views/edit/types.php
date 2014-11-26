@@ -54,6 +54,8 @@ $this->params['breadcrumbs'] = [
     
     $("#updateTypesTable").button({text : false}).click(
         function() {
+            //alert($("#ajaxTypesGrid"));
+            //$("#ajaxTypesGrid").ajaxWidgetReloadHelperInitialize();
             $.pjax.reload('#typesGridPjaxWidget', 
                             {
                                 push : false,
@@ -89,7 +91,7 @@ $this->params['breadcrumbs'] = [
         items : ".directory-edit-type-button, .directory-delete-type-button"
     });
     
-   /* $("#typesGridPjaxWidget").on("pjax:start", function() {
+    $("#typesGridPjaxWidget").on("pjax:start", function() {
         $("#waitQueryDataType").removeClass("directory-hide-element");
     }).on("pjax:end", function() {
         $("#waitQueryDataType").addClass("directory-hide-element");
@@ -116,11 +118,14 @@ $this->params['breadcrumbs'] = [
                 $("#updateTypesTable").click();
             }
         });
-    });*/
+    });
     
-    $("#ajaxTypesGrid").ajaxWidgetReloadHelper({
+   /* $("#ajaxTypesGrid").ajaxWidgetReloadHelper({
+        reloadUrl : function() { 
+            alert($("#typesGridWidget").yiiGridView("data").settings.filterUrl);
+            return $("#typesGridWidget").yiiGridView("data").settings.filterUrl; 
+        },
         ajaxParams : {
-            url : "<?=Url::toRoute(['/directory/edit/types'])?>",
             waitTag : "#waitQueryDataType",
             errorTag : "#errorQueryDataType",
             errorWaitTimeout: 5,
@@ -131,7 +136,7 @@ $this->params['breadcrumbs'] = [
     }}).tooltip({
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
-    });
+    });*/
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 

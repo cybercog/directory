@@ -102,14 +102,12 @@ class EditController extends Controller {
         $model = new \app\modules\directory\models\search\TypesSearch();
         $model->attributes = \Yii::$app->request->get('TypesSearch');
         
-        if(\Yii::$app->request->isAjax) {
-            $control = \Yii::$app->request->post('ajaxWidget');
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            
-            if($control == 'ajaxTypesGrid') {
-                return ajaxJSONResponseHelper::createResponse(true, 
-                        $this->renderPartial('types_grid', ['dataModel' => $model]));
-            } elseif(preg_match('/#typesCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) == 1) {
+        if(\Yii::$app->request->isPjax) {
+            $control = \Yii::$app->request->get('_pjax');
+
+            if($control == '#typesGridPjaxWidget') {
+                return $this->renderPartial('types_grid', ['dataModel' => $model]);
+            } elseif(preg_match('/#typesCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) > 0) {
                 return $this->renderPartial('dialogs/types-compact-grid', ['typesDataModel' => $model, 'uid' => $matches['uid']]);
             } else {
                 throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
