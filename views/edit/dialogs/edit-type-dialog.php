@@ -151,8 +151,8 @@ Dialog::begin([
                                                             $("#editDialog<?=$uid?>").dialog("close");
                                                             if(p.onSuccess !== undefined) {
                                                                 if((dataObject !== undefined) &&
-                                                                        (dataObject.<?=ajaxJSONResponseHelper::additionalField?> !== undefined)) {
-                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::additionalField?>);
+                                                                        (dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined)) {
+                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::messageField?>);
                                                                 } else {
                                                                    p.onSuccess();
                                                                 }

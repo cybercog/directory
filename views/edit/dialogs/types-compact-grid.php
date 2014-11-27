@@ -17,7 +17,6 @@ $typesDataModel->pagination = 7;
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
                 'id' => 'typesCompactGridPjaxWidget'.$uid,
-                //'clientOptions' => ['url' => Url::toRoute(['/directory/edit/types'])]
                 ]);?>
             <?= yii\grid\GridView::widget([
                 'id' => 'typesCompactGridWidget'.$uid,
@@ -61,6 +60,21 @@ $typesDataModel->pagination = 7;
                             return typesViewHelper::getTextString($data['description']);
                         }
                     ],
+                    [
+                        'class' => 'yii\grid\DataColumn',
+                        'contentOptions' => ['class' => 'directory-min-width directory-compact-types-grid-edit'],
+                        'format' => 'raw',
+                        'value' => function($data) {
+                            return '<nobr>'
+                                    . '<button class="directory-edit-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::ht('edit', 'Edit data type').'"><img src="'.
+                                    directoryModule::getPublishPath('/img/edit-item.png').
+                                    '" /></button>&nbsp;<button class="directory-delete-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::ht('edit', 'Delete data type').'"><img src="'.
+                                    directoryModule::getPublishPath('/img/delete-item.png')
+                                    .'" /></button></nobr>';
+                        },
+                    ]
                 ]
             ]) ?>
             <?php yii\widgets\Pjax::end(); ?>

@@ -55,6 +55,7 @@ Dialog::begin([
             $(this).addClass("directory-hide-element");
         }).on("pjax:end", function() {
             $("#selectTypeDialog<?=$uid?> #waitDlgQueryCompactDataType").addClass("directory-hide-element");
+            $("#typesCompactGridPjaxWidget<?=$uid?> .directory-edit-type-button, #typesCompactGridPjaxWidget<?=$uid?> .directory-delete-type-button").button({text : false});
             $(this).removeClass("directory-hide-element").find("#typesCompactGridWidget<?=$uid?> tbody tr").addClass("directory-row-selector");
         }).on("pjax:error", function(eventObject) {
             eventObject.preventDefault();
@@ -63,22 +64,33 @@ Dialog::begin([
             setTimeout(function() { $("#selectTypeDialog<?=$uid?> #errorDlgQueryCompactDataType").addClass("directory-hide-element"); }, 5000);
         }).on("pjax:timeout", function(eventObject) {
             eventObject.preventDefault();
+        }).tooltip({
+            content : function() { return $(this).closest("td").find(".row-value").html(); },
+            items : ".directory-show-full-text"
+        });
+        
+        $("#typesCompactGridPjaxWidget<?=$uid?> .directory-edit-type-button, #typesCompactGridPjaxWidget<?=$uid?> .directory-delete-type-button").button({text : false});
+        
+        $("body").tooltip({
+            content : function() { return $(this).attr("title"); },
+            items : "#typesCompactGridPjaxWidget<?=$uid?> .directory-edit-type-button, #typesCompactGridPjaxWidget<?=$uid?> .directory-delete-type-button"
         });
         
         $.selectTypeDialog = function(p) {
             if(p !== undefined) {
                 $("#typesCompactGridPjaxWidget<?=$uid?>").on(
                         "click", 
-                        "#typesCompactGridWidget<?=$uid?> tbody tr", 
+                        "#typesCompactGridWidget<?=$uid?> tbody tr td:not(.directory-compact-types-grid-edit)", 
                         { params : p }, 
                         function(eventObject) {
                             $("#selectTypeDialog<?=$uid?>").dialog("close");
                             if(eventObject.data.params.onSuccess !== undefined) {
+                                var row = $(this).closest("tr");
                                 eventObject.data.params.onSuccess({
-                                    id : $(this).find("td:first .row-id").text(),
-                                    name : $(this).find("td:first .row-display").text(),
-                                    type : $(this).find("td:eq(1) .row-value").text(),
-                                    typeDiaplay : $(this).find("td:eq(1) .row-display").text()
+                                    id : $(row).find("td:first .row-id").text(),
+                                    name : $(row).find("td:first .row-display").text(),
+                                    type : $(row).find("td:eq(1) .row-value").text(),
+                                    typeDiaplay : $(row).find("td:eq(1) .row-display").text()
                                 });
                             }
                 });
@@ -106,14 +118,3 @@ Dialog::begin([
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 
-<?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
-    
-    /*function SelectDataType(resultCallback) {
-        $("#selectTypeDialog").
-                data("resultCallback", resultCallback).
-                dialog("open");
-        $("#typesCompactGridWidget").remove();
-        $.pjax.reload("#typesCompactGridPjaxWidget", {timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>});
-    }*/
-    
-<?php $this->registerJs(ob_get_clean(), View::POS_HEAD); if(false) { ?></script><?php } ?>

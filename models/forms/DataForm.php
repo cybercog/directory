@@ -17,71 +17,47 @@ class DataForm extends Model {
     public $file;
     public $image;
     
-    private $type_item;
-    
-    private function getTypeItem() {
-        if(!isset($this->type_item)) {
-            try {
-                $this->type_item = Types::find()->where(['id' => $this->typeId])->one();
-            } catch (Exception $ex) {
-                
-            }
+    public function validate($attributeNames = null, $clearErrors = true){
+        $type = null;
+        try {
+            $type = Types::find()->where(['id' => $this->typeId])->one();
+        } catch (Exception $ex) {
+            
         }
         
-        return $this->type_item;
+        if(!isset($type)) {
+            return false;
+        }
+        
+        $attributes = ['$typeId', 'description', 'visible', 'keywords'];
+        
+        switch($type->type) {
+            case 'string':
+                $attributes = array_merge($attributes, ['value']);
+                break;
+            case 'text':
+                $attributes = array_merge($attributes, ['text']);
+                break;
+            case 'file':
+                $attributes = array_merge($attributes, ['file']);
+                break;
+            case 'image':
+                $attributes = array_merge($attributes, ['image']);
+                break;
+        }
+        
+        return parent::validate($attributes, $clearErrors);
     }
     
     public function rules() {
         return [
-            ['typeId', function($attribute, $params) {
-                $type = $this->getTypeItem();
-                if(empty($type)) {
-                    $this->addError($attribute, 
-                            directoryModule::ht('edit', 'The data type is set incorrectly').'.');
-                }
-            }],
-            [['value'], function($attribute, $params) {
-                $type = $this->getTypeItem();
-                if($type->type == 'string') {
-                    if(empty($this->value)) {
-                        $this->addError($attribute, 
-                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'value'])).'.');
-                    }
-                }
-            }],
             ['value', 'string', 'min' => 3, 'max' => 255],
-            ['text', function($attribute, $params) {
-                $type = $this->getTypeItem();
-                if($type->type == 'text') {
-                    if(empty($this->text)) {
-                        $this->addError($attribute, 
-                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'text'])).'.');
-                    }
-                }
-            }],
             ['text', 'string', 'min' => 3],
             [['description', 'keywords'], 'safe'],
+            [['value', 'text', 'file', 'image', 'typeId'], 'required'],
             ['visible', 'boolean'],
-            ['file', 'file', /*'sizeLimit' => 31457280,*/ 'maxSize' => 31457280, 'minSize' => 1],
-            [['file'], function($attribute, $params) {
-                $type = $this->getTypeItem();
-                if($type->type == 'string') {
-                    if(empty($this->file)) {
-                        $this->addError($attribute, 
-                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'file'])).'.');
-                    }
-                }
-            }],
-            ['image', 'file', /*'sizeLimit' => 1048576,*/ 'maxSize' => 1048576, 'minSize' => 1, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png'],
-            [['image'], function($attribute, $params) {
-                $type = $this->getTypeItem();
-                if($type->type == 'string') {
-                    if(empty($this->image)) {
-                        $this->addError($attribute, 
-                                Html::encode(directoryModule::ht('edit', 'The field <{field}> must not be empty', ['field' => 'image'])).'.');
-                    }
-                }
-            }]
+            ['file', 'file', 'maxSize' => 31457280, 'minSize' => 1],
+            ['image', 'file', 'maxSize' => 1048576, 'minSize' => 1, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png']
         ];
     }
     

@@ -43,9 +43,10 @@ class EditController extends Controller {
                                     $ct['id'] = $createdType->id;
                                     $ct['name'] = $createdType->name;
                                     $ct['type'] = $createdType->type;
+                                    $ct['typeDiaplay'] = directoryModule::ht('edit', $createdType->type);
                                     $ct['description'] = $createdType->description;
                                     $ct['validate'] = $createdType->validate;
-                                    return ajaxJSONResponseHelper::createResponse(true, 'ok', $ct);
+                                    return ajaxJSONResponseHelper::createResponse(true, $ct);
                                 } else {
                                     return ajaxJSONResponseHelper::createResponse();
                                 }

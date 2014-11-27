@@ -278,14 +278,25 @@ Dialog::begin([
                                     if(data !== undefined) {
                                         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").val(data.id).prop("data-type", data.type);
                                         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId').'text'?>").val(
-                                                data.name + " - [" + data.type + "]");
+                                                data.name + " - [" + data.typeDiaplay + "]");
                                         updateFormState(data.type);
                                     }
                                 }
                             });
         }).next().click(
                 function() {
-                    alert($(this).text());
+                    $.editTypeDialog(
+                            {
+                                type : "new", 
+                                onSuccess : function(data) {
+                                    if(data !== undefined) {
+                                        $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").val(data.id).prop("data-type", data.type);
+                                        $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId').'text'?>").val(
+                                                data.name + " - [" + data.typeDiaplay + "]");
+                                        updateFormState(data.type);
+                                    }
+                                } 
+                    });
         });
         
         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>").change(function(eventObject) {
@@ -331,11 +342,11 @@ Dialog::begin([
                         p.onSuccess();
                     }
                 } else {
-                    $("#editDataDialog<?=$uid?> #errorDlgQueryData").removeClass("directory-hide-element").text(response.<?= ajaxJSONResponseHelper::messageField?>);
+                    $("#editDataDialog<?=$uid?> #errorDlgQueryData").removeClass("directory-hide-element").html(response.<?= ajaxJSONResponseHelper::messageField?>);
                     setTimeout(function(){ $("#editDataDialog<?=$uid?> #errorDlgQueryData").addClass("directory-hide-element"); }, 5000);
                 }
             } catch(err) {
-                $("#editDataDialog<?=$uid?> #errorDlgQueryData").removeClass("directory-hide-element").text("<?= directoryModule::ht('search', 'Error connecting to server.')?>");
+                $("#editDataDialog<?=$uid?> #errorDlgQueryData").removeClass("directory-hide-element").html("<?= directoryModule::ht('search', 'Error connecting to server.')?>");
                 setTimeout(function(){ $("#editDataDialog<?=$uid?> #errorDlgQueryData").addClass("directory-hide-element"); }, 5000);
             }
         });
