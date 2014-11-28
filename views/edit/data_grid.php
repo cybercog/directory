@@ -75,6 +75,21 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'value' => function($data) {
                             return dataGridCellViewHelper::getVisibleFlagString($data->visible);
                         }
+                    ],
+                    [
+                        'class' => 'yii\grid\DataColumn',
+                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'format' => 'raw',
+                        'value' => function($data) {
+                            return '<nobr>'
+                                    . '<button class="directory-edit-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::ht('edit', 'Edit data type').'"><img src="'.
+                                    directoryModule::getPublishPath('/img/edit-item.png').
+                                    '" /></button>&nbsp;<button class="directory-delete-type-button directory-small-button" '
+                                    . 'title="'.directoryModule::ht('edit', 'Delete data type').'"><img src="'.
+                                    directoryModule::getPublishPath('/img/delete-item.png')
+                                    .'" /></button></nobr>';
+                        },
                     ]
                 ]
             ])?>

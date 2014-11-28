@@ -25,6 +25,10 @@ body.directory-layout {
     background-color: white !important;
 }
 
+.directory-base-font {
+    font-size: 14px;
+}
+
 .directory-stretch-bar {
     width: 100%;
 }
@@ -250,7 +254,7 @@ select.directory-grid-filter-control, input.directory-grid-filter-control {
 }
 
 button.directory-small-button {
-    font-size: 0.6em;
+    font-size: 0.6em !important;
 }
 
 .directory-row-selector {

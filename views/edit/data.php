@@ -41,11 +41,6 @@ $this->params['breadcrumbs'] = [
 
 <h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::ht('edit', 'Data')?></h1>
 
-
-<?php //require('select_type_dialog.php'); ?>
-
-
-
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     $("#addDataItem").button().click(
@@ -56,6 +51,13 @@ $this->params['breadcrumbs'] = [
             });
     }).tooltip({
         content : function() { return $(this).attr("title"); }
+    });
+    
+    $("#dataGridPjaxWidget .directory-edit-type-button, .directory-delete-type-button").button({text : false});
+
+    $("body").tooltip({
+        content : function() { return $(this).attr("title"); },
+        items : ".directory-edit-type-button, .directory-delete-type-button"
     });
     
     $("#updateDataTable").button({text : false}).click(

@@ -3,10 +3,21 @@
 use yii\jui\Dialog;
 use yii\web\View;
 use app\modules\directory\directoryModule;
+use app\modules\directory\widgets\SingletonRenderHelper;
+use yii\helpers\Url;
 
 $uid = mt_rand(0, mt_getrandmax());
 
 ?>
+
+<?= SingletonRenderHelper::widget(['viewsRequire' => [
+    ['name' => '/helpers/ajax-post-helper'],
+    ['name' => '/helpers/publish-result-css'],
+    ['name' => '/helpers/publish-types-css'],
+    //['name' => '/edit/dialogs/edit-data-dialog', 'params' => ['formModel' => $formModel]]
+    ['name' => '/edit/dialogs/edit-type-dialog']
+    ]]) ?>
+
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     
@@ -67,8 +78,50 @@ Dialog::begin([
         }).tooltip({
             content : function() { return $(this).closest("td").find(".row-value").html(); },
             items : ".directory-show-full-text"
+        }).on("click", ".directory-delete-type-button", function() {
+            $.ajaxPostHelper({
+                url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),
+                data : $("#type-data-form").serialize(),
+                waitTag: "#waitDlgQueryCompactDataType",
+                errorTag: "#errorDlgQueryCompactDataType",
+                errorWaitTimeout: 5,
+                onSuccess: function(dataObject) { 
+                            $.pjax.reload('#typesCompactGridPjaxWidget<?=$uid?>', 
+                                            {
+                                                push : false,
+                                                replace : false,
+                                                timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
+                                                url : $("#typesCompactGridPjaxWidget<?=$uid?> #typesCompactGridWidget<?=$uid?>").yiiGridView("data").settings.filterUrl
+                                            });
+                }
+            });
         });
         
+        $("#typesCompactGridPjaxWidget<?=$uid?>").on("click", ".directory-edit-type-button", 
+            function() {
+                var field = $(this).closest("tr").find("td").first();
+                $.editTypeDialog(
+                        {
+                            type : "edit",
+                            data : {
+                                id : field.find("div.row-id").text(),
+                                name : field.find("div.row-value").text(),
+                                type : (function() { field = field.next(); return field; })().find("div.row-value").text(),
+                                validate : (function() { field = field.next(); return field; })().find("div.row-value").text(),
+                                description : (function() { field = field.next(); return field; })().find("div.row-value").text()
+                            },
+                            onSuccess : function() {  
+                                $.pjax.reload('#typesCompactGridPjaxWidget<?=$uid?>', 
+                                                {
+                                                    push : false,
+                                                    replace : false,
+                                                    timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
+                                                    url : $("#typesCompactGridPjaxWidget<?=$uid?> #typesCompactGridWidget<?=$uid?>").yiiGridView("data").settings.filterUrl
+                                                });
+                            } 
+                        });
+        });
+
         $("#typesCompactGridPjaxWidget<?=$uid?> .directory-edit-type-button, #typesCompactGridPjaxWidget<?=$uid?> .directory-delete-type-button").button({text : false});
         
         $("body").tooltip({

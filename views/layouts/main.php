@@ -25,7 +25,7 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="directory-layout">
+<body class="directory-layout directory-base-font">
 <?php $this->beginBody() ?>
 
 
