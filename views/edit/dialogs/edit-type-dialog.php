@@ -127,6 +127,18 @@ Dialog::begin([
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     (function($) {
+        var onSelectType = function() {
+            if($("#type-data-form<?=$uid?> #<?=Html::getInputId($formModel, 'type')?>").val() === "string") {
+                $("#type-data-form<?=$uid?> #<?=Html::getInputId($formModel, 'validate')?>").closest("tr").removeClass("directory-hide-element");
+            } else {
+                $("#type-data-form<?=$uid?> #<?=Html::getInputId($formModel, 'validate')?>").closest("tr").addClass("directory-hide-element");
+            }
+        };
+        
+        $("#type-data-form<?=$uid?> #<?=Html::getInputId($formModel, 'type')?>").change(function() {
+            onSelectType();
+        });
+        
         $.editTypeDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
@@ -134,6 +146,7 @@ Dialog::begin([
                         case "new":
                             (function(p) {
                                 $("#type-data-form<?=$uid?>").trigger('reset');
+                                onSelectType();
                                 $("#editDialog<?=$uid?>").
                                         dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new type')?>").
                                         dialog("option", "buttons", 
@@ -177,6 +190,7 @@ Dialog::begin([
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").val(p.data.type);
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'validate')?>']").val(p.data.validate);
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.description);
+                                onSelectType();
                                 $("#editDialog<?=$uid?>").
                                     dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
                                     dialog("option", "buttons", 

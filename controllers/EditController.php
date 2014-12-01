@@ -88,7 +88,19 @@ class EditController extends Controller {
                 case 'delete':
                     if(\Yii::$app->request->get('id', false)) {
                         try {
-                            Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
+                                Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            } else {
+                                $dataCount = Data::find()->where('type_id=:id', 
+                                                [':id' => \Yii::$app->request->get('id')])->with('type')->count();
+                                if($dataCount > 0) {
+                                    return ajaxJSONResponseHelper::createResponse(true, 'query', 
+                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
+                                                'id' => \Yii::$app->request->get('id', false)]);
+                                } else {
+                                    Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                                }
+                            }
                         } catch (\Exception $ex) {
                             return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                         }
@@ -147,8 +159,8 @@ class EditController extends Controller {
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->file = UploadedFile::getInstance($form, 'file');
                                         $file =  '/file_'.mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
-                                        if($form->file->saveAs(\Yii::getAlias(\Yii::$app->params['uploadPathLocal']).$file)) {
-                                            $data->text = \Yii::getAlias(\Yii::$app->params['uploadPathWeb']).$file;
+                                        if($form->file->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
+                                            $data->text = \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']).$file;
                                         } else {
                                             throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                         }
@@ -157,8 +169,8 @@ class EditController extends Controller {
                                         $data->value = empty($form->keywords) ? null : $form->keywords;
                                         $form->image = UploadedFile::getInstance($form, 'image');
                                         $file =  '/image_'.mt_rand(0, mt_getrandmax()).'.'.$form->image->extension;
-                                        if($form->image->saveAs(\Yii::getAlias(\Yii::$app->params['uploadPathLocal']).$file)) {
-                                            $data->text = \Yii::getAlias(\Yii::$app->params['uploadPathWeb']).$file;
+                                        if($form->image->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
+                                            $data->text = \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']).$file;
                                         } else {
                                             throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                         }

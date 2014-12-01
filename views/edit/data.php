@@ -66,7 +66,7 @@ $this->params['breadcrumbs'] = [
                             {
                                 push : false,
                                 replace : false,
-                                timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
+                                timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
                                 url : $("#dataGridWidget").yiiGridView("data").settings.filterUrl
                             });
     }).tooltip({

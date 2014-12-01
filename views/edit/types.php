@@ -7,6 +7,7 @@ use app\modules\directory\directoryModule;
 
 use yii\helpers\Url;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 
 $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Data types');
@@ -58,7 +59,7 @@ $this->params['breadcrumbs'] = [
                             {
                                 push : false,
                                 replace : false,
-                                timeout : <?=\Yii::$app->params['pjaxDefaultTimeout']?>, 
+                                timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
                                 url : $("#typesGridWidget").yiiGridView("data").settings.filterUrl
                             });
     }).tooltip({
@@ -69,17 +70,10 @@ $this->params['breadcrumbs'] = [
             
     $("#typesGridPjaxWidget").on("click", ".directory-edit-type-button", 
         function() {
-            var field = $(this).closest("tr").find("td").first();
             $.editTypeDialog(
                     {
                         type : "edit",
-                        data : {
-                            id : field.find("div.row-id").text(),
-                            name : field.find("div.row-value").text(),
-                            type : (function() { field = field.next(); return field; })().find("div.row-value").text(),
-                            validate : (function() { field = field.next(); return field; })().find("div.row-value").text(),
-                            description : (function() { field = field.next(); return field; })().find("div.row-value").text()
-                        },
+                        data : $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()),
                         onSuccess : function() { $("#updateTypesTable").click(); } 
                     });
     });
@@ -105,15 +99,33 @@ $this->params['breadcrumbs'] = [
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
-        var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>";
         $.ajaxPostHelper({
-            url : url.replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),
+            url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+                    $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
             data : $("#type-data-form").serialize(),
             waitTag: "#waitQueryDataType",
             errorTag: "#errorQueryDataType",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                $("#updateTypesTable").click();
+                if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
+                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
+                        if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
+                            $.ajaxPostHelper({
+                                url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
+                                        dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
+                                data : $("#type-data-form").serialize(),
+                                waitTag: "#waitQueryDataType",
+                                errorTag: "#errorQueryDataType",
+                                errorWaitTimeout: 5,
+                                onSuccess: function(dataObject) { 
+                                    $("#updateTypesTable").click();
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    $("#updateTypesTable").click();
+                }
             }
         });
     });

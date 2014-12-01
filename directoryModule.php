@@ -20,6 +20,15 @@ class directoryModule extends \yii\base\Module
         return directoryModule::$publishPath.$resId;
     }
     
+    public static $SETTING = [    
+        'showFooter' => false,
+        'pjaxDefaultTimeout' => 30000,
+        'uploadPathLocal' => '@webroot/uploads',
+        'uploadPathWeb' => '@web/uploads',
+        'gridRowCount' => 20,
+        'compactGridRowCount' => 7,
+        ];
+    
     public function init() {
         parent::init();
         

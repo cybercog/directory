@@ -27,8 +27,7 @@ class dataGridCellViewHelper {
     }
 
     public static function getDataTypeString($type) {
-        return '<div class="directory-hide-element row-value">'.$type.'</div>'
-                . '<div class="directory-'.$type.'-type row-display">'.directoryModule::ht('edit', $type).'</div>';
+        return '<div class="directory-'.$type.'-type row-display">'.directoryModule::ht('edit', $type).'</div>';
     }
 
     public static function getTextString($text) {

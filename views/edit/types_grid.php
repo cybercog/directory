@@ -7,7 +7,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 
 
             <?php yii\widgets\Pjax::begin([
-                'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
+                'timeout' => directoryModule::$SETTING['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
                 'id' => 'typesGridPjaxWidget']); ?>
@@ -24,7 +24,9 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getDataString($data->name, false, $data->id);
+                            return dataGridCellViewHelper::getTextString($data->name).
+                                    '<div class="directory-hide-element directory-row-data">'.
+                                    json_encode($data->attributes).'</div>';
                         }
                     ],
                     [

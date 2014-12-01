@@ -7,7 +7,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 
 
             <?php yii\widgets\Pjax::begin([
-                'timeout' => \Yii::$app->params['pjaxDefaultTimeout'], 
+                'timeout' => directoryModule::$SETTING['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false,
                 'linkSelector' => '#dataGridPjaxWidget a:not(.directory-data-file-download)',

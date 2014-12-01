@@ -34,5 +34,6 @@ return [
     'Update table' => 'Обновить таблицу',
     'The data type is set incorrectly' => 'Тип данных задан некорректно',
     'The field <{field}> must not be empty' => 'Поле <{field}> должно быть не пустое',
-    'Error when saving a file.' => 'Ошибка рпи сохранении файла.',
+    'Error when saving a file.' => 'Ошибка при сохранении файла.',
+    'With the type of associated data. When you delete a type type, they will be removed. Remove?' => 'С типом связаны данные. При удалении типа типа они будут удалены. Удалить?',
 ];

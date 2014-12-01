@@ -173,7 +173,7 @@ AppAsset::register($this);
         </div>
     </div>
 
-    <?php if(\Yii::$app->params['showFooter']) {?>
+    <?php if(directoryModule::$SETTING['showFooter']) {?>
     <footer class="directory-footer">
         <div>
             <p class="directory-float-left">&copy; Romashka this is - <span class="directory-my-name-class">клёвый справочник</span></p>
