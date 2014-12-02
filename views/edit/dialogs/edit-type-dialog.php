@@ -185,11 +185,21 @@ Dialog::begin([
                             break;
                         case "edit":
                             (function(p) {
+                                if(p.data === undefined) {
+                                    if(p.onError !== undefined) {
+                                       p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                                    } else {
+                                        alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
+                                    }
+                                    
+                                    return;
+                                } 
+                                
                                 $("#type-data-form<?=$uid?>").trigger('reset');
-                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.name);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.original_name);
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").val(p.data.type);
-                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'validate')?>']").val(p.data.validate);
-                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.description);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'validate')?>']").val(p.data.original_validate);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
                                 onSelectType();
                                 $("#editDialog<?=$uid?>").
                                     dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
@@ -229,14 +239,20 @@ Dialog::begin([
                         default:
                             if(p.onError !== undefined) {
                                p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                            } else {
+                                alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
                             }
                             break;
                     }
                 } else {
                     if(p.onError !== undefined) {
                        p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                    } else {
+                        alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
                     }
                 }
+            } else {
+                alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
             }
         };
     })(jQuery);

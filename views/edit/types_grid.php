@@ -24,7 +24,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getTextString($data->name).
+                            return dataGridCellViewHelper::getTextString($data->original_name).
                                     '<div class="directory-hide-element directory-row-data">'.
                                     json_encode($data->attributes).'</div>';
                         }
@@ -51,7 +51,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'attribute' => 'description',
                         'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getTextString($data->description);
+                            return dataGridCellViewHelper::getTextString($data->original_description);
                         }
                     ],
                     [
@@ -61,7 +61,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'attribute' => 'validate',
                         'label' => directoryModule::ht('edit', 'Validate'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getTextString($data->validate);
+                            return dataGridCellViewHelper::getTextString($data->original_validate);
                         }
                     ],
                     [

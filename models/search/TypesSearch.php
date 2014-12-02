@@ -2,13 +2,7 @@
 
 namespace app\modules\directory\models\search;
 
-use yii\db\ActiveRecord;
-
-class LowerTypes extends ActiveRecord {
-    public static function tableName() {
-        return 'types_tolower_v';
-    }
-}
+use app\modules\directory\models\db\views\LowerTypes;
 
 class TypesSearch extends FilterModelBase {
     public $name;

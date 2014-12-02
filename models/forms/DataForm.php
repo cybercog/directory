@@ -5,45 +5,52 @@ namespace app\modules\directory\models\forms;
 use yii\base\Model;
 use app\modules\directory\directoryModule;
 use app\modules\directory\models\db\Types;
-use yii\helpers\Html;
 
 class DataForm extends Model {
     public $typeId;
     public $value;
     public $text;
     public $description;
-    public $visible = true;
+    public $visible = '1';
     public $keywords;
     public $file;
     public $image;
-    
-    public function validate($attributeNames = null, $clearErrors = true){
-        $type = null;
-        try {
-            $type = Types::find()->where(['id' => $this->typeId])->one();
-        } catch (Exception $ex) {
-            
-        }
-        
-        if(!isset($type)) {
-            return false;
-        }
-        
-        $attributes = ['$typeId', 'description', 'visible', 'keywords'];
-        
-        switch($type->type) {
-            case 'string':
-                $attributes = array_merge($attributes, ['value']);
-                break;
-            case 'text':
-                $attributes = array_merge($attributes, ['text']);
-                break;
-            case 'file':
-                $attributes = array_merge($attributes, ['file']);
-                break;
-            case 'image':
-                $attributes = array_merge($attributes, ['image']);
-                break;
+    public $replase = '0';
+
+
+    public function validate($attributeNames = null, $clearErrors = true) {
+        if(!isset($attributeNames)) {
+            $type = null;
+            try {
+                $type = Types::find()->where(['id' => $this->typeId])->one();
+            } catch (\Exception $ex) {
+
+            }
+
+            if(!isset($type)) {
+                return false;
+            }
+
+            $attributes = ['typeId', 'description', 'visible', 'keywords'];
+
+            switch($type->type) {
+                case 'string':
+                    $attributes = array_merge($attributes, ['value']);
+                    break;
+                case 'text':
+                    $attributes = array_merge($attributes, ['text']);
+                    break;
+                case 'file':
+                    if($this->replase) {
+                        $attributes = array_merge($attributes, ['file']);
+                    }
+                    break;
+                case 'image':
+                    if($this->replase) {
+                        $attributes = array_merge($attributes, ['image']);
+                    }
+                    break;
+            }
         }
         
         return parent::validate($attributes, $clearErrors);
@@ -54,10 +61,10 @@ class DataForm extends Model {
             ['value', 'string', 'min' => 3, 'max' => 255],
             ['text', 'string', 'min' => 3],
             [['description', 'keywords'], 'safe'],
-            [['value', 'text', 'file', 'image', 'typeId'], 'required'],
-            ['visible', 'boolean'],
-            ['file', 'file', 'maxSize' => 31457280, 'minSize' => 1],
-            ['image', 'file', 'maxSize' => 1048576, 'minSize' => 1, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png']
+            [['value', 'text', 'typeId'], 'required'],
+            [['visible', 'replase'], 'boolean'],
+            ['file', 'file', 'maxSize' => 31457280, 'minSize' => 1, 'skipOnEmpty' => false],
+            ['image', 'file', 'maxSize' => 1048576, 'minSize' => 1, 'skipOnEmpty' => false, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png']
         ];
     }
     

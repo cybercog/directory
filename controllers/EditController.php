@@ -12,6 +12,7 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 use app\modules\directory\helpers\modelErrorsToStringHelper;
 use app\modules\directory\helpers\boolSaveHelper;
 use yii\web\UploadedFile;
+use app\modules\directory\models\db\views\LowerData;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -67,8 +68,8 @@ class EditController extends Controller {
                                         $ct['id'] = \Yii::$app->request->get('id');
                                         $ct['name'] = $form->name;
                                         $ct['type'] = $form->type;
-                                        $ct['description'] = $form->description;
-                                        $ct['validate'] = $form->validate;
+                                        $ct['description'] = isset($form->description) ? $form->description : null;
+                                        $ct['validate'] = isset($form->validate) ? $form->validate : null;
                                         return ajaxJSONResponseHelper::createResponse(true, 'ok', $ct);
                                     }
                                 } else {
@@ -144,10 +145,10 @@ class EditController extends Controller {
                             try {
                                 $data = new Data;
                                 $data->type_id = $form->typeId;
-                                $ppp = Types::find()->where(['id' => $form->typeId])->one();
+                                $dataType = Types::find()->where(['id' => $form->typeId])->one();
                                 $data->visible = boolSaveHelper::boolean2string((boolean)$form->visible);
                                 $data->description = !isset($form->description) || strlen($form->description) === 0 ? null : $form->description;
-                                switch($ppp->type) {
+                                switch($dataType->type) {
                                     case 'string':
                                         $data->value = $form->value;
                                         break;
@@ -182,6 +183,34 @@ class EditController extends Controller {
                                 return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                             }
                         } else {
+                            try {
+                                if(\Yii::$app->request->get('id', false)) {
+                                    $attributes = [
+                                        'type_id' => $form->typeId,
+                                        'visible' => boolSaveHelper::boolean2string((boolean)$form->visible),
+                                        'description' => isset($form->description) ? $form->description : null
+                                    ];
+                                    
+                                    $data = LowerData::find()->where(['id' => \Yii::$app->request->get('id', false)])->one();
+                                    
+                                    if($form->typeId == $data->type_id) {
+                                        
+                                    } else {
+                                        
+                                    }
+                                    
+                                    //switch()
+                                    
+                                    Data::updateAll($attributes, 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                    //$data = LowerData::find()->where(['id' => \Yii::$app->request->get('id', false)])->one();
+                                    return ajaxJSONResponseHelper::createResponse();
+                                } else {
+                                    return ajaxJSONResponseHelper::createResponse(false, 
+                                            directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
+                                }
+                            } catch (\Exception $ex) {
+                                return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                            }
                         }
                     } else {
                         return ajaxJSONResponseHelper::createResponse(false, 
@@ -189,7 +218,29 @@ class EditController extends Controller {
                     }
                     break;
                 case 'delete':
-                    break;
+                    if(\Yii::$app->request->get('id', false)) {
+                        try {
+                            if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
+                                Data::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            } else {
+                                $dataCount = Data::find()->where('type_id=:id', 
+                                                [':id' => \Yii::$app->request->get('id')])->with('type')->count();
+                                if($dataCount > 0) {
+                                    return ajaxJSONResponseHelper::createResponse(true, 'query', 
+                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
+                                                'id' => \Yii::$app->request->get('id', false)]);
+                                } else {
+                                    Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                                }
+                            }
+                        } catch (\Exception $ex) {
+                            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                        }
+                    } else {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
+                    }
+                    return ajaxJSONResponseHelper::createResponse(true);
             }
         }
         

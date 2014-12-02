@@ -2,13 +2,7 @@
 
 namespace app\modules\directory\models\search;
 
-use yii\db\ActiveRecord;
-
-class LowerData extends ActiveRecord {
-    public static function tableName() {
-        return 'data_tolower_v';
-    }
-}
+use app\modules\directory\models\db\views\LowerData;
 
 class DataSearch extends FilterModelBase {
     public $description;

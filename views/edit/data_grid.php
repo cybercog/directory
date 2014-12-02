@@ -2,6 +2,7 @@
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\dataGridCellViewHelper;
+use app\modules\directory\helpers\boolSaveHelper;
 
 ?>
 
@@ -25,7 +26,11 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Type name'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getDataString($data->type_name, false, $data->id);
+                            $row = $data->attributes;
+                            $row['visible'] = boolSaveHelper::string2booleanForm($row['visible']);
+                            return dataGridCellViewHelper::getTextString($data->original_type_name).
+                                    '<div class="directory-hide-element directory-row-data">'.
+                                    json_encode($row).'</div>';
                         }
                     ],
                     [
@@ -50,7 +55,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Value'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getValueDataString($data->type_type, $data->value, $data->text);
+                            return dataGridCellViewHelper::getValueDataString($data->type_type, $data->original_value, $data->original_text);
                         }
                     ],
                     [
@@ -60,7 +65,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
-                            return dataGridCellViewHelper::getTextString($data->description);
+                            return dataGridCellViewHelper::getTextString($data->original_description);
                         }
                     ],
                     [

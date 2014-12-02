@@ -44,7 +44,10 @@ CREATE INDEX types_t_type_index ON types_t (type);
 CREATE VIEW types_tolower_v (id, name, type, description, validate) AS
 SELECT t.id AS id, lower(t.name) AS name, 
         t.type AS type, lower(t.description) AS description, 
-        lower(t.validate) AS validate
+        lower(t.validate) AS validate,
+        t.name AS original_name,
+        t.description AS original_description, 
+        t.validate AS original_validate
 FROM types_t t;
 -- ESQLDDLCMD
 
@@ -96,7 +99,9 @@ CREATE INDEX data_t_value_index ON data_t (value);
 CREATE VIEW data_tolower_v AS
 SELECT d.id AS id, t.id AS type_id, lower(t.name) AS type_name,
         t.type AS type_type, lower(d.value) AS value, lower(d.text) AS text,
-        lower(d.description) AS description, d.visible AS visible
+        lower(d.description) AS description, d.visible AS visible,
+        t.name AS original_type_name, d.value AS original_value,
+        d.text AS original_text, d.description AS original_description
 FROM data_t d
     INNER JOIN types_t t ON t.id = d.type_id;
 -- ESQLDDLCMD

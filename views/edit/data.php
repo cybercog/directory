@@ -29,7 +29,6 @@ $this->params['breadcrumbs'] = [
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
     ['name' => '/edit/dialogs/edit-data-dialog', 'params' => ['formModel' => $formModel]]
-    //['name' => '/edit/dialogs/edit-type-dialog', 'params' => ['formModel' => $typeFormModel]]
     ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
@@ -88,7 +87,14 @@ $this->params['breadcrumbs'] = [
     }).tooltip({
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
-    }).on("click", ".directory-delete-data-button", function() {
+    }).on("click", ".directory-edit-type-button", function() {
+            $.editDataDialog({
+                type : "edit",
+                data : $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()),
+                onSuccess : function() { $("#updateDataTable").click(); } 
+            });
+    }).on("click", ".directory-delete-type-button", function() {
+        alert("m");
         /*var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>";
         $.ajaxPostHelper({
             url : url.replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),

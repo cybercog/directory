@@ -62,6 +62,7 @@ Dialog::begin([
                     <table class="directory-modal-table directory-stretch-bar directory-table">
                         <tr>
                             <td>
+                                <?= Html::activeHiddenInput($formModel, 'replase')?>
                                 <?= Html::activeHiddenInput($formModel, 'typeId')?>
                                 <?= Html::input('text', 'typeId.display', null,
                                                         ['class' => 'directory-stretch-bar directory-grid-filter-control', 
@@ -263,6 +264,25 @@ Dialog::begin([
                     break;
             }
         };
+        
+        var sendForm = function() {
+            switch($("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").prop("data-type")) {
+                case "string":
+                case "text":
+                    $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>, #data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").trigger("reset");
+                    break;
+                case "file":
+                    $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>").trigger("reset");
+                    break;
+                case "image":
+                    $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").trigger("reset");
+                    break;
+            }
+            
+            $("#data-edit-form<?=$uid?>")[0].submit();
+            
+            $("#editDataDialog<?=$uid?> #waitDlgQueryData").removeClass("directory-hide-element");
+        };
             
         $("#data-edit-form<?=$uid?> #selectDataTypeButton").
                 button({ text : false, icons : { primary : "ui-icon-triangle-1-s" } }).
@@ -301,9 +321,9 @@ Dialog::begin([
         
         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>").change(function(eventObject) {
             if(eventObject.target.files.length > 0) {
-                alert(eventObject.target.files[0].name);
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file').'text'?>").val(
                         eventObject.target.files[0].name);
+                $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("1");
             } else {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file').'text'?>").val("");
             }
@@ -311,9 +331,9 @@ Dialog::begin([
 
         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").change(function(eventObject) {
             if(eventObject.target.files.length > 0) {
-                alert(eventObject.target.files[0].name);
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image').'text'?>").val(
                         eventObject.target.files[0].name);
+                $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("1");
             } else {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image').'text'?>").val("");
             }
@@ -367,24 +387,9 @@ Dialog::begin([
                                                             {
                                                                 text : "<?= directoryModule::ht('edit', 'Add data item')?>",
                                                                 click : function() {
-                                                                    switch($("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").prop("data-type")) {
-                                                                        case "string":
-                                                                        case "text":
-                                                                            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>, #data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").trigger("reset");
-                                                                            break;
-                                                                        case "file":
-                                                                            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>").trigger("reset");
-                                                                            break;
-                                                                        case "image":
-                                                                            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").trigger("reset");
-                                                                            break;
-                                                                    }
-                                                                    
                                                                     $("#data-edit-form<?=$uid?>").
-                                                                            attr("action", "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>")[0].
-                                                                            submit();
-                                                                    
-                                                                    $("#editDataDialog<?=$uid?> #waitDlgQueryData").removeClass("directory-hide-element");
+                                                                            attr("action", "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>");
+                                                                    sendForm();
                                                                 }
                                                             },
                                                             {
@@ -396,6 +401,77 @@ Dialog::begin([
                             })(p);
                             break;
                         case "edit":
+                            (function(p) {
+                                if(p.data === undefined) {
+                                    if(p.onError !== undefined) {
+                                       p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                                    } else {
+                                        alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
+                                    }
+                                    
+                                    return;
+                                }
+                                
+                                $("#data-edit-form<?=$uid?>").trigger('reset');
+                                $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'typeId')?>']").val(p.data.type_id);
+                                $("#data-edit-form<?=$uid?> [name='typeId.display']").val(p.data.original_type_name + " - [" + (function(type) {
+                                    switch(type) {
+                                        case "string":
+                                            return "<?=directoryModule::ht('edit', 'string')?>";
+                                        case "text":
+                                            return "<?=directoryModule::ht('edit', 'text')?>";
+                                        case "image":
+                                            return "<?=directoryModule::ht('edit', 'image')?>";
+                                        case "file":
+                                            return "<?=directoryModule::ht('edit', 'file')?>";
+                                    }
+                                })(p.data.type_type) + "]");
+                                
+                                switch(p.data.type_type) {
+                                    case "string":
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'value')?>']").val(p.data.original_value);
+                                        break;
+                                    case "text":
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'text')?>']").val(p.data.original_text);
+                                        break;
+                                    case "image":
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='image_display']").val(p.data.original_text);
+                                        break;
+                                    case "file":
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='file_display']").val(p.data.original_text);
+                                        break;
+                                }
+                                
+                                $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
+                                $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").val(p.data.visible);
+                                
+                                $("#data-edit-form<?=$uid?>").data("<?=$uid?>", p);
+                                
+                                $("#editDataDialog<?=$uid?>").
+                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit item')?>").
+                                        dialog({open : function(event, ui) { updateFormState(p.data.type_type); }}).
+                                        dialog("option", "buttons", 
+                                                [
+                                                    {
+                                                        text : "<?= directoryModule::ht('edit', 'Apply')?>",
+                                                        click : function() {
+                                                            $("#data-edit-form<?=$uid?>").
+                                                                    attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id));
+                                                            sendForm();
+                                                        }
+                                                    },
+                                                    {
+                                                        text : "<?= directoryModule::ht('edit', 'Close')?>",
+                                                        click : function() { $("#editDataDialog<?=$uid?>").dialog("close"); }
+                                                    }
+                                                ]).
+                                        dialog("open");
+                            })(p);
+                            break;
+                        default:
                             break;
                     }
                 }
