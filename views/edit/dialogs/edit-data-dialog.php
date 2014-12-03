@@ -125,7 +125,7 @@ Dialog::begin([
             <td>
                 <div class="directory-form-item-bottom-padding">
                     <table class="directory-modal-table directory-stretch-bar directory-table">
-                        <tr>
+                        <tr class="directory-file-control">
                             <td>
                                 <div class="directory-hide-element">
                                 <?= Html::activeFileInput($formModel, 'file')?>
@@ -138,6 +138,15 @@ Dialog::begin([
                             <td class="directory-min-width">
                                 <div id="selectFileButton">
                                     <nobr>...</nobr>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="directory-file-link directory-hide-element">
+                            <td><a target="_blank"></a></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <div id="selectFileReplase" title="<?= directoryModule::ht('edit', 'Delete file')?>">
+                                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
                                 </div>
                             </td>
                         </tr>
@@ -156,7 +165,7 @@ Dialog::begin([
             <td>
                 <div class="directory-form-item-bottom-padding">
                     <table class="directory-modal-table directory-stretch-bar directory-table">
-                        <tr>
+                        <tr class="directory-image-control">
                             <td>
                                 <div class="directory-hide-element">
                                 <?= Html::activeFileInput($formModel, 'image')?>
@@ -169,6 +178,15 @@ Dialog::begin([
                             <td class="directory-min-width">
                                 <div id="selectImageButton">
                                     <nobr>...</nobr>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="directory-image-link directory-hide-element">
+                            <td><a target="_blank"></a></td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <div id="selectImageReplase" title="<?= directoryModule::ht('edit', 'Delete file')?>">
+                                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
                                 </div>
                             </td>
                         </tr>
@@ -323,7 +341,6 @@ Dialog::begin([
             if(eventObject.target.files.length > 0) {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file').'text'?>").val(
                         eventObject.target.files[0].name);
-                $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("1");
             } else {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file').'text'?>").val("");
             }
@@ -333,7 +350,6 @@ Dialog::begin([
             if(eventObject.target.files.length > 0) {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image').'text'?>").val(
                         eventObject.target.files[0].name);
-                $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("1");
             } else {
                 $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image').'text'?>").val("");
             }
@@ -343,10 +359,26 @@ Dialog::begin([
             eventObject.preventDefault();
             $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'file')?>").click();
         });
+        
+        $("#data-edit-form<?=$uid?> #selectFileReplase").button().click(function() {
+            $("#data-edit-form<?=$uid?> .directory-file-control").removeClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> .directory-file-link").addClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("change");
+        }).tooltip({
+            content : function() { return $(this).attr("title"); }
+        });
 
         $("#data-edit-form<?=$uid?> #selectImageButton").button().click(function(eventObject) {
             eventObject.preventDefault();
             $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'image')?>").click();
+        });
+
+        $("#data-edit-form<?=$uid?> #selectImageReplase").button().click(function() {
+            $("#data-edit-form<?=$uid?> .directory-image-control").removeClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> .directory-image-link").addClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val("change");
+        }).tooltip({
+            content : function() { return $(this).attr("title"); }
         });
 
         $("#file_upload_<?=$uid?>").load(function(){
@@ -370,6 +402,14 @@ Dialog::begin([
                 setTimeout(function(){ $("#editDataDialog<?=$uid?> #errorDlgQueryData").addClass("directory-hide-element"); }, 5000);
             }
         });
+        
+        $("#editDataDialog<?=$uid?>").dialog({close : function(event, ui) {
+            $("#data-edit-form<?=$uid?> .directory-file-control").removeClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> .directory-file-link").addClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> .directory-image-control").removeClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> .directory-image-link").addClass("directory-hide-element");
+            $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val('new');
+        }});
         
         $.editDataDialog = function(p) {
             if(p !== undefined) {
@@ -437,11 +477,15 @@ Dialog::begin([
                                         break;
                                     case "image":
                                         $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
-                                        $("#data-edit-form<?=$uid?> [name='image_display']").val(p.data.original_text);
+                                        $("#data-edit-form<?=$uid?> .directory-image-control").addClass("directory-hide-element");
+                                        $("#data-edit-form<?=$uid?> .directory-image-link").removeClass("directory-hide-element");
+                                        $("#data-edit-form<?=$uid?> .directory-image-link a").text(p.data.original_text).attr("href", p.data.original_text);
                                         break;
                                     case "file":
                                         $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
-                                        $("#data-edit-form<?=$uid?> [name='file_display']").val(p.data.original_text);
+                                        $("#data-edit-form<?=$uid?> .directory-file-control").addClass("directory-hide-element");
+                                        $("#data-edit-form<?=$uid?> .directory-file-link").removeClass("directory-hide-element");
+                                        $("#data-edit-form<?=$uid?> .directory-file-link a").text(p.data.original_text).attr("href", p.data.original_text);
                                         break;
                                 }
                                 
@@ -452,14 +496,20 @@ Dialog::begin([
                                 
                                 $("#editDataDialog<?=$uid?>").
                                         dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit item')?>").
-                                        dialog({open : function(event, ui) { updateFormState(p.data.type_type); }}).
+                                        dialog(
+                                            {
+                                                open : function(event, ui) { 
+                                                    updateFormState(p.data.type_type); 
+                                                    $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val('no');
+                                                }
+                                            }).
                                         dialog("option", "buttons", 
                                                 [
                                                     {
                                                         text : "<?= directoryModule::ht('edit', 'Apply')?>",
                                                         click : function() {
                                                             $("#data-edit-form<?=$uid?>").
-                                                                    attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id));
+                                                                    attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id));
                                                             sendForm();
                                                         }
                                                     },

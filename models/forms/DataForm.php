@@ -15,7 +15,7 @@ class DataForm extends Model {
     public $keywords;
     public $file;
     public $image;
-    public $replase = '0';
+    public $replase = 'new';
 
 
     public function validate($attributeNames = null, $clearErrors = true) {
@@ -41,12 +41,14 @@ class DataForm extends Model {
                     $attributes = array_merge($attributes, ['text']);
                     break;
                 case 'file':
-                    if($this->replase) {
+                    if(($this->replase == 'change') ||
+                            ($this->replase == 'new')) {
                         $attributes = array_merge($attributes, ['file']);
                     }
                     break;
                 case 'image':
-                    if($this->replase) {
+                    if(($this->replase == 'change') ||
+                            ($this->replase == 'new')) {
                         $attributes = array_merge($attributes, ['image']);
                     }
                     break;
@@ -62,9 +64,10 @@ class DataForm extends Model {
             ['text', 'string', 'min' => 3],
             [['description', 'keywords'], 'safe'],
             [['value', 'text', 'typeId'], 'required'],
-            [['visible', 'replase'], 'boolean'],
-            ['file', 'file', 'maxSize' => 31457280, 'minSize' => 1, 'skipOnEmpty' => false],
-            ['image', 'file', 'maxSize' => 1048576, 'minSize' => 1, 'skipOnEmpty' => false, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png']
+            ['visible', 'boolean'],
+            ['replase', 'yii\validators\RangeValidator', 'range' => ['new', 'no', 'change']],
+            ['file', 'file', 'maxSize' => 31457280, 'minSize' => 1],
+            ['image', 'file', 'maxSize' => 1048576, 'minSize' => 1, 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png']
         ];
     }
     

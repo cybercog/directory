@@ -12,7 +12,6 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 use app\modules\directory\helpers\modelErrorsToStringHelper;
 use app\modules\directory\helpers\boolSaveHelper;
 use yii\web\UploadedFile;
-use app\modules\directory\models\db\views\LowerData;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -191,18 +190,58 @@ class EditController extends Controller {
                                         'description' => isset($form->description) ? $form->description : null
                                     ];
                                     
-                                    $data = LowerData::find()->where(['id' => \Yii::$app->request->get('id', false)])->one();
+                                    $transaction = \Yii::$app->db->beginTransaction();
                                     
-                                    if($form->typeId == $data->type_id) {
+                                    try {
+                                        $dataType = Types::find()->where(['id' => $form->typeId])->one();
                                         
-                                    } else {
+                                        switch($dataType->type) {
+                                            case 'string':
+                                                $attributes['value'] = $form->value;
+                                                break;
+                                            case 'text':
+                                                $attributes['text'] = $form->text;
+                                                $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
+                                                break;
+                                            case 'file':
+                                                $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
+                                                if($form->replase == 'change') {
+                                                    $form->file = UploadedFile::getInstance($form, 'file');
+                                                    $file =  '/file_'.mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
+                                                    if($form->file->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
+                                                        $attributes['text'] = \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']).$file;
+                                                    } else {
+                                                        throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                                    }
+                                                }
+                                                break;
+                                            case 'image':
+                                                $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
+                                                if($form->replase == 'change') {
+                                                    $form->image = UploadedFile::getInstance($form, 'image');
+                                                    $file =  '/image_'.mt_rand(0, mt_getrandmax()).'.'.$form->image->extension;
+                                                    if($form->image->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
+                                                        $attributes['text'] = \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']).$file;
+                                                    } else {
+                                                        throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                                    }
+                                                }
+                                                break;
+                                        }
                                         
+                                        //если было сохранено файло, поудалять
+                                        $dataCurr = Data::find()->where([Data::tableName().'.id' => \Yii::$app->request->get('id')])->with(Types::tableName())->innerJoin(Types::tableName(), Types::tableName().'.id = '.Data::tableName().'.type_id')->one();
+                                        /*switch($dataCurr[Types::tableName().'.type']) {
+                                            
+                                        }*/
+                                        
+                                        //Data::updateAll($attributes, 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                        $transaction->commit();
+                                    } catch (\Exception $ex) {
+                                        $transaction->rollBack();
+                                        throw $ex;
                                     }
                                     
-                                    //switch()
-                                    
-                                    Data::updateAll($attributes, 'id = :id', [':id' => \Yii::$app->request->get('id')]);
-                                    //$data = LowerData::find()->where(['id' => \Yii::$app->request->get('id', false)])->one();
                                     return ajaxJSONResponseHelper::createResponse();
                                 } else {
                                     return ajaxJSONResponseHelper::createResponse(false, 

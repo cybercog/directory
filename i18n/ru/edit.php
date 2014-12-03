@@ -26,6 +26,7 @@ return [
     'Edit type' => 'Редактировать тип',
     'Close' => 'Закрыть',
     'Delete data type' => 'Удалить тип',
+    'Delete file' => 'Удалить файл',
     'Edit data type' => 'Редактировать тип',
     'Show completely' => 'Показать полностью',
     'Apply' => 'Применить',
