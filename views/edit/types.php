@@ -4,6 +4,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 use app\modules\directory\directoryModule;
+use yii\widgets\Breadcrumbs;
 
 use yii\helpers\Url;
 use app\modules\directory\widgets\SingletonRenderHelper;
@@ -14,13 +15,6 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
 
 $uid = mt_rand(0, mt_getrandmax());
 
-$this->params['breadcrumbs'] = [
-        [
-            'label' => directoryModule::ht('search', 'Search'),
-            'url' => Url::toRoute('/directory/search/index')
-        ],
-        directoryModule::ht('edit', 'Data types')
-    ];
 ?>
 
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
@@ -39,6 +33,16 @@ $this->params['breadcrumbs'] = [
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
 <h1 class="directory-h1 directory-types-h1-icon"><?= directoryModule::ht('edit', 'Data types')?></h1>
+
+<?= Breadcrumbs::widget([
+    'links' => [
+        [
+            'label' => directoryModule::ht('search', 'Search'),
+            'url' => Url::toRoute('/directory/search/index')
+        ],
+        directoryModule::ht('edit', 'Data types')
+    ]
+    ]) ?>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
@@ -102,7 +106,7 @@ $this->params['breadcrumbs'] = [
         $.ajaxPostHelper({
             url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
                     $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
-            data : $("#type-data-form").serialize(),
+            data : "del",
             waitTag: "#waitQueryDataType",
             errorTag: "#errorQueryDataType",
             errorWaitTimeout: 5,
@@ -113,7 +117,7 @@ $this->params['breadcrumbs'] = [
                             $.ajaxPostHelper({
                                 url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
                                         dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
-                                data : $("#type-data-form").serialize(),
+                                data : "del",
                                 waitTag: "#waitQueryDataType",
                                 errorTag: "#errorQueryDataType",
                                 errorWaitTimeout: 5,

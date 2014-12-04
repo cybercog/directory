@@ -22,6 +22,8 @@ class DataSearch extends FilterModelBase {
     public function search() {
         $query = LowerData::find();
         
+        $query->addOrderBy(['id' => SORT_ASC]);
+        
         $query->andFilterWhere(['like', 'description', mb_strtolower($this->description, 'UTF-8')]);
         $query->andFilterWhere(['like', 'value', mb_strtolower($this->value, 'UTF-8')]);
         $query->andFilterWhere(['like', 'type_name', mb_strtolower($this->type_name, 'UTF-8')]);

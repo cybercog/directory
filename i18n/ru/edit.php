@@ -7,6 +7,7 @@ return [
     'file' => 'файл',
     'Data types' => 'Типы данных',
     'Data' => 'Данные',
+    'Records' => 'Записи',
     'regular expression to validate the entered string' => 'регулярное выражение для проверки введённой строки',
     'Name' => 'Имя',
     'Type' => 'Тип',

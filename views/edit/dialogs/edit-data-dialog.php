@@ -472,17 +472,17 @@ Dialog::begin([
                                         $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'value')?>']").val(p.data.original_value);
                                         break;
                                     case "text":
-                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_value);
                                         $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'text')?>']").val(p.data.original_text);
                                         break;
                                     case "image":
-                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_value);
                                         $("#data-edit-form<?=$uid?> .directory-image-control").addClass("directory-hide-element");
                                         $("#data-edit-form<?=$uid?> .directory-image-link").removeClass("directory-hide-element");
                                         $("#data-edit-form<?=$uid?> .directory-image-link a").text(p.data.original_text).attr("href", p.data.original_text);
                                         break;
                                     case "file":
-                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_keywords);
+                                        $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'keywords')?>']").val(p.data.original_value);
                                         $("#data-edit-form<?=$uid?> .directory-file-control").addClass("directory-hide-element");
                                         $("#data-edit-form<?=$uid?> .directory-file-link").removeClass("directory-hide-element");
                                         $("#data-edit-form<?=$uid?> .directory-file-link a").text(p.data.original_text).attr("href", p.data.original_text);

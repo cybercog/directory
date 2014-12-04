@@ -19,6 +19,8 @@ class TypesSearch extends FilterModelBase {
     
     public function search() {
         $query = LowerTypes::find();
+        
+        $query->addOrderBy(['id' => SORT_ASC]);
 
         $query->andFilterWhere(['like', 'name', mb_strtolower($this->name, 'UTF-8')]);
         $query->andFilterWhere(['type' => $this->type]);

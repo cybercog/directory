@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use yii\widgets\Breadcrumbs;
 
 $uid = mt_rand(0, mt_getrandmax());
 
@@ -15,13 +16,6 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
 
 //$uid = mt_rand(0, mt_getrandmax());
 
-$this->params['breadcrumbs'] = [
-        [
-            'label' => directoryModule::ht('search', 'Search'),
-            'url' => Url::toRoute('/directory/search/index')
-        ],
-        directoryModule::ht('edit', 'Data')
-    ];
 ?>
 
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
@@ -39,6 +33,16 @@ $this->params['breadcrumbs'] = [
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
 <h1 class="directory-h1 directory-data-h1-icon"><?= directoryModule::ht('edit', 'Data')?></h1>
+
+<?= Breadcrumbs::widget([
+    'links' => [
+        [
+            'label' => directoryModule::ht('search', 'Search'),
+            'url' => Url::toRoute('/directory/search/index')
+        ],
+        directoryModule::ht('edit', 'Data')
+    ]
+    ]) ?>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
@@ -94,18 +98,35 @@ $this->params['breadcrumbs'] = [
                 onSuccess : function() { $("#updateDataTable").click(); } 
             });
     }).on("click", ".directory-delete-type-button", function() {
-        alert("m");
-        /*var url = "<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>";
         $.ajaxPostHelper({
-            url : url.replace("<?=$uid?>", $(this).closest("tr").find("td").first().find("div.row-id").text()),
-            data : $("#type-data-form").serialize(),
-            waitTag: "#waitQueryDataType",
-            errorTag: "#errorQueryDataType",
+            url : ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+                    $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
+            data : "del",
+            waitTag: "#waitQueryData",
+            errorTag: "#errorQueryData",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                $("#updateTypesTable").click();
+                if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
+                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
+                        if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
+                            $.ajaxPostHelper({
+                                url : ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
+                                        dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
+                                data : "del",
+                                waitTag: "#waitQueryData",
+                                errorTag: "#errorQueryData",
+                                errorWaitTimeout: 5,
+                                onSuccess: function(dataObject) { 
+                                    $("#updateDataTable").click();
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    $("#updateDataTable").click();
+                }
             }
-        });*/
+        });
     });
     
  

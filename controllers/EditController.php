@@ -194,18 +194,41 @@ class EditController extends Controller {
                                     
                                     try {
                                         $dataType = Types::find()->where(['id' => $form->typeId])->one();
+                                        $dataCurr = Data::find()
+                                                ->where([Data::tableName().'.id' => \Yii::$app->request->get('id')])
+                                                ->innerJoinWith('type', true)
+                                                ->one();
+                                        $delFileFunc = function($filePath) {
+                                            $path = str_replace(
+                                                    \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']), 
+                                                    \Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']), $filePath);
+                                            if(file_exists($path)) {
+                                                unlink($path);
+                                            }
+                                        };
                                         
                                         switch($dataType->type) {
                                             case 'string':
                                                 $attributes['value'] = $form->value;
+                                                $attributes['text'] = null;
+                                                if(($dataCurr->type->type == 'file') || ($dataCurr->type->type == 'image')) {
+                                                    $delFileFunc($dataCurr->text);
+                                                }
                                                 break;
                                             case 'text':
                                                 $attributes['text'] = $form->text;
                                                 $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
+                                                if(($dataCurr->type->type == 'file') || ($dataCurr->type->type == 'image')) {
+                                                    $delFileFunc($dataCurr->text);
+                                                }
                                                 break;
                                             case 'file':
                                                 $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
-                                                if($form->replase == 'change') {
+                                                if($form->replase == 'no') {
+                                                    if($dataCurr->type->type != 'file') {
+                                                        throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                                    }
+                                                } elseif($form->replase == 'change') {
                                                     $form->file = UploadedFile::getInstance($form, 'file');
                                                     $file =  '/file_'.mt_rand(0, mt_getrandmax()).'.'.$form->file->extension;
                                                     if($form->file->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
@@ -213,11 +236,21 @@ class EditController extends Controller {
                                                     } else {
                                                         throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                                     }
+                                                    if(($dataCurr->type->type == 'image') || 
+                                                            ($dataCurr->type->type == 'file')) {
+                                                        $delFileFunc($dataCurr->text);
+                                                    }
+                                                } else {
+                                                    throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                                 }
                                                 break;
                                             case 'image':
                                                 $attributes['value'] = empty($form->keywords) ? null : $form->keywords;
-                                                if($form->replase == 'change') {
+                                                if($form->replase == 'no') {
+                                                    if($dataCurr->type->type != 'image') {
+                                                        throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
+                                                    }
+                                                } elseif($form->replase == 'change') {
                                                     $form->image = UploadedFile::getInstance($form, 'image');
                                                     $file =  '/image_'.mt_rand(0, mt_getrandmax()).'.'.$form->image->extension;
                                                     if($form->image->saveAs(\Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']).$file)) {
@@ -225,17 +258,17 @@ class EditController extends Controller {
                                                     } else {
                                                         throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                                     }
+                                                    if(($dataCurr->type->type == 'image') || 
+                                                            ($dataCurr->type->type == 'file')) {
+                                                        $delFileFunc($dataCurr->text);
+                                                    }
+                                                } else {
+                                                    throw new \Exception(directoryModule::ht('edit', 'Error when saving a file.'));
                                                 }
                                                 break;
                                         }
                                         
-                                        //если было сохранено файло, поудалять
-                                        $dataCurr = Data::find()->where([Data::tableName().'.id' => \Yii::$app->request->get('id')])->with(Types::tableName())->innerJoin(Types::tableName(), Types::tableName().'.id = '.Data::tableName().'.type_id')->one();
-                                        /*switch($dataCurr[Types::tableName().'.type']) {
-                                            
-                                        }*/
-                                        
-                                        //Data::updateAll($attributes, 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                        Data::updateAll($attributes, 'id = :id', [':id' => \Yii::$app->request->get('id')]);
                                         $transaction->commit();
                                     } catch (\Exception $ex) {
                                         $transaction->rollBack();
@@ -259,18 +292,44 @@ class EditController extends Controller {
                 case 'delete':
                     if(\Yii::$app->request->get('id', false)) {
                         try {
-                            if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
-                                Data::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
-                            } else {
-                                $dataCount = Data::find()->where('type_id=:id', 
-                                                [':id' => \Yii::$app->request->get('id')])->with('type')->count();
-                                if($dataCount > 0) {
-                                    return ajaxJSONResponseHelper::createResponse(true, 'query', 
-                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
-                                                'id' => \Yii::$app->request->get('id', false)]);
-                                } else {
-                                    Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            $delete = function($id) {
+                                $dataCurr = Data::find()
+                                                ->where([Data::tableName().'.id' => $id])
+                                                ->innerJoinWith('type', true)
+                                                ->one();
+                                if(($dataCurr->type->type == 'file') || 
+                                        ($dataCurr->type->type == 'image')) {
+                                    $path = str_replace(
+                                            \Yii::getAlias(directoryModule::$SETTING['uploadPathWeb']), 
+                                            \Yii::getAlias(directoryModule::$SETTING['uploadPathLocal']), $dataCurr->text);
+                                    if(file_exists($path)) {
+                                        unlink($path);
+                                    }
                                 }
+                                
+                                Data::deleteAll('id=:id', [':id' => $id]);
+                            };
+                            
+                            $transaction = \Yii::$app->db->beginTransaction();
+                            
+                            try {
+                                if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
+                                    $delete(\Yii::$app->request->get('id'));
+                                } else {
+                                    $dataCount = Data::find()->where('type_id=:id', 
+                                                    [':id' => \Yii::$app->request->get('id')])->with('recordsdata')->count();
+                                    if($dataCount > 0) {
+                                        return ajaxJSONResponseHelper::createResponse(true, 'query', 
+                                                ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
+                                                    'id' => \Yii::$app->request->get('id', false)]);
+                                    } else {
+                                        $delete(\Yii::$app->request->get('id'));
+                                    }
+                                }
+                                $transaction->commit();
+                            } catch (\Exception $ex) {
+                                $transaction->rollBack();
+                                throw $ex;
                             }
                         } catch (\Exception $ex) {
                             return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
@@ -286,17 +345,19 @@ class EditController extends Controller {
         $model = new \app\modules\directory\models\search\DataSearch();
         $model->attributes = \Yii::$app->request->get('DataSearch');
         
-       /* $typesData = new \app\modules\directory\models\search\TypesSearch();
-        $typesData->pagination = 7;*/
-        
         if(\Yii::$app->request->isPjax) {
-            /*switch (\Yii::$app->request->get('_pjax')) {
-                case '#typesCompactGridPjaxWidget':
-                    return $this->renderPartial('types_compact_grid', ['typesDataModel' => $typesData]);
-            }*/
+            $control = \Yii::$app->request->get('_pjax');
+
+            if($control == '#dataGridPjaxWidget') {
+                return $this->renderPartial('data_grid', ['dataModel' => $model]);
+            } elseif(preg_match('/#dataCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) > 0) {
+                return $this->renderPartial('dialogs/data-compact-grid', ['typesDataModel' => $model, 'uid' => $matches['uid']]);
+            } else {
+                throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+            }
         }
         
-        return $this->render('data', [/*'formModel' => new DataForm, *//*'typeFormModel' => new TypeForm,*/ /*'typesDataModel' => $typesData,*/ 'dataModel' => $model]);
+        return $this->render('data', ['dataModel' => $model]);
     }
     
     public function actionRecords(){
