@@ -22,7 +22,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
-    ['name' => '/edit/dialogs/edit-data-dialog', 'params' => ['formModel' => $formModel]]
+    ['name' => '/edit/dialogs/edit-data-dialog']
     ]]) ?>
 
 <?php if(false) { ?><style><?php } ob_start(); ?>

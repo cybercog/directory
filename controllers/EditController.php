@@ -19,7 +19,7 @@ class EditController extends Controller {
         $this->layout = 'main';
     }
     
-    public function actionTypes(){
+    public function actionTypes() {
         if($cmd = \Yii::$app->request->get('cmd', false)) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
@@ -130,7 +130,7 @@ class EditController extends Controller {
         return $this->render('types', ['dataModel' => $model]);
     }
     
-    public function actionData(){
+    public function actionData() {
         if($cmd = \Yii::$app->request->get('cmd', false)) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -360,15 +360,19 @@ class EditController extends Controller {
         return $this->render('data', ['dataModel' => $model]);
     }
     
-    public function actionRecords(){
-        return $this->render('records');
+    public function actionRecords() {
+        $model = new \app\modules\directory\models\search\RecordsSearch();
+        $model->attributes = \Yii::$app->request->get('RecordsSearch');
+        
+        
+        return $this->render('records', ['dataModel' => $model]);
     }
     
-    public function actionDirectories(){
+    public function actionDirectories() {
         return $this->render('directories');
     }
     
-    public function actionHierarchies(){
+    public function actionHierarchies() {
         return $this->render('hierarchies');
     }
 }

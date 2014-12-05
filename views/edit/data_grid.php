@@ -20,14 +20,14 @@ use app\modules\directory\helpers\boolSaveHelper;
                 'columns' => [
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
                         'attribute' => 'type_name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Type name'),
                         'value' => function($data) {
                             $row = $data->attributes;
-                            $row['visible'] = boolSaveHelper::string2booleanForm($row['visible']);
+                            $row['visible'] = boolSaveHelper::string2boolean($row['visible']);
                             return dataGridCellViewHelper::getTextString($data->original_type_name).
                                     '<div class="directory-hide-element directory-row-data">'.
                                     json_encode($row).'</div>';
@@ -35,7 +35,7 @@ use app\modules\directory\helpers\boolSaveHelper;
                     ],
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
                         'attribute' => 'type_type',
                         'filter' => ['string' => directoryModule::ht('edit', 'string'), 
@@ -70,7 +70,7 @@ use app\modules\directory\helpers\boolSaveHelper;
                     ],
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
                         'attribute' => 'visible',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
@@ -83,7 +83,7 @@ use app\modules\directory\helpers\boolSaveHelper;
                     ],
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
                         'value' => function($data) {
                             return '<nobr>'

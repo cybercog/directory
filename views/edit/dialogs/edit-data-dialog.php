@@ -490,7 +490,7 @@ Dialog::begin([
                                 }
                                 
                                 $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
-                                $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").val(p.data.visible);
+                                $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.visible);
                                 
                                 $("#data-edit-form<?=$uid?>").data("<?=$uid?>", p);
                                 
@@ -522,9 +522,22 @@ Dialog::begin([
                             })(p);
                             break;
                         default:
+                            if(p.onError !== undefined) {
+                               p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                            } else {
+                                alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
+                            }
                             break;
                     }
+                } else {
+                    if(p.onError !== undefined) {
+                       p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                    } else {
+                        alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
+                    }
                 }
+            } else {
+                alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
             }
         };
     })(jQuery);

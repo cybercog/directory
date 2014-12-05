@@ -24,6 +24,8 @@ return [
     'Description' => 'Описание',
     'Create new type' => 'Создать новый тип',
     'Add data item' => 'Добавить элемент',
+    'Add' => 'Добавить',
+    'Add record' => 'Добавить запись',
     'Edit type' => 'Редактировать тип',
     'Close' => 'Закрыть',
     'Delete data type' => 'Удалить тип',

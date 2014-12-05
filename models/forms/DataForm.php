@@ -11,7 +11,7 @@ class DataForm extends Model {
     public $value;
     public $text;
     public $description;
-    public $visible = '1';
+    public $visible = true;
     public $keywords;
     public $file;
     public $image;

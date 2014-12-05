@@ -26,7 +26,7 @@ $typesDataModel->pagination = 7;
                 'columns' => [
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'format' => 'raw',
                         'attribute' => 'name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
@@ -37,7 +37,7 @@ $typesDataModel->pagination = 7;
                     ],
                     [
                         'class' => 'yii\grid\DataColumn',
-                        'contentOptions' => ['class' => 'directory-min-width'],
+                        'headerOptions' => ['class' => 'directory-min-width'],
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'format' => 'raw',
                         'attribute' => 'type',

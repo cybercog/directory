@@ -10,6 +10,7 @@ class directoryModule extends \yii\base\Module
     
     public function __construct($id, $parent = null, $config = array()) {
         parent::__construct($id, $parent, $config);
+        $this->defaultRoute = 'search';
     }
 
     public static function getPublishPath($resId) {
