@@ -68,8 +68,8 @@ Dialog::begin([
                                                         ['class' => 'directory-stretch-bar directory-grid-filter-control', 
                                                             'readonly' => 'readonly', 
                                                             'id' => Html::getInputId($formModel, 'typeId').'text']) ; ?></td>
-                            <td class="directory-min-width">&nbsp;</td>
-                            <td class="directory-min-width">
+                            <td class="directory-min-width directory-select-type-button">&nbsp;</td>
+                            <td class="directory-min-width directory-select-type-button">
                                 <div id="selectDataTypeButton">&nbsp;</div>
                                 <ul class="directory-ui-menu">
                                     <li><nobr><?= directoryModule::ht('edit', 'Select type')?>...</nobr></li>
@@ -326,6 +326,7 @@ Dialog::begin([
                     $.editTypeDialog(
                             {
                                 type : "new", 
+                                return : true,
                                 onSuccess : function(data) {
                                     if(data !== undefined) {
                                         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").val(data.id).prop("data-type", data.type);
@@ -409,6 +410,7 @@ Dialog::begin([
             $("#data-edit-form<?=$uid?> .directory-image-control").removeClass("directory-hide-element");
             $("#data-edit-form<?=$uid?> .directory-image-link").addClass("directory-hide-element");
             $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'replase')?>").val('new');
+            $("#data-edit-form<?=$uid?> .directory-select-type-button").removeClass("directory-hide-element");
         }});
         
         $.editDataDialog = function(p) {
@@ -428,7 +430,7 @@ Dialog::begin([
                                                                 text : "<?= directoryModule::ht('edit', 'Add data item')?>",
                                                                 click : function() {
                                                                     $("#data-edit-form<?=$uid?>").
-                                                                            attr("action", "<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>");
+                                                                            attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create', 'return' => $uid])?>").replace("<?=$uid?>", p.return ? "yes" : "no"));
                                                                     sendForm();
                                                                 }
                                                             },
@@ -491,6 +493,7 @@ Dialog::begin([
                                 
                                 $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
                                 $("#data-edit-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.visible);
+                                $("#data-edit-form<?=$uid?> .directory-select-type-button").addClass("directory-hide-element");
                                 
                                 $("#data-edit-form<?=$uid?>").data("<?=$uid?>", p);
                                 

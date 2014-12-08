@@ -5,27 +5,6 @@ namespace app\modules\directory\helpers;
 use app\modules\directory\directoryModule;
 
 class dataGridCellViewHelper {
-    public static function getDataString($value, $display = false, $id = false) {
-        $result = (!empty($id) ? '<div class="directory-hide-element row-id">'.$id.'</div>' : '');
-        
-        $_display = empty($display) ? $value : $display;
-        
-        if(strlen($_display) <= 20) {
-            $result .= '<div class="row-display">'.$_display.'</div>';
-        } else {
-            $result .= '<div class="row-display">'.substr($_display, 0, 20).'</div>'
-                    . '<div class="row-display-title">'.$_display.'</div>';
-        }
-        
-        $result .= '<div class="directory-hide-element row-value">'.$value.'</div>';
-        
-        return $result;
-        /*return ($display ? '<div class="row-display">'.$display.'</div>'
-                . '<div class="directory-hide-element row-value">'.$value.'</div>' : 
-                    '<div class="row-value row-display">'.$value.'</div>')
-                . ($id ? '<div class="directory-hide-element row-id">'.$id.'</div>' : '');*/
-    }
-
     public static function getDataTypeString($type) {
         return '<div class="directory-'.$type.'-type row-display">'.directoryModule::ht('edit', $type).'</div>';
     }

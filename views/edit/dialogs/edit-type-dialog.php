@@ -139,6 +139,10 @@ Dialog::begin([
             onSelectType();
         });
         
+        $("#editDialog<?=$uid?>").dialog({close : function(event, ui) {
+                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").removeAttr("disabled");
+        }});
+        
         $.editTypeDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
@@ -155,7 +159,7 @@ Dialog::begin([
                                                 text : "<?= directoryModule::ht('edit', 'Create new type')?>",
                                                 click : function() {
                                                     $.ajaxPostHelper({
-                                                        url : "<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create', 'return' => 'ok'])?>",
+                                                        url : ("<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create', 'return' => $uid])?>").replace("<?=$uid?>", p.return ? "yes" : "no"),
                                                         data : $("#type-data-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
@@ -197,10 +201,11 @@ Dialog::begin([
                                 
                                 $("#type-data-form<?=$uid?>").trigger('reset');
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.original_name);
-                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").val(p.data.type);
+                                $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").val(p.data.type).attr("disabled", "disabled");
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'validate')?>']").val(p.data.original_validate);
                                 $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
                                 onSelectType();
+                                
                                 $("#editDialog<?=$uid?>").
                                     dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit type')?>").
                                     dialog("option", "buttons", 

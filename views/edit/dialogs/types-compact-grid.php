@@ -1,7 +1,7 @@
 <?php 
 
 use app\modules\directory\directoryModule;
-use app\modules\directory\helpers\typesViewHelper;
+use app\modules\directory\helpers\dataGridCellViewHelper;
 use yii\helpers\Url;
 
 if(!isset($typesDataModel)) {
@@ -32,7 +32,9 @@ $typesDataModel->pagination = 7;
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Name'),
                         'value' => function($data) {
-                            return typesViewHelper::getNameString($data);
+                            return dataGridCellViewHelper::getTextString($data->original_name).
+                                    '<div class="directory-hide-element directory-row-data">'.
+                                    json_encode($data->attributes).'</div>';
                         }
                     ],
                     [
@@ -47,7 +49,7 @@ $typesDataModel->pagination = 7;
                                                 'file' => directoryModule::ht('edit', 'file')],
                         'label' => directoryModule::ht('edit', 'Type'),
                         'value' => function($data) {
-                            return typesViewHelper::getTypeString($data);
+                            return dataGridCellViewHelper::getDataTypeString($data->type);
                         }
                     ],
                     [
@@ -57,7 +59,7 @@ $typesDataModel->pagination = 7;
                         'attribute' => 'description',
                         'label' => directoryModule::ht('edit', 'Description'),
                         'value' => function($data) {
-                            return typesViewHelper::getTextString($data['description']);
+                            return dataGridCellViewHelper::getTextString($data['description']);
                         }
                     ]
                 ]

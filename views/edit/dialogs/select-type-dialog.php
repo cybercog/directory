@@ -4,7 +4,6 @@ use yii\jui\Dialog;
 use yii\web\View;
 use app\modules\directory\directoryModule;
 use app\modules\directory\widgets\SingletonRenderHelper;
-use yii\helpers\Url;
 
 $uid = mt_rand(0, mt_getrandmax());
 
@@ -14,7 +13,6 @@ $uid = mt_rand(0, mt_getrandmax());
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
-    //['name' => '/edit/dialogs/edit-data-dialog', 'params' => ['formModel' => $formModel]]
     ['name' => '/edit/dialogs/edit-type-dialog']
     ]]) ?>
 
@@ -79,18 +77,13 @@ Dialog::begin([
             if(p !== undefined) {
                 $("#typesCompactGridPjaxWidget<?=$uid?>").on(
                         "click", 
-                        "#typesCompactGridWidget<?=$uid?> tbody tr td:not(.directory-compact-types-grid-edit)", 
+                        "#typesCompactGridWidget<?=$uid?> tbody tr td", 
                         { params : p }, 
                         function(eventObject) {
                             $("#selectTypeDialog<?=$uid?>").dialog("close");
                             if(eventObject.data.params.onSuccess !== undefined) {
-                                var row = $(this).closest("tr");
-                                eventObject.data.params.onSuccess({
-                                    id : $(row).find("td:first .row-id").text(),
-                                    name : $(row).find("td:first .row-display").text(),
-                                    type : $(row).find("td:eq(1) .row-value").text(),
-                                    typeDiaplay : $(row).find("td:eq(1) .row-display").text()
-                                });
+                                eventObject.data.params.onSuccess(
+                                        $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()));
                             }
                 });
                 
@@ -111,6 +104,8 @@ Dialog::begin([
                         }
                 }).
                 dialog("open");
+            } else {
+                alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
             }
         }
     })(jQuery);

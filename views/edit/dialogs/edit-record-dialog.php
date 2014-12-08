@@ -20,7 +20,8 @@ $formModel = new \app\modules\directory\models\forms\RecordForm;
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     //['name' => '/edit/dialogs/edit-type-dialog'],
-    ['name' => '/edit/dialogs/edit-data-dialog']
+    ['name' => '/edit/dialogs/edit-data-dialog'],
+    ['name' => '/edit/dialogs/select-data-dialog']
     ]]) ?>
 
 <div class="directory-hide-element">
@@ -43,12 +44,31 @@ Dialog::begin([
     <table class="directory-modal-table directory-stretch-bar directory-table">
         <tr>
             <td colspan="2">
-                <div id="dataArray"></div>
-                <div class="directory-min-width">
-                    <div id="addDataToRecord">
-                        <nobr>
-                            <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add')?>...</span>
-                        </nobr>
+                <div class="directory-record-data-list">
+                    <span class="diretory-record-label"><?= directoryModule::ht('edit', 'Items')?></span>
+                    <table>
+                        <tr>
+                            <td class="directory-min-width">
+                                <div id="addDataToRecord">
+                                    <nobr>
+                                        <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add')?>...</span>
+                                    </nobr>
+                                </div>
+                            </td>
+                            <td class="directory-min-width">&nbsp;</td>
+                            <td class="directory-min-width">
+                                <div id="createNewDataToRecord">
+                                    <nobr>
+                                        <span class="directory-new-button-icon"><?= directoryModule::ht('edit', 'New')?>...</span>
+                                    </nobr>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                    <div id="dataArray">
+                        <table class="directory-modal-table directory-stretch-bar">
+                        </table>
                     </div>
                 </div>
             </td>
@@ -65,12 +85,41 @@ Dialog::begin([
 
 </div>
 
+<div class="directory-hide-element" id="data-add-template">
+    <tr>
+        <td><?=$uid.'text'?><?=Html::hiddenInput(Html::getInputName($formModel, "[$uid]dataId"), null, ['id' => Html::getInputId($formModel, "[$uid]dataId")])?></td>
+        <td>&nbsp;</td>
+        <td><?=Html::textInput(Html::getInputName($formModel, "[$uid]position"), null, ['id' => Html::getInputId($formModel, "[$uid]position")])?></td>
+        <td>&nbsp;</td>
+        <td><?=Html::textInput(Html::getInputName($formModel, "[$uid]subPosition"), null, ['id' => Html::getInputId($formModel, "[$uid]subPosition")])?></td>
+        <td>&nbsp;</td>
+        <td>hhh</td>
+    </tr>
+</div>
+
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     (function($) {
         
         $("#record-form<?=$uid?> #addDataToRecord").button().click(function() {
-            alert("ggggggggg");
+            $.selectDataDialog({
+                onSuccess : function(data) {
+                    if(data !== undefined) {
+                        alert("hhhhhh");
+                    }
+                }
+            });
+        });
+        
+        $("#record-form<?=$uid?> #createNewDataToRecord").button().click(function() {
+            $.editDataDialog({
+                type : "new",
+                return : true,
+                onSuccess : function(data) {
+                    if(data !== undefined) {
+                    }
+                }
+            });
         });
         
         $.editRecordDialog = function(p) {

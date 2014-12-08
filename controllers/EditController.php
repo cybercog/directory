@@ -37,7 +37,7 @@ class EditController extends Controller {
                                 $type->description = !isset($form->description) || strlen($form->description) === 0 ? null : $form->description;
                                 $type->validate = !isset($form->validate) || strlen($form->validate) === 0 ? null : $form->validate;
                                 $type->save();
-                                if(\Yii::$app->request->get('return', false)) {
+                                if(\Yii::$app->request->get('return', 'no') == 'yes') {
                                     $createdType = Types::find()->where('name=:name', [':name' => $form->name])->one();
                                     $ct = [];
                                     $ct['id'] = $createdType->id;

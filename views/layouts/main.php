@@ -55,6 +55,10 @@ AppAsset::register($this);
             background: url(<?= directoryModule::getPublishPath('/img/add.png'); ?>) no-repeat;
             padding-left: 20px;
         }
+        .directory-new-button-icon {
+            background: url(<?= directoryModule::getPublishPath('/img/new.png'); ?>) no-repeat;
+            padding-left: 20px;
+        }
         .directory-update-button-icon {
             background: url(<?= directoryModule::getPublishPath('/img/update.png'); ?>) no-repeat;
             padding-left: 20px;

@@ -266,3 +266,21 @@ button.directory-small-button {
 }
 
 .directory-ui-menu { position: absolute; z-index: 1000; }
+
+.directory-record-data-list {
+    padding: 5px;
+    padding-top: 9px;
+    margin-top: 9px;
+    border-radius: 4px;
+    border: silver dotted 1px;
+    position: relative;
+}
+
+.directory-record-data-list .diretory-record-label {
+    position: absolute;
+    background-color: white;
+    color: #3399ff;
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+}
