@@ -53,8 +53,6 @@ $uid = mt_rand(0, mt_getrandmax());
                         type : "new", 
                         onSuccess : function() { $("#updateTypesTable").click(); } 
                     });
-    }).tooltip({
-        content : function() { return $(this).attr("title"); }
     });
     
     $("#updateTypesTable").button({text : false}).click(
@@ -66,8 +64,6 @@ $uid = mt_rand(0, mt_getrandmax());
                                 timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
                                 url : $("#typesGridWidget").yiiGridView("data").settings.filterUrl
                             });
-    }).tooltip({
-        content : function() { return $(this).attr("title"); }
     });
     
     $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
@@ -144,7 +140,7 @@ $uid = mt_rand(0, mt_getrandmax());
                 <table class="directory-modal-table directory-stretch-bar">
                     <tr>
                         <td class="directory-min-width">
-                            <button id="createNewType" title="<?= directoryModule::ht('edit', 'Create new type')?>...">
+                            <button id="createNewType">
                                 <nobr>
                                     <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
                                 </nobr>
@@ -152,7 +148,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         </td>
                         <td class="directory-min-width">&nbsp;</td>
                         <td class="directory-min-width">
-                            <button id="updateTypesTable" title="<?= directoryModule::ht('edit', 'Update table')?>">
+                            <button id="updateTypesTable">
                                 <nobr>
                                     <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
                                 </nobr>

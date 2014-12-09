@@ -7,12 +7,10 @@ use app\modules\directory\directoryModule;
 
 class RecordForm extends Model {
     public $visible = true;
-    public $dataId;
     
     public function rules() {
         return [
-            ['visible', 'boolean'],
-            ['dataId', 'safe']
+            ['visible', 'boolean']
         ];
     }
     

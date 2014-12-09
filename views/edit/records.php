@@ -42,17 +42,13 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#addRecordItem").button().tooltip({
-        content : function() { return $(this).attr("title"); }
-    }).click(function() {
+    $("#addRecordItem").button().click(function() {
         $.editRecordDialog({
             type : "new"
         });
     });
 
-    $("#updateRecordTable").button().tooltip({
-        content : function() { return $(this).attr("title"); }
-    }).click(function() {
+    $("#updateRecordTable").button().click(function() {
         
     });
     
@@ -65,7 +61,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                 <table class="directory-modal-table directory-stretch-bar">
                     <tr>
                         <td class="directory-min-width">
-                            <button id="addRecordItem" title="<?= directoryModule::ht('edit', 'Add record')?>...">
+                            <button id="addRecordItem">
                                 <nobr>
                                     <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add record')?>...</span>
                                 </nobr>
@@ -73,7 +69,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                         </td>
                         <td class="directory-min-width">&nbsp;</td>
                         <td class="directory-min-width">
-                            <button id="updateRecordTable" title="<?= directoryModule::ht('edit', 'Update table')?>">
+                            <button id="updateRecordTable">
                                 <nobr>
                                     <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
                                 </nobr>

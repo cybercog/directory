@@ -68,21 +68,26 @@ Dialog::begin([
             items : ".directory-show-full-text"
         });
         
+        $("#dataCompactGridPjaxWidget<?=$uid?>").on(
+                "click", 
+                "#dataCompactGridWidget<?=$uid?> tbody tr td", 
+                function(eventObject) {
+                    if(!$(eventObject.target).hasClass("directory-data-file-download")) {
+                        $("#selectDataDialog<?=$uid?>").dialog("close");
+                        var p = $("#selectDataDialog<?=$uid?>").data("<?=$uid?>");
+                        if((p !== undefined) && (p.onSuccess !== undefined)) {
+                            var data = $.parseJSON($(this).closest("tr").find("td .directory-row-data").text());
+                            data.valueDisplay = $(this).closest("tr").find("td:eq(1)").html();
+                            p.onSuccess(data);
+                        }
+                    }
+        });
+        
         $.selectDataDialog = function(p) {
             if(p !== undefined) {
-                $("#dataCompactGridPjaxWidget<?=$uid?>").on(
-                        "click", 
-                        "#dataCompactGridWidget<?=$uid?> tbody tr td", 
-                        { params : p }, 
-                        function(eventObject) {
-                            $("#selectDataDialog<?=$uid?>").dialog("close");
-                            if(eventObject.data.params.onSuccess !== undefined) {
-                                eventObject.data.params.onSuccess(
-                                        $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()));
-                            }
-                });
                 
-                $("#selectDataDialog<?=$uid?>").dialog("option", "buttons", {
+                $("#selectDataDialog<?=$uid?>").data("<?=$uid?>", p).
+                dialog("option", "buttons", {
                     "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
                         $("#selectDataDialog<?=$uid?>").dialog("close");
                     }

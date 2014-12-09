@@ -284,3 +284,25 @@ button.directory-small-button {
     left: 8px;
     font-size: 12px;
 }
+
+table.directory-record-item-form {
+    margin-top: 3px !important;
+}
+
+table.directory-record-item-form thead {
+    border-bottom: #3399ff solid 1px !important;
+    border-top: #3399ff solid 1px !important;
+    
+}
+
+table.directory-record-item-form td {
+    padding: 3px !important;
+}
+
+table.directory-record-item-form thead {
+    font-weight: bold;
+}
+
+table.directory-record-item-form tr td:nth-child(even) {
+    background-color: #e0e0ff !important;
+}

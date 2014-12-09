@@ -72,22 +72,25 @@ Dialog::begin([
             content : function() { return $(this).closest("td").find(".row-value").html(); },
             items : ".directory-show-full-text"
         });
+        
+        $("#typesCompactGridPjaxWidget<?=$uid?>").on(
+                "click", 
+                "#typesCompactGridWidget<?=$uid?> tbody tr td", 
+                function(eventObject) {
+                    $("#selectTypeDialog<?=$uid?>").dialog("close");
+                    var p = $("#selectTypeDialog<?=$uid?>").data("<?=$uid?>");
+                    if((p !== undefined) && (p.onSuccess !== undefined)) {
+                        var type = $.parseJSON($(this).closest("tr").find("td .directory-row-data").text());
+                        type.typeDiaplay = $(this).closest("tr").find("td:eq(1)").text();
+                        p.onSuccess(type);
+                    }
+        });
 
         $.selectTypeDialog = function(p) {
             if(p !== undefined) {
-                $("#typesCompactGridPjaxWidget<?=$uid?>").on(
-                        "click", 
-                        "#typesCompactGridWidget<?=$uid?> tbody tr td", 
-                        { params : p }, 
-                        function(eventObject) {
-                            $("#selectTypeDialog<?=$uid?>").dialog("close");
-                            if(eventObject.data.params.onSuccess !== undefined) {
-                                eventObject.data.params.onSuccess(
-                                        $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()));
-                            }
-                });
                 
-                $("#selectTypeDialog<?=$uid?>").dialog("option", "buttons", {
+                $("#selectTypeDialog<?=$uid?>").data("<?=$uid?>", p).
+                dialog("option", "buttons", {
                     "<?= directoryModule::ht('edit', 'Close')?>" : function() { 
                         $("#selectTypeDialog<?=$uid?>").dialog("close");
                     }

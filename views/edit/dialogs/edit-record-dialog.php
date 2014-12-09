@@ -13,6 +13,7 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 $uid = mt_rand(0, mt_getrandmax());
 
 $formModel = new \app\modules\directory\models\forms\RecordForm;
+$formItemModel = new \app\modules\directory\models\forms\RecordDataItemForm;
 
 ?>
 
@@ -67,7 +68,18 @@ Dialog::begin([
                         </tr>
                     </table>
                     <div id="dataArray">
-                        <table class="directory-modal-table directory-stretch-bar">
+                        <table class="directory-modal-table directory-stretch-bar directory-record-item-form">
+                            <thead>
+                                <tr>
+                                    <td><nobr><?=directoryModule::ht('edit', 'Value')?></nobr></td>
+                                    <td><nobr><?=directoryModule::ht('edit', 'Position')?></nobr></td>
+                                    <td><nobr><?=directoryModule::ht('edit', 'Sub.')?></nobr></td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -85,16 +97,22 @@ Dialog::begin([
 
 </div>
 
-<div class="directory-hide-element" id="data-add-template">
-    <tr>
-        <td><?=$uid.'text'?><?=Html::hiddenInput(Html::getInputName($formModel, "[$uid]dataId"), null, ['id' => Html::getInputId($formModel, "[$uid]dataId")])?></td>
-        <td>&nbsp;</td>
-        <td><?=Html::textInput(Html::getInputName($formModel, "[$uid]position"), null, ['id' => Html::getInputId($formModel, "[$uid]position")])?></td>
-        <td>&nbsp;</td>
-        <td><?=Html::textInput(Html::getInputName($formModel, "[$uid]subPosition"), null, ['id' => Html::getInputId($formModel, "[$uid]subPosition")])?></td>
-        <td>&nbsp;</td>
-        <td>hhh</td>
-    </tr>
+<div class="directory-hide-element" id="data-add-template<?=$uid?>">
+    <table>
+        <tr>
+            <td>
+                <?=$uid.'p1'?>
+                <?=Html::hiddenInput(Html::getInputName($formItemModel, "[$uid]dataId"), null, ['id' => Html::getInputId($formItemModel, "[$uid]dataId")])?>
+            </td>
+            <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]position"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]position"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
+            <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]subPosition"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]subPosition"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
+            <td class="directory-min-width">
+                <div class="directory-edit-type-button directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
+                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
@@ -105,7 +123,13 @@ Dialog::begin([
             $.selectDataDialog({
                 onSuccess : function(data) {
                     if(data !== undefined) {
-                        alert("hhhhhh");
+                        var tmpEl = $("#data-add-template<?=$uid?> tr").clone();
+                        tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]dataId")?>").val(data.id);
+                        var counter = $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
+                        ++counter;
+                        $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                        tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
+                        $("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
                     }
                 }
             });
@@ -125,6 +149,8 @@ Dialog::begin([
         $.editRecordDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
+                    $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
+                    $("#record-form<?=$uid?> #dataArray table tbody").html("");
                     switch(p.type) {
                         case "new":
                             (function(p) {

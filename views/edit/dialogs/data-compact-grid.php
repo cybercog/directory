@@ -18,6 +18,7 @@ $dataDataModel->pagination = 7;
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
                 'id' => 'dataCompactGridPjaxWidget'.$uid,
+                'linkSelector' => '#dataCompactGridPjaxWidget'.$uid.' a:not(.directory-data-file-download)'
                 ]);?>
             <?= yii\grid\GridView::widget([
                 'id' => 'dataCompactGridWidget'.$uid,

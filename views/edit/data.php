@@ -52,8 +52,6 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                 type : "new",
                 onSuccess : function() { $("#updateDataTable").click(); } 
             });
-    }).tooltip({
-        content : function() { return $(this).attr("title"); }
     });
     
     $("#dataGridPjaxWidget .directory-edit-type-button, .directory-delete-type-button").button({text : false});
@@ -72,8 +70,6 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                                 timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
                                 url : $("#dataGridWidget").yiiGridView("data").settings.filterUrl
                             });
-    }).tooltip({
-        content : function() { return $(this).attr("title"); }
     });
     
     $("#dataGridPjaxWidget").on("pjax:start", function() {
@@ -139,7 +135,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                 <table class="directory-modal-table directory-stretch-bar">
                     <tr>
                         <td class="directory-min-width">
-                            <button id="addDataItem" title="<?= directoryModule::ht('edit', 'Add data item')?>...">
+                            <button id="addDataItem">
                                 <nobr>
                                     <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add data item')?>...</span>
                                 </nobr>
@@ -147,7 +143,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                         </td>
                         <td class="directory-min-width">&nbsp;</td>
                         <td class="directory-min-width">
-                            <button id="updateDataTable" title="<?= directoryModule::ht('edit', 'Update table')?>">
+                            <button id="updateDataTable">
                                 <nobr>
                                     <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
                                 </nobr>

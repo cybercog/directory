@@ -8,8 +8,8 @@ use app\modules\directory\directoryModule;
 class RecordDataItemForm extends Model {
     public $visible = true;
     public $dataId;
-    public $position;
-    public $subPosition;
+    public $position = 0;
+    public $subPosition = 0;
     
     public function rules() {
         return [
