@@ -39,6 +39,7 @@ return [
     'Apply' => 'Применить',
     'Items' => 'Элементы',
     'Visible' => 'Показать',
+    'Error saving type in the database.' => 'Ошибка при сохранении типа в базе данных.',
     'Error: invalid call parameters.' => 'Ошибка: некоррекные параметры вызова.',
     'Update table' => 'Обновить таблицу',
     'Edit item' => 'Редактировать элемент',

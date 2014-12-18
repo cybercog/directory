@@ -326,7 +326,6 @@ Dialog::begin([
                     $.editTypeDialog(
                             {
                                 type : "new", 
-                                return : true,
                                 onSuccess : function(data) {
                                     if(data !== undefined) {
                                         $("#data-edit-form<?=$uid?> #<?=Html::getInputId($formModel, 'typeId')?>").val(data.id).prop("data-type", data.type);
@@ -392,7 +391,7 @@ Dialog::begin([
                     var p = $("#data-edit-form<?=$uid?>").data("<?=$uid?>");
                     if((p !== undefined) && 
                             (p.onSuccess !== undefined)) {
-                        p.onSuccess();
+                        p.onSuccess(response.<?=ajaxJSONResponseHelper::messageField?>);
                     }
                 } else {
                     $("#editDataDialog<?=$uid?> #errorDlgQueryData").removeClass("directory-hide-element").html(response.<?= ajaxJSONResponseHelper::messageField?>);
@@ -430,7 +429,7 @@ Dialog::begin([
                                                                 text : "<?= directoryModule::ht('edit', 'Add data item')?>",
                                                                 click : function() {
                                                                     $("#data-edit-form<?=$uid?>").
-                                                                            attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create', 'return' => $uid])?>").replace("<?=$uid?>", p.return ? "yes" : "no"));
+                                                                            attr("action", ("<?= Url::toRoute(['/directory/edit/data', 'cmd' => 'create'])?>"));
                                                                     sendForm();
                                                                 }
                                                             },

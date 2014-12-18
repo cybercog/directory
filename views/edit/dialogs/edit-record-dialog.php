@@ -52,7 +52,7 @@ Dialog::begin([
                             <td class="directory-min-width">
                                 <div id="addDataToRecord">
                                     <nobr>
-                                        <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add')?>...</span>
+                                        <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add data item')?>...</span>
                                     </nobr>
                                 </div>
                             </td>
@@ -93,6 +93,15 @@ Dialog::begin([
 
     <?php ActiveForm::end(); ?>
     
+    <span id="waitDlgQuery" class="directory-hide-element">
+        <nobr>
+            <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+            <span><?= directoryModule::ht('search', 'processing request')?></span>
+        </nobr>
+    </span>
+    <div id="errorDlgQuery" class="directory-error-msg directory-hide-element"></div>
+    <div id="okDlgQuery" class="directory-ok-msg directory-hide-element"></div>
+
 <?php Dialog::end(); ?>
 
 </div>
@@ -117,20 +126,29 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
+    $("#record-form<?=$uid?> #dataArray table tbody").on("click", ".directory-edit-type-button", function() {
+        alert(0);
+    });
+    
     (function($) {
+        
+        var addDataToTable = function(data) {
+            if(data !== undefined) {
+                var tmpEl = $("#data-add-template<?=$uid?> tr").clone();
+                tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]dataId")?>").val(data.id);
+                var counter = $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
+                ++counter;
+                $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
+                tmpEl.find(".directory-edit-type-button").button();
+                $("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
+            }
+        }
         
         $("#record-form<?=$uid?> #addDataToRecord").button().click(function() {
             $.selectDataDialog({
                 onSuccess : function(data) {
-                    if(data !== undefined) {
-                        var tmpEl = $("#data-add-template<?=$uid?> tr").clone();
-                        tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]dataId")?>").val(data.id);
-                        var counter = $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
-                        ++counter;
-                        $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
-                        tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
-                        $("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
-                    }
+                    addDataToTable(data);
                 }
             });
         });
@@ -140,8 +158,7 @@ Dialog::begin([
                 type : "new",
                 return : true,
                 onSuccess : function(data) {
-                    if(data !== undefined) {
-                    }
+                    addDataToTable(data);
                 }
             });
         });
@@ -160,7 +177,21 @@ Dialog::begin([
                                                         [
                                                             {
                                                                 text : "<?= directoryModule::ht('edit', 'Add record')?>",
-                                                                click : function() { $("#editRecordDialog<?=$uid?>").dialog("close"); }
+                                                                click : function() { 
+                                                                    $.ajaxPostHelper({
+                                                                        url : ("<?=Url::toRoute(['/directory/edit/records', 'cmd' => 'create'])?>"),
+                                                                        data : $("#record-form<?=$uid?>").serialize(),
+                                                                        waitTag : "#editRecordDialog<?=$uid?> #waitDlgQuery",
+                                                                        errorTag : "editRecordDialog<?=$uid?> #errorDlgQuery",
+                                                                        errorWaitTimeout : 5,
+                                                                        onSuccess : function() { 
+                                                                            $("#editRecordDialog<?=$uid?>").dialog("close");
+                                                                            if(p.onSuccess !== undefined) {
+                                                                                p.onSuccess();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
                                                             },
                                                             {
                                                                 text : "<?= directoryModule::ht('edit', 'Close')?>",

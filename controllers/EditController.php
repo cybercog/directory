@@ -12,6 +12,8 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 use app\modules\directory\helpers\modelErrorsToStringHelper;
 use app\modules\directory\helpers\boolSaveHelper;
 use yii\web\UploadedFile;
+use app\modules\directory\models\db\views\LowerData;
+use app\modules\directory\helpers\dataGridCellViewHelper;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -36,19 +38,12 @@ class EditController extends Controller {
                                 $type->type = $form->type;
                                 $type->description = !isset($form->description) || strlen($form->description) === 0 ? null : $form->description;
                                 $type->validate = !isset($form->validate) || strlen($form->validate) === 0 ? null : $form->validate;
-                                $type->save();
-                                if(\Yii::$app->request->get('return', 'no') == 'yes') {
-                                    $createdType = Types::find()->where('name=:name', [':name' => $form->name])->one();
-                                    $ct = [];
-                                    $ct['id'] = $createdType->id;
-                                    $ct['name'] = $createdType->name;
-                                    $ct['type'] = $createdType->type;
-                                    $ct['typeDiaplay'] = directoryModule::ht('edit', $createdType->type);
-                                    $ct['description'] = $createdType->description;
-                                    $ct['validate'] = $createdType->validate;
+                                if($type->save()) {
+                                    $ct = $type->attributes;
+                                    $ct['typeDiaplay'] = directoryModule::ht('edit', $ct['type']);
                                     return ajaxJSONResponseHelper::createResponse(true, $ct);
                                 } else {
-                                    return ajaxJSONResponseHelper::createResponse();
+                                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
                                 }
                             } catch (\Exception $ex) {
                                 return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
@@ -177,7 +172,9 @@ class EditController extends Controller {
                                         break;
                                 }
                                 $data->save();
-                                return ajaxJSONResponseHelper::createResponse();
+                                $newData = LowerData::find()->where('id=:id', [':id' => $data->id])->one()->attributes;
+                                $newData['valueDisplay'] = dataGridCellViewHelper::getValueDataString($newData['type_type'], $newData['original_value'], $newData['original_text']);
+                                return ajaxJSONResponseHelper::createResponse(true, $newData);
                             } catch (\Exception $ex) {
                                 return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                             }

@@ -159,7 +159,7 @@ Dialog::begin([
                                                 text : "<?= directoryModule::ht('edit', 'Create new type')?>",
                                                 click : function() {
                                                     $.ajaxPostHelper({
-                                                        url : ("<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create', 'return' => $uid])?>").replace("<?=$uid?>", p.return ? "yes" : "no"),
+                                                        url : ("<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'create'])?>"),
                                                         data : $("#type-data-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
