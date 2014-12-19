@@ -19,6 +19,7 @@ $formItemModel = new \app\modules\directory\models\forms\RecordDataItemForm;
 
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
     ['name' => '/helpers/ajax-post-helper'],
+    ['name' => '/helpers/table-paginator-js'],
     ['name' => '/helpers/publish-result-css'],
     //['name' => '/edit/dialogs/edit-type-dialog'],
     ['name' => '/edit/dialogs/edit-data-dialog'],
