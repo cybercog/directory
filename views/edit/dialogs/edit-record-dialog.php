@@ -23,7 +23,8 @@ $formItemModel = new \app\modules\directory\models\forms\RecordDataItemForm;
     ['name' => '/helpers/publish-result-css'],
     //['name' => '/edit/dialogs/edit-type-dialog'],
     ['name' => '/edit/dialogs/edit-data-dialog'],
-    ['name' => '/edit/dialogs/select-data-dialog']
+    ['name' => '/edit/dialogs/select-data-dialog'],
+    ['name' => '/helpers/table-paginator-js']
     ]]) ?>
 
 <div class="directory-hide-element">
@@ -142,9 +143,13 @@ Dialog::begin([
                 $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
                 tmpEl.find(".directory-edit-type-button").button();
-                $("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
+                var ii=$("#record-form<?=$uid?> #dataArray table");
+                $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().addRows(tmpEl);
+                //$("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
             }
         }
+        
+        $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().init();
         
         $("#record-form<?=$uid?> #addDataToRecord").button().click(function() {
             $.selectDataDialog({
