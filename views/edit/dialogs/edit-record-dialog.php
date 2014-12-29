@@ -49,7 +49,7 @@ Dialog::begin([
             <td colspan="2">
                 <div class="directory-record-data-list">
                     <span class="diretory-record-label"><?= directoryModule::ht('edit', 'Items')?></span>
-                    <table>
+                    <table class="directory-stretch-bar">
                         <tr>
                             <td class="directory-min-width">
                                 <div id="addDataToRecord">
@@ -67,6 +67,12 @@ Dialog::begin([
                                 </div>
                             </td>
                             <td>&nbsp;</td>
+                            <td class="directory-min-width">
+                                <span id="prevButton" class="directory-small-button">&larr;</span>
+                            </td>
+                            <td class="directory-min-width">
+                                <span id="nextButton" class="directory-small-button">&rarr;</span>
+                            </td>
                         </tr>
                     </table>
                     <div id="dataArray">
@@ -128,10 +134,6 @@ Dialog::begin([
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
-    $("#record-form<?=$uid?> #dataArray table tbody").on("click", ".directory-edit-type-button", function() {
-        alert(0);
-    });
-    
     (function($) {
         
         var addDataToTable = function(data) {
@@ -149,7 +151,23 @@ Dialog::begin([
             }
         }
         
-        $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().init();
+        $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().init(
+            {
+                pageSize : 2,
+                prevButton : "#record-form<?=$uid?> #prevButton",
+                nextButton : "#record-form<?=$uid?> #nextButton"
+            });
+        
+        $("#record-form<?=$uid?> #prevButton").button({text : false}).click(function() {
+            $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().prevPage();
+        });
+        $("#record-form<?=$uid?> #nextButton").button({text : false}).click(function() {
+            $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().nextPage();
+        });
+        
+        $("#record-form<?=$uid?> #dataArray table tbody").on("click", ".directory-edit-type-button", function() {
+            alert(0);
+        });
         
         $("#record-form<?=$uid?> #addDataToRecord").button().click(function() {
             $.selectDataDialog({

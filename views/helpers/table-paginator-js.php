@@ -9,10 +9,12 @@ use yii\web\View;
         $.fn.tableJSPaginator = function() {
             
             this.init = function(p) {
-                this.options(p);
+                this.tableJSPaginator().options(p);
+                return this;
             };
             this.clear = function() {
-                $(this).options(p);
+                $(this).removeData("paginatorData236614");
+                return this;
             };
             this.options = function(p) {
                 var _p = $(this).data("paginatorData236614");
@@ -47,7 +49,9 @@ use yii\web\View;
 
                 $(this).data("paginatorData236614", _p);
 
-                $(this).update();
+                $(this).tableJSPaginator().update();
+                
+                return this;
             };
             this.countPage = function() {
                 var _p = $(this).data("paginatorData236614");
@@ -72,37 +76,96 @@ use yii\web\View;
                 var _p_count = Math.ceil(_rows.length / _p.pageSize);
 
                 if(_p.current > _p_count) {
-                    _p.current = _p_count;
+                    if(_p_count < 1) {
+                        _p.current = 1;
+                    } else {
+                        _p.current = _p_count;
+                    }
                 } else {
-                    if(_p.count < 1) {
-                        _p.count = 1;
+                    if(_p.current < 1) {
+                        _p.current = 1;
                     }
                 }
-
-                switch(_p.current) {
-                    case 1:
-                        _rows.slice(_p.pageSize).addClass("directory-hide-element");
-                        _rows.slice(0, _p.pageSize - 1).removeClass("directory-hide-element");
-                        break;
-                    case _p_count:
-                        _rows.slice(0, _p.pageSize * (_p_count - 1) - 1).addClass("directory-hide-element");
-                        _rows.slice(_p.pageSize * (_p_count - 1)).removeClass("directory-hide-element");
-                        break;
-                    default:
-                        _rows.slice(0, _p.current * _p.pageSize - 1).addClass("directory-hide-element");
-                        _rows.slice(_p.current * _p.pageSize - 1).addClass("directory-hide-element");
-                        _rows.slice(_p.pageSize * _p.current, _p.pageSize * (_p.current - 1)).removeClass("directory-hide-element");
-                        break;
+                
+                if(_p_count === 1) {
+                    _rows.removeClass("directory-hide-element");
+                    if(_p.nextButton !== undefined) {
+                        $(_p.nextButton).addClass("directory-hide-element");
+                    }
+                    if(_p.prevButton !== undefined) {
+                        $(_p.prevButton).addClass("directory-hide-element");
+                    }
+                } else if(_p.current === 1) {
+                    _rows.slice(_p.pageSize).addClass("directory-hide-element");
+                    _rows.slice(0, _p.pageSize - 1).removeClass("directory-hide-element");
+                    if(_p.nextButton !== undefined) {
+                        $(_p.nextButton).addClass("directory-hide-element");
+                    }
+                    if(_p.prevButton !== undefined) {
+                        $(_p.prevButton).removeClass("directory-hide-element");
+                    }
+                } else if(_p.current === _p_count) {
+                    _rows.slice(0, _p.pageSize * (_p_count - 1) - 1).addClass("directory-hide-element");
+                    _rows.slice(_p.pageSize * (_p_count - 1)).removeClass("directory-hide-element");
+                    if(_p.nextButton !== undefined) {
+                        $(_p.nextButton).removeClass("directory-hide-element");
+                    }
+                    if(_p.prevButton !== undefined) {
+                        $(_p.prevButton).addClass("directory-hide-element");
+                    }
+                } else {
+                    _rows.slice(0, _p.current * _p.pageSize - 1).addClass("directory-hide-element");
+                    _rows.slice(_p.current * _p.pageSize - 1).addClass("directory-hide-element");
+                    _rows.slice(_p.pageSize * _p.current, _p.pageSize * (_p.current - 1)).removeClass("directory-hide-element");
+                    if(_p.nextButton !== undefined) {
+                        $(_p.nextButton).removeClass("directory-hide-element");
+                    }
+                    if(_p.prevButton !== undefined) {
+                        $(_p.prevButton).removeClass("directory-hide-element");
+                    }
                 }
+                
+                return this;
             };
             this.addRows = function(rows) {
-                alert(this);
                 $(this).find("tbody").append(rows);
-                $(this).tableJSPaginator.update();
+                $(this).tableJSPaginator().update();
+                return this;
             };
             this.removeRows = function(rows) {
                 $(this).find(rows).remove();
-                $(this).tableJSPaginator.update();
+                $(this).tableJSPaginator().update();
+                return this;
+            };
+            this.nextPage = function() {
+                var _p = $(this).data("paginatorData236614");
+                
+                if(_p !== undefined) {
+                    ++_p.current;
+                    if(_p.current > $(this).tableJSPaginator().countPage()) {
+                        _p.current = 1;
+                    }
+                    
+                    $(this).data("paginatorData236614", _p);
+                    $(this).tableJSPaginator().update();
+                }
+                
+                return this;
+            };
+            this.prevPage = function() {
+                var _p = $(this).data("paginatorData236614");
+                
+                if(_p !== undefined) {
+                    --_p.current;
+                    if(_p.current < 1) {
+                        _p.current = $(this).tableJSPaginator().countPage();
+                    }
+                    
+                    $(this).data("paginatorData236614", _p);
+                    $(this).tableJSPaginator().update();
+                }
+                
+                return this;
             };
             
             return this;
