@@ -68,10 +68,10 @@ Dialog::begin([
                             </td>
                             <td>&nbsp;</td>
                             <td class="directory-min-width">
-                                <span id="prevButton" class="directory-small-button">&larr;</span>
+                                <span id="prevButton" class="directory-small-button directory-navigation">&larr;</span>
                             </td>
                             <td class="directory-min-width">
-                                <span id="nextButton" class="directory-small-button">&rarr;</span>
+                                <span id="nextButton" class="directory-small-button directory-navigation">&rarr;</span>
                             </td>
                         </tr>
                     </table>
@@ -147,13 +147,11 @@ Dialog::begin([
                 tmpEl.find(".directory-edit-type-button").button();
                 var ii=$("#record-form<?=$uid?> #dataArray table");
                 $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().addRows(tmpEl);
-                //$("#record-form<?=$uid?> #dataArray table tbody").append(tmpEl);
             }
         }
         
         $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().init(
             {
-                pageSize : 2,
                 prevButton : "#record-form<?=$uid?> #prevButton",
                 nextButton : "#record-form<?=$uid?> #nextButton"
             });
@@ -166,7 +164,7 @@ Dialog::begin([
         });
         
         $("#record-form<?=$uid?> #dataArray table tbody").on("click", ".directory-edit-type-button", function() {
-            alert(0);
+            $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().removeRows($(this).closest("tr"));
         });
         
         $("#record-form<?=$uid?> #addDataToRecord").button().click(function() {

@@ -14,6 +14,8 @@ use yii\web\View;
             };
             this.clear = function() {
                 $(this).removeData("paginatorData236614");
+                $(this).find("tbody > *").remove();
+                $(this).tableJSPaginator().update();
                 return this;
             };
             this.options = function(p) {
@@ -76,18 +78,14 @@ use yii\web\View;
                 var _p_count = Math.ceil(_rows.length / _p.pageSize);
 
                 if(_p.current > _p_count) {
-                    if(_p_count < 1) {
-                        _p.current = 1;
-                    } else {
-                        _p.current = _p_count;
-                    }
+                    _p.current = _p_count;
                 } else {
                     if(_p.current < 1) {
                         _p.current = 1;
                     }
                 }
-                
-                if(_p_count === 1) {
+
+                if(_p_count <= 1) {
                     _rows.removeClass("directory-hide-element");
                     if(_p.nextButton !== undefined) {
                         $(_p.nextButton).addClass("directory-hide-element");
@@ -97,26 +95,26 @@ use yii\web\View;
                     }
                 } else if(_p.current === 1) {
                     _rows.slice(_p.pageSize).addClass("directory-hide-element");
-                    _rows.slice(0, _p.pageSize - 1).removeClass("directory-hide-element");
-                    if(_p.nextButton !== undefined) {
-                        $(_p.nextButton).addClass("directory-hide-element");
-                    }
-                    if(_p.prevButton !== undefined) {
-                        $(_p.prevButton).removeClass("directory-hide-element");
-                    }
-                } else if(_p.current === _p_count) {
-                    _rows.slice(0, _p.pageSize * (_p_count - 1) - 1).addClass("directory-hide-element");
-                    _rows.slice(_p.pageSize * (_p_count - 1)).removeClass("directory-hide-element");
+                    _rows.slice(0, _p.pageSize).removeClass("directory-hide-element");
                     if(_p.nextButton !== undefined) {
                         $(_p.nextButton).removeClass("directory-hide-element");
                     }
                     if(_p.prevButton !== undefined) {
                         $(_p.prevButton).addClass("directory-hide-element");
                     }
+                } else if(_p.current === _p_count) {
+                    _rows.slice(0, _p.pageSize * (_p_count - 1)).addClass("directory-hide-element");
+                    _rows.slice(_p.pageSize * (_p_count - 1)).removeClass("directory-hide-element");
+                    if(_p.nextButton !== undefined) {
+                        $(_p.nextButton).addClass("directory-hide-element");
+                    }
+                    if(_p.prevButton !== undefined) {
+                        $(_p.prevButton).removeClass("directory-hide-element");
+                    }
                 } else {
-                    _rows.slice(0, _p.current * _p.pageSize - 1).addClass("directory-hide-element");
+                    _rows.slice(0, (_p.current - 1) * _p.pageSize).addClass("directory-hide-element");
                     _rows.slice(_p.current * _p.pageSize - 1).addClass("directory-hide-element");
-                    _rows.slice(_p.pageSize * _p.current, _p.pageSize * (_p.current - 1)).removeClass("directory-hide-element");
+                    _rows.slice(_p.pageSize * (_p.current - 1), _p.pageSize * _p.current).removeClass("directory-hide-element");
                     if(_p.nextButton !== undefined) {
                         $(_p.nextButton).removeClass("directory-hide-element");
                     }
@@ -134,6 +132,11 @@ use yii\web\View;
             };
             this.removeRows = function(rows) {
                 $(this).find(rows).remove();
+                $(this).tableJSPaginator().update();
+                return this;
+            };
+            this.clearRows = function() {
+                $(this).find("tbody > *").remove();
                 $(this).tableJSPaginator().update();
                 return this;
             };

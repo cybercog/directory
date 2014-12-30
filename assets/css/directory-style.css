@@ -190,7 +190,7 @@ h1.directory-h1 {
 }
 
 .directory-hide-element {
-    display: none;
+    display: none !important;
 }
 
 .directory-table-label {
@@ -309,4 +309,9 @@ table.directory-record-item-form tr td:nth-child(even) {
 
 table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     background-color: #e0e0ff !important;
+}
+
+.directory-navigation {
+    color: blue !important;
+    font-weight: bold !important;
 }

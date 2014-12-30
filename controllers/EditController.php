@@ -22,7 +22,7 @@ class EditController extends Controller {
     }
     
     public function actionTypes() {
-        if($cmd = \Yii::$app->request->get('cmd', false)) {
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             
             switch ($cmd) {
@@ -126,7 +126,7 @@ class EditController extends Controller {
     }
     
     public function actionData() {
-        if($cmd = \Yii::$app->request->get('cmd', false)) {
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
             switch ($cmd) {
@@ -358,6 +358,19 @@ class EditController extends Controller {
     }
     
     public function actionRecords() {
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            switch($cmd) {
+                case 'create':
+                case 'update':
+                    break;
+                case 'delete':
+                    break;
+            }
+        }
+        
+        
         $model = new \app\modules\directory\models\search\RecordsSearch();
         $model->attributes = \Yii::$app->request->get('RecordsSearch');
         
