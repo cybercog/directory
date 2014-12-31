@@ -14,6 +14,8 @@ use app\modules\directory\helpers\boolSaveHelper;
 use yii\web\UploadedFile;
 use app\modules\directory\models\db\views\LowerData;
 use app\modules\directory\helpers\dataGridCellViewHelper;
+use app\modules\directory\models\forms\RecordForm;
+use app\modules\directory\models\forms\RecordDataItemForm;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -364,6 +366,18 @@ class EditController extends Controller {
             switch($cmd) {
                 case 'create':
                 case 'update':
+                    $recordForm = new RecordForm;
+                    $recordForm->attributes = \Yii::$app->request->post('RecordForm');
+                    if(!$recordForm->validate()) {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                modelErrorsToStringHelper::to($recordForm->errors));
+                    }
+                    
+                    $recordFormItems = [];
+                    $formItems = \Yii::$app->request->post('RecordDataItemForm');
+                    if(isset($formItems) && is_array($formItems) && (count($formItems) > 0)) {
+                        //foreach ()
+                    }
                     break;
                 case 'delete':
                     break;
