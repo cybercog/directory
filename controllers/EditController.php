@@ -16,6 +16,8 @@ use app\modules\directory\models\db\views\LowerData;
 use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\forms\RecordForm;
 use app\modules\directory\models\forms\RecordDataItemForm;
+use app\modules\directory\models\db\Records;
+use app\modules\directory\models\db\RecordsData;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -376,7 +378,33 @@ class EditController extends Controller {
                     $recordFormItems = [];
                     $formItems = \Yii::$app->request->post('RecordDataItemForm');
                     if(isset($formItems) && is_array($formItems) && (count($formItems) > 0)) {
-                        //foreach ()
+                        foreach ($formItems as $formItem) {
+                            $recordFormItem = new RecordDataItemForm;
+                            $recordFormItem->attributes = $formItem;
+                            if(!$recordFormItem->validate()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        modelErrorsToStringHelper::to($recordFormItem->errors));
+                            }
+                            $recordFormItems[] = $recordFormItem;
+                        }
+                    }
+                    
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    
+                    try {
+                        if($cmd === 'create') {
+                            $newRecord = new Records;
+                            $newRecord->visible = boolSaveHelper::boolean2string((boolean)$recordForm->visible);
+                            if(!$newRecord->save()) {
+                                
+                            }
+                        } else {
+
+                        }
+                        
+                        $transaction->commit();
+                    } catch (Exception $ex) {
+                        $transaction->rollBack();
                     }
                     break;
                 case 'delete':
