@@ -390,21 +390,43 @@ class EditController extends Controller {
                     }
                     
                     $transaction = \Yii::$app->db->beginTransaction();
+                    $result = [];
                     
                     try {
                         if($cmd === 'create') {
                             $newRecord = new Records;
                             $newRecord->visible = boolSaveHelper::boolean2string((boolean)$recordForm->visible);
                             if(!$newRecord->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                            }
+                            
+                            $result = $newRecord->attributes;
+                            $result['items'] = [];
+                            
+                            foreach ($recordFormItems as $recordItem) {
+                                $newLinkData = new RecordsData;
+                                $newLinkData->record_id = $newRecord->id;
+                                $newLinkData->data_id = $recordItem->dataId;
+                                $newLinkData->visible = boolSaveHelper::boolean2string((boolean)$recordItem->visible);
+                                $newLinkData->position = $recordItem->position;
+                                $newLinkData->sub_position = $recordItem->subPosition;
                                 
+                                if(!$newLinkData->save()) {
+                                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                                }
+                                
+                                $result['items'][] = $newLinkData->attributes;
                             }
                         } else {
 
                         }
                         
                         $transaction->commit();
+                        
+                        return ajaxJSONResponseHelper::createResponse(true, $result);
                     } catch (Exception $ex) {
                         $transaction->rollBack();
+                        return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                     }
                     break;
                 case 'delete':

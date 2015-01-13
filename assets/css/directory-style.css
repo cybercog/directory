@@ -285,6 +285,10 @@ select.directory-grid-filter-control, input.directory-grid-filter-control {
     font-size: 12px;
 }
 
+.directory-record-data-list:hover .diretory-record-label {
+    background-color: #f6f6f6;
+}
+
 table.directory-record-item-form {
     margin-top: 3px !important;
 }

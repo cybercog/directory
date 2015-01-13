@@ -119,19 +119,6 @@ AppAsset::register($this);
                                                 </nobr>
                                             </div>
                                         </td>
-                                        <td class="directory-min-width<?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/records') ? ' directory-panel-item-cell-selected': ''?>">
-                                            <div class="directory-edit-panel-item <?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/records') ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
-                                                <nobr>
-                                                    <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/records') { ?>
-                                                    <a href="<?= Url::toRoute(['/directory/edit/records'])?>">
-                                                        <span class="directory-record-edit-button-icon">Записи</span>
-                                                    </a>
-                                                    <?php } else { ?>
-                                                    <span class="directory-record-edit-button-icon">Записи</span>
-                                                    <?php } ?>
-                                                </nobr>
-                                            </div>
-                                        </td>
                                         <td class="directory-min-width<?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/directories') ? ' directory-panel-item-cell-selected': ''?>">
                                             <div class="directory-edit-panel-item  <?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/directories') ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
                                                 <nobr>
@@ -141,6 +128,19 @@ AppAsset::register($this);
                                                     </a>
                                                     <?php } else { ?>
                                                     <span class="directory-directory-edit-button-icon">Каталоги</span>
+                                                    <?php } ?>
+                                                </nobr>
+                                            </div>
+                                        </td>
+                                        <td class="directory-min-width<?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/records') ? ' directory-panel-item-cell-selected': ''?>">
+                                            <div class="directory-edit-panel-item <?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/records') ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
+                                                <nobr>
+                                                    <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/records') { ?>
+                                                    <a href="<?= Url::toRoute(['/directory/edit/records'])?>">
+                                                        <span class="directory-record-edit-button-icon">Записи</span>
+                                                    </a>
+                                                    <?php } else { ?>
+                                                    <span class="directory-record-edit-button-icon">Записи</span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>

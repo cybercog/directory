@@ -6,6 +6,7 @@ use yii\base\Model;
 use app\modules\directory\directoryModule;
 
 class RecordDataItemForm extends Model {
+    public $recordId;
     public $visible = true;
     public $dataId;
     public $position = 0;

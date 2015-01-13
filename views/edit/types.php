@@ -21,7 +21,7 @@ $uid = mt_rand(0, mt_getrandmax());
     ['name' => '/helpers/ajax-post-helper'],
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
-    ['name' => '/helpers/ajax-widget-reload-helper'],
+    //['name' => '/helpers/ajax-widget-reload-helper'],
     ['name' => '/edit/dialogs/edit-type-dialog']
     ]]) ?>
 

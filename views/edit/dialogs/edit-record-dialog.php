@@ -8,6 +8,7 @@ use yii\web\View;
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $uid = mt_rand(0, mt_getrandmax());
@@ -80,6 +81,7 @@ Dialog::begin([
                             <thead>
                                 <tr>
                                     <td><nobr><?=directoryModule::ht('edit', 'Value')?></nobr></td>
+                                    <td><nobr><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></nobr></td>
                                     <td><nobr><?=directoryModule::ht('edit', 'Position')?></nobr></td>
                                     <td><nobr><?=directoryModule::ht('edit', 'Sub.')?></nobr></td>
                                     <td>&nbsp;</td>
@@ -121,6 +123,9 @@ Dialog::begin([
                 <?=$uid.'p1'?>
                 <?=Html::hiddenInput(Html::getInputName($formItemModel, "[$uid]dataId"), null, ['id' => Html::getInputId($formItemModel, "[$uid]dataId")])?>
             </td>
+            <td class="directory-min-width">
+                <div align="center"><?=Html::checkbox(Html::getInputName($formItemModel, "[$uid]visible"), $formItemModel->visible, ['id' => Html::getInputId($formItemModel, "[$uid]position")])?></div>
+            </td>
             <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]position"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]position"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
             <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]subPosition"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]subPosition"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
             <td class="directory-min-width">
@@ -138,10 +143,11 @@ Dialog::begin([
         
         var addDataToTable = function(data) {
             if(data !== undefined) {
-                var tmpEl = $("#data-add-template<?=$uid?> tr").clone();
-                tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]dataId")?>").val(data.id);
                 var counter = $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
                 ++counter;
+                var tmpEl = $("#data-add-template<?=$uid?> tr").clone();
+                tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]dataId")?>").val(data.id);
+                tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]position")?>").attr("value", counter);
                 $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
                 tmpEl.find(".directory-edit-type-button").button();
