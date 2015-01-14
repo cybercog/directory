@@ -42,3 +42,116 @@ $uid = mt_rand(0, mt_getrandmax());
         directoryModule::ht('edit', 'Directories')
     ]
     ]) ?>
+
+<?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
+    
+    $("#createNewDirectory").button({text : false}).click(
+        function() {
+            $.editDirectoryDialog({ type : 'new', onSuccess : function() { $("#updateDirectoriesTable").click(); } });
+        });
+
+    $("#updateDirectoriesTable").button({text : false}).click(
+        function() {
+            $.pjax.reload('#directoriesGridPjaxWidget', 
+                            {
+                                push : false,
+                                replace : false,
+                                timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
+                                url : $("#directoriesGridWidget").yiiGridView("data").settings.filterUrl
+                            });
+        });
+    
+    $("#directoriesGridPjaxWidget").on("pjax:start", function() {
+        $("#waitQueryDirectories").removeClass("directory-hide-element");
+    }).on("pjax:end", function() {
+        $("#waitQueryDirectories").addClass("directory-hide-element");
+        $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
+    }).on("pjax:error", function(eventObject) {
+        eventObject.preventDefault();
+        $("#waitQueryDirectories").addClass("directory-hide-element");
+        $("#errorQueryDirectories").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
+        setTimeout(function() { $("#errorQueryDataType").addClass("directory-hide-element"); }, 5000);
+    }).on("pjax:timeout", function(eventObject) {
+        eventObject.preventDefault();
+    }).tooltip({
+        content : function() { return $(this).closest("td").find(".row-value").html(); },
+        items : ".directory-show-full-text"
+    }).on("click", ".directory-delete-type-button", function() {
+        /*$.ajaxPostHelper({
+            url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+                    $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
+            data : "del",
+            waitTag: "#waitQueryDataType",
+            errorTag: "#errorQueryDataType",
+            errorWaitTimeout: 5,
+            onSuccess: function(dataObject) { 
+                if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
+                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
+                        if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
+                            $.ajaxPostHelper({
+                                url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
+                                        dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
+                                data : "del",
+                                waitTag: "#waitQueryDataType",
+                                errorTag: "#errorQueryDataType",
+                                errorWaitTimeout: 5,
+                                onSuccess: function(dataObject) { 
+                                    $("#updateTypesTable").click();
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    $("#updateTypesTable").click();
+                }
+            }
+        });*/
+    });
+    
+<?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+
+<table class="directory-modal-table directory-stretch-bar">
+    <tr>
+        <td class="directory-min-width">
+            <div class="directory-buttons-panel-padding-wrap ui-widget-header ui-corner-all">
+                <table class="directory-modal-table directory-stretch-bar">
+                    <tr>
+                        <td class="directory-min-width">
+                            <button id="createNewDirectory">
+                                <nobr>
+                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
+                                </nobr>
+                            </button>
+                        </td>
+                        <td class="directory-min-width">&nbsp;</td>
+                        <td class="directory-min-width">
+                            <button id="updateDirectoriesTable">
+                                <nobr>
+                                    <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
+                                </nobr>
+                            </button>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td class="directory-min-width">
+                            <span id="waitQueryDirectories" class="directory-hide-element">
+                                <nobr>
+                                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                                    <span><?= directoryModule::ht('search', 'processing request')?></span>
+                                </nobr>
+                            </span>
+                            <div id="errorQueryDirectories" class="directory-error-msg directory-hide-element"></div>
+                            <div id="okQueryDirectories" class="directory-ok-msg directory-hide-element"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="directory-table-wrap">
+                <?=$this->render('directories_grid', ['dataModel' => $dataModel])?>
+            </div>
+        </td>
+    </tr>
+</table>

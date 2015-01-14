@@ -48,4 +48,5 @@ return [
     'Error when saving a file.' => 'Ошибка при сохранении файла.',
     'With the type of associated data. When you delete a type type, they will be removed. Remove?' => 'С типом связаны данные. При удалении типа типа они будут удалены. Удалить?',
     'Directories' => 'Каталоги',
+    'Create new directory' => 'Создать новый каталог',
 ];

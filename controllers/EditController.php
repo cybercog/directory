@@ -16,8 +16,10 @@ use app\modules\directory\models\db\views\LowerData;
 use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\forms\RecordForm;
 use app\modules\directory\models\forms\RecordDataItemForm;
+use app\modules\directory\models\forms\DirectoryForm;
 use app\modules\directory\models\db\Records;
 use app\modules\directory\models\db\RecordsData;
+use app\modules\directory\models\db\Directories;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -424,7 +426,7 @@ class EditController extends Controller {
                         $transaction->commit();
                         
                         return ajaxJSONResponseHelper::createResponse(true, $result);
-                    } catch (Exception $ex) {
+                    } catch (\Exception $ex) {
                         $transaction->rollBack();
                         return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                     }
@@ -443,7 +445,43 @@ class EditController extends Controller {
     }
     
     public function actionDirectories() {
-        return $this->render('directories');
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            switch($cmd) {
+                case 'create':
+                case 'update':
+                    $directoryForm = new DirectoryForm;
+                    $directoryForm->attributes = \Yii::$app->request->post('DirectoryForm');
+                    if(!$directoryForm->validate()) {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                modelErrorsToStringHelper::to($directoryForm->errors));
+                    }
+                    
+                    try {
+                        if($cmd === 'create') {
+                            $directory = new Directories;
+                            $directory->name = $directoryForm->name;
+                            $directory->description = !isset($directoryForm->description) || strlen($directoryForm->description) === 0 ? null : $directoryForm->description;
+                            $directory->visible = boolSaveHelper::boolean2string((boolean)$directoryForm->visible);
+
+                            if(!$directory->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                            }
+                            
+                            return ajaxJSONResponseHelper::createResponse(true, $directory->attributes);
+                        }
+                    } catch (\Exception $ex) {
+                        return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                    }
+                    
+                    break;
+            }
+        }
+        
+        $model = new \app\modules\directory\models\search\DirectoriesSearch();
+        $model->attributes = \Yii::$app->request->get('DirectoriesSearch');
+        return $this->render('directories', ['dataModel' => $model]);
     }
     
     public function actionHierarchies() {

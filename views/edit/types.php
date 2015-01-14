@@ -172,7 +172,7 @@ $uid = mt_rand(0, mt_getrandmax());
     </tr>
     <tr>
         <td>
-            <div class="directory-table-wrap" id="ajaxTypesGrid">
+            <div class="directory-table-wrap">
                 <?=$this->render('types_grid', ['dataModel' => $dataModel])?>
             </div>
         </td>

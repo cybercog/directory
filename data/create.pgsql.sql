@@ -105,12 +105,22 @@ CREATE TABLE directories_t
 (
     id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('directories_t_id_counter'),
     name VARCHAR(255) NOT NULL,
+    description TEXT DEFAULT NULL,
     visible visible_type NOT NULL DEFAULT 'Y',
     UNIQUE (name)
 );
 CREATE INDEX directories_t_id_index ON directories_t (id);
 CREATE INDEX directories_t_name_index ON directories_t (name);
 CREATE INDEX directories_t_visible_index ON directories_t (visible);
+
+CREATE VIEW directories_tolower_v AS
+SELECT d.id AS id,
+    lower(d.name) AS name,
+    d.name AS original_name,
+    lower(d.description) AS description,
+    d.description AS original_description,
+    d.visible AS visible
+FROM directories_t d;
 
 CREATE SEQUENCE records_directory_t_id_counter CYCLE;
 CREATE TABLE records_directory_t
