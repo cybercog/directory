@@ -50,46 +50,83 @@ Dialog::begin([
             <td colspan="2">
                 <div class="directory-record-data-list">
                     <span class="diretory-record-label"><?= directoryModule::ht('edit', 'Items')?></span>
-                    <table class="directory-stretch-bar">
-                        <tr>
-                            <td class="directory-min-width">
-                                <div id="addDataToRecord">
-                                    <nobr>
-                                        <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add data item')?>...</span>
-                                    </nobr>
-                                </div>
-                            </td>
-                            <td class="directory-min-width">&nbsp;</td>
-                            <td class="directory-min-width">
-                                <div id="createNewDataToRecord">
-                                    <nobr>
-                                        <span class="directory-new-button-icon"><?= directoryModule::ht('edit', 'New')?>...</span>
-                                    </nobr>
-                                </div>
-                            </td>
-                            <td>&nbsp;</td>
-                            <td class="directory-min-width">
-                                <span id="prevButton" class="directory-small-button directory-navigation">&larr;</span>
-                            </td>
-                            <td class="directory-min-width">
-                                <span id="nextButton" class="directory-small-button directory-navigation">&rarr;</span>
-                            </td>
-                        </tr>
-                    </table>
-                    <div id="dataArray">
-                        <table class="directory-modal-table directory-stretch-bar directory-record-item-form">
-                            <thead>
-                                <tr>
-                                    <td><nobr><?=directoryModule::ht('edit', 'Value')?></nobr></td>
-                                    <td><nobr><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></nobr></td>
-                                    <td><nobr><?=directoryModule::ht('edit', 'Position')?></nobr></td>
-                                    <td><nobr><?=directoryModule::ht('edit', 'Sub.')?></nobr></td>
-                                    <td>&nbsp;</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                
-                            </tbody>
+                    <div class="directory-record-data-list-border">
+                        <table class="directory-stretch-bar">
+                            <tr>
+                                <td class="directory-min-width">
+                                    <div id="addDataToRecord">
+                                        <nobr>
+                                            <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add data item')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td class="directory-min-width">&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <div id="createNewDataToRecord">
+                                        <nobr>
+                                            <span class="directory-new-button-icon"><?= directoryModule::ht('edit', 'New')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <span id="prevButton" class="directory-small-button directory-navigation">&larr;</span>
+                                </td>
+                                <td class="directory-min-width">
+                                    <span id="nextButton" class="directory-small-button directory-navigation">&rarr;</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="dataArray">
+                            <table class="directory-modal-table directory-stretch-bar directory-record-item-form">
+                                <thead>
+                                    <tr>
+                                        <td><nobr><?=directoryModule::ht('edit', 'Value')?></nobr></td>
+                                        <td><nobr><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></nobr></td>
+                                        <td><nobr><?=directoryModule::ht('edit', 'Position')?></nobr></td>
+                                        <td><nobr><?=directoryModule::ht('edit', 'Sub.')?></nobr></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="directory-record-data-list">
+                    <span class="diretory-record-label"><?= directoryModule::ht('edit', 'Directories')?></span>
+                    <div class="directory-record-data-list-border">
+                        <table class="directory-stretch-bar">
+                            <tr>
+                                <td class="directory-min-width">
+                                    <div id="addRecordToDirectory">
+                                        <nobr>
+                                            <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add directory')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td class="directory-min-width">&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <div id="createNewDirectoryForAddRecord">
+                                        <nobr>
+                                            <span class="directory-new-button-icon"><?= directoryModule::ht('edit', 'New')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <span id="prevButton" class="directory-small-button directory-navigation">&larr;</span>
+                                </td>
+                                <td class="directory-min-width">
+                                    <span id="nextButton" class="directory-small-button directory-navigation">&rarr;</span>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -105,7 +142,7 @@ Dialog::begin([
     
     <span id="waitDlgQuery" class="directory-hide-element">
         <nobr>
-            <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+            <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
             <span><?= directoryModule::ht('search', 'processing request')?></span>
         </nobr>
     </span>
@@ -130,7 +167,7 @@ Dialog::begin([
             <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]subPosition"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]subPosition"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
             <td class="directory-min-width">
                 <div class="directory-edit-type-button directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
-                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
+                    <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
                 </div>
             </td>
         </tr>
@@ -189,6 +226,12 @@ Dialog::begin([
                     addDataToTable(data);
                 }
             });
+        });
+        
+        $("#record-form<?=$uid?> #addRecordToDirectory").button().click(function() {
+        });
+        
+        $("#record-form<?=$uid?> #createNewDirectoryForAddRecord").button().click(function() {
         });
         
         $.editRecordDialog = function(p) {

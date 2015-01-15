@@ -10,7 +10,7 @@ use app\modules\directory\widgets\SingletonRenderHelper;
 <div>
     <span id="waitQuery<?=$blockUid?>" class="directory-hide-element">
         <nobr>
-            <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+            <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
             <span><?= directoryModule::ht('search', 'processing request')?></span>
         </nobr>
     </span>

@@ -89,10 +89,10 @@ use app\modules\directory\helpers\boolSaveHelper;
                             return '<nobr>'
                                     . '<button class="directory-edit-type-button directory-small-button" '
                                     . 'title="'.directoryModule::ht('edit', 'Edit data type').'"><img src="'.
-                                    directoryModule::getPublishPath('/img/edit-item.png').
+                                    directoryModule::getPublishImage('/edit-item.png').
                                     '" /></button>&nbsp;<button class="directory-delete-type-button directory-small-button" '
                                     . 'title="'.directoryModule::ht('edit', 'Delete data type').'"><img src="'.
-                                    directoryModule::getPublishPath('/img/delete-item.png')
+                                    directoryModule::getPublishImage('/delete-item.png')
                                     .'" /></button></nobr>';
                         },
                     ]

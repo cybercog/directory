@@ -16,14 +16,14 @@ class dataGridCellViewHelper {
                         substr($text, 0, 20)
                         .'...&nbsp;<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" '
-                        . 'src="'.directoryModule::getPublishPath('/img/info16.png').'" />').'</div>';
+                        . 'src="'.directoryModule::getPublishImage('/info16.png').'" />').'</div>';
     }
     
     public static function getVisibleFlagString($visible) {
         return '<div align="center"><img src="'
                 .(boolSaveHelper::string2boolean($visible) ? 
-                directoryModule::getPublishPath('/img/16view.png') : 
-            directoryModule::getPublishPath('/img/16lock.png')).'" /></div>';
+                directoryModule::getPublishImage('/16view.png') : 
+            directoryModule::getPublishImage('/16lock.png')).'" /></div>';
     }
     
     public static function getValueDataString($type, $value, $text) {
@@ -35,7 +35,7 @@ class dataGridCellViewHelper {
                     $result = '<div class="row-display">'.$result.'&nbsp;'
                             . '<img class="directory-show-full-text" title="'
                             .directoryModule::ht('edit', 'Show completely').'" src="'
-                            .directoryModule::getPublishPath('/img/info16.png').'" /></div>'
+                            .directoryModule::getPublishImage('/info16.png').'" /></div>'
                             .'<div class="directory-hide-element row-value">'.$value.'</div>';
                 } else {
                     $result = '<div class="row-display">'.$result.'</div>';
@@ -45,7 +45,7 @@ class dataGridCellViewHelper {
                 $result = '<div class="row-display">'.$result.'&nbsp;'
                         . '<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" src="'
-                        .directoryModule::getPublishPath('/img/info16.png').'" /></div>'
+                        .directoryModule::getPublishImage('/info16.png').'" /></div>'
                         .'<div class="directory-hide-element row-value"><div>'
                     .$value
                     .'</div><div>'
@@ -56,7 +56,7 @@ class dataGridCellViewHelper {
                 $result = '<div class="row-display">'.$result.'&nbsp;'
                         . '<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" src="'
-                        .directoryModule::getPublishPath('/img/info16.png').'" />'
+                        .directoryModule::getPublishImage('/info16.png').'" />'
                     . '&nbsp;<a href="'.$text.'" target="_blank" class="directory-data-file-download">'
                     .  directoryModule::ht('search', 'Download').'</a></div>'
                         .'<div class="directory-hide-element row-value"><div>'
@@ -69,7 +69,7 @@ class dataGridCellViewHelper {
                 $result = '<div class="row-display">'.$result.'&nbsp;'
                         . '<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" src="'
-                        .directoryModule::getPublishPath('/img/info16.png').'" />'
+                        .directoryModule::getPublishImage('/info16.png').'" />'
                     . '&nbsp;<a href="'.$text.'" target="_blank" class="directory-data-file-download">'
                     .  directoryModule::ht('search', 'Download').'</a></div>'
                         .'<div class="directory-hide-element row-value"><div>'

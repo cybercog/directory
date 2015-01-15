@@ -146,7 +146,7 @@ Dialog::begin([
                             <td class="directory-min-width">&nbsp;</td>
                             <td class="directory-min-width">
                                 <div id="selectFileReplase" title="<?= directoryModule::ht('edit', 'Delete file')?>">
-                                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
+                                    <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
                                 </div>
                             </td>
                         </tr>
@@ -186,7 +186,7 @@ Dialog::begin([
                             <td class="directory-min-width">&nbsp;</td>
                             <td class="directory-min-width">
                                 <div id="selectImageReplase" title="<?= directoryModule::ht('edit', 'Delete file')?>">
-                                    <img src="<?=directoryModule::getPublishPath('/img/delete-item.png')?>" />
+                                    <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
                                 </div>
                             </td>
                         </tr>
@@ -243,7 +243,7 @@ Dialog::begin([
     <div>
         <span id="waitDlgQueryData" class="directory-hide-element">
             <nobr>
-                <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                 <span><?= directoryModule::ht('search', 'processing request')?></span>
             </nobr>
         </span>

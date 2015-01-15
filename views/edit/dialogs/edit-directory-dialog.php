@@ -86,7 +86,7 @@ Dialog::begin([
     <div>
         <span id="wait<?=$uid?>" class="directory-hide-element">
             <nobr>
-                <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                 <span><?= directoryModule::ht('search', 'processing request')?></span>
             </nobr>
         </span>
@@ -147,6 +147,55 @@ Dialog::begin([
                             })(p);
                             break;
                         case 'edit':
+                            (function(p) {
+                                if(p.data === undefined) {
+                                    if(p.onError !== undefined) {
+                                       p.onError({message : "<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>"}); 
+                                    } else {
+                                        alert("<?=directoryModule::ht('edit', 'Error: invalid call parameters.')?>");
+                                    }
+                                    
+                                    return;
+                                } 
+                                
+                                $("#directory-form<?=$uid?>").trigger('reset');
+                                $("#directory-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.original_name);
+                                $("#directory-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.original_description);
+                                $("#directory-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.visible);
+                                
+                                $("#editDirectoryDialog<?=$uid?>").
+                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit directory')?>").
+                                        dialog("option", "buttons", 
+                                        [
+                                            {
+                                                text : "<?= directoryModule::ht('edit', 'Apply')?>",
+                                                click : function() {
+                                                    $.ajaxPostHelper({
+                                                        url : ("<?=Url::toRoute(['/directory/edit/directories', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id),
+                                                        data : $("#directory-form<?=$uid?>").serialize(),
+                                                        waitTag : "#wait<?=$uid?>",
+                                                        errorTag : "#error<?=$uid?>",
+                                                        errorWaitTimeout : 5,
+                                                        onSuccess : function(dataObject) { 
+                                                            $("#editDirectoryDialog<?=$uid?>").dialog("close");
+                                                            if(p.onSuccess !== undefined) {
+                                                                if((dataObject !== undefined) &&
+                                                                        (dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined)) {
+                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::messageField?>);
+                                                                } else {
+                                                                   p.onSuccess();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            },
+                                            {
+                                                text : "<?= directoryModule::ht('edit', 'Close')?>",
+                                                click : function() {$("#editDirectoryDialog<?=$uid?>").dialog("close"); }
+                                            }
+                                        ]).dialog("open");
+                            })(p);
                             break;
                         default:
                             if(p.onError !== undefined) {

@@ -9,7 +9,6 @@ use app\modules\directory\directoryModule;
 
 
 AppAsset::register($this);
-//$this->registerJsFile(directoryModule::getPublishPath('/js/ajaxPostHelper.js'), ['position' => \yii\web\View::POS_HEAD]);
 
 ?>
 <?php $this->beginPage() ?>
@@ -28,39 +27,39 @@ AppAsset::register($this);
 
     <?php if(false) { ?><style><?php } ob_start(); ?>
         .directory-search-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/search-button-icon.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/search-button-icon.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-types-edit-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/types16.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/types16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-data-edit-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/data16.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/data16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-record-edit-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/record16.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/record16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-directory-edit-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/directory16.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/directory16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-hierarchy-edit-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/hierarchy16.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/hierarchy16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-add-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/add.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/add.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-new-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/new.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/new.png'); ?>) no-repeat;
             padding-left: 20px;
         }
         .directory-update-button-icon {
-            background: url(<?= directoryModule::getPublishPath('/img/update.png'); ?>) no-repeat;
+            background: url(<?= directoryModule::getPublishImage('/update.png'); ?>) no-repeat;
             padding-left: 20px;
         }
     <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>

@@ -7,7 +7,10 @@ class directoryModule extends \yii\base\Module
     public $controllerNamespace = 'app\modules\directory\controllers';
     
     private static $publishPath;
-    
+    private static $publishImage;
+    private static $publishCSS;
+
+
     public function __construct($id, $parent = null, $config = array()) {
         parent::__construct($id, $parent, $config);
         $this->defaultRoute = 'search';
@@ -19,6 +22,20 @@ class directoryModule extends \yii\base\Module
         }
         
         return directoryModule::$publishPath.$resId;
+    }
+    public static function getPublishImage($resId) {
+        if(!isset(directoryModule::$publishImage)) {
+            directoryModule::$publishImage = \Yii::$app->assetManager->publish(__DIR__.'/assets/img')[1];
+        }
+        
+        return directoryModule::$publishImage.$resId;
+    }
+    public static function getPublishCSS() {
+        if(!isset(directoryModule::$publishCSS)) {
+            directoryModule::$publishCSS = \Yii::$app->assetManager->publish(__DIR__.'/assets/css/directory-style.css')[1];
+        }
+        
+        return directoryModule::$publishCSS;
     }
     
     public static $SETTING = [    
@@ -34,7 +51,7 @@ class directoryModule extends \yii\base\Module
         parent::init();
         
         \Yii::$app->getView()->registerCssFile(
-                directoryModule::getPublishPath('/css/directory-style.css'));
+                directoryModule::getPublishCSS());
         
         \Yii::$app->i18n->translations['modules/directory/*'] = [
             'class'          => 'yii\i18n\PhpMessageSource',

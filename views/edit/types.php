@@ -27,7 +27,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-types-h1-icon {
-        background: url(<?= directoryModule::getPublishPath('/img/types32.png'); ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishImage('/types32.png'); ?>) no-repeat;
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -158,7 +158,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         <td class="directory-min-width">
                             <span id="waitQueryDataType" class="directory-hide-element">
                                 <nobr>
-                                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                                    <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                                     <span><?= directoryModule::ht('search', 'processing request')?></span>
                                 </nobr>
                             </span>

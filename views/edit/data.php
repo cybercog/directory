@@ -27,7 +27,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-data-h1-icon {
-        background: url(<?= directoryModule::getPublishPath('/img/data32.png') ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishImage('/data32.png') ?>) no-repeat;
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -153,7 +153,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                         <td class="directory-min-width">
                             <span id="waitQueryData" class="directory-hide-element">
                                 <nobr>
-                                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                                    <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                                     <span><?= directoryModule::ht('search', 'processing request')?></span>
                                 </nobr>
                             </span>

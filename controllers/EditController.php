@@ -110,6 +110,8 @@ class EditController extends Controller {
                                 directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
                     }
                     return ajaxJSONResponseHelper::createResponse(true);
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
         }
         
@@ -342,6 +344,8 @@ class EditController extends Controller {
                                 directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
                     }
                     return ajaxJSONResponseHelper::createResponse(true);
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
         }
         
@@ -392,14 +396,14 @@ class EditController extends Controller {
                     }
                     
                     $transaction = \Yii::$app->db->beginTransaction();
-                    $result = [];
                     
                     try {
                         if($cmd === 'create') {
                             $newRecord = new Records;
                             $newRecord->visible = boolSaveHelper::boolean2string((boolean)$recordForm->visible);
                             if(!$newRecord->save()) {
-                                return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving record in the database.'));
                             }
                             
                             $result = $newRecord->attributes;
@@ -414,18 +418,19 @@ class EditController extends Controller {
                                 $newLinkData->sub_position = $recordItem->subPosition;
                                 
                                 if(!$newLinkData->save()) {
-                                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                                    return ajaxJSONResponseHelper::createResponse(false, 
+                                            directoryModule::ht('edit', 'Error saving record element in the database.'));
                                 }
                                 
                                 $result['items'][] = $newLinkData->attributes;
                             }
+                            
+                            return ajaxJSONResponseHelper::createResponse(true, $result);
                         } else {
 
                         }
                         
                         $transaction->commit();
-                        
-                        return ajaxJSONResponseHelper::createResponse(true, $result);
                     } catch (\Exception $ex) {
                         $transaction->rollBack();
                         return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
@@ -433,6 +438,8 @@ class EditController extends Controller {
                     break;
                 case 'delete':
                     break;
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
         }
         
@@ -466,16 +473,66 @@ class EditController extends Controller {
                             $directory->visible = boolSaveHelper::boolean2string((boolean)$directoryForm->visible);
 
                             if(!$directory->save()) {
-                                return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('edit', 'Error saving type in the database.'));
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving directory in the database.'));
                             }
                             
                             return ajaxJSONResponseHelper::createResponse(true, $directory->attributes);
+                        } else {
+                            if(\Yii::$app->request->get('id', false)) {
+                                Directories::updateAll([
+                                    'name' => $directoryForm->name,
+                                    'description' => !isset($directoryForm->description) || strlen($directoryForm->description) === 0 ? null : $directoryForm->description,
+                                    'visible' => boolSaveHelper::boolean2string((boolean)$directoryForm->visible)
+                                        ], 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                if(\Yii::$app->request->get('return', false)) {
+                                    $ct = [];
+                                    $ct['id'] = \Yii::$app->request->get('id');
+                                    $ct['name'] = $directoryForm->name;
+                                    $ct['visible'] = $directoryForm->visible;
+                                    $ct['description'] = isset($form->description) ? $form->description : null;
+                                    return ajaxJSONResponseHelper::createResponse(true, 'ok', $ct);
+                                }
+                            } else {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
+                            }
+                            
+                            return ajaxJSONResponseHelper::createResponse();
                         }
                     } catch (\Exception $ex) {
                         return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                     }
                     
                     break;
+                case 'delete':
+                    if(\Yii::$app->request->get('id', false)) {
+                        try {
+                            if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
+                                Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            } else {// не сформированы --- добавить позже
+                                /*$dataCount = Data::find()->where('type_id=:id', 
+                                                [':id' => \Yii::$app->request->get('id')])->with('type')->count();
+                                if($dataCount > 0) {
+                                    return ajaxJSONResponseHelper::createResponse(true, 'query', 
+                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
+                                                'id' => \Yii::$app->request->get('id', false)]);
+                                } else {
+                                    Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                                }*/
+                                Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                            }
+                        } catch (\Exception $ex) {
+                            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                        }
+                    } else {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
+                    }
+                    return ajaxJSONResponseHelper::createResponse(true);
+                    break;
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
         }
         

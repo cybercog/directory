@@ -26,7 +26,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 <?php if(false) { ?><style><?php } ob_start(); ?>
     h1.directory-directory-h1-icon {
-        background: url(<?= directoryModule::getPublishPath('/img/directory32.png'); ?>) no-repeat;
+        background: url(<?= directoryModule::getPublishImage('/directory32.png'); ?>) no-repeat;
         padding-left: 36px;
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
@@ -60,6 +60,18 @@ $uid = mt_rand(0, mt_getrandmax());
                                 url : $("#directoriesGridWidget").yiiGridView("data").settings.filterUrl
                             });
         });
+        
+    $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
+    
+    $("#directoriesGridPjaxWidget").on("click", ".directory-edit-type-button", 
+        function() {
+            $.editDirectoryDialog(
+                    {
+                        type : "edit",
+                        data : $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()),
+                        onSuccess : function() { $("#updateDirectoriesTable").click(); } 
+                    });
+    });
     
     $("#directoriesGridPjaxWidget").on("pjax:start", function() {
         $("#waitQueryDirectories").removeClass("directory-hide-element");
@@ -77,35 +89,35 @@ $uid = mt_rand(0, mt_getrandmax());
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
-        /*$.ajaxPostHelper({
-            url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+        $.ajaxPostHelper({
+            url : ("<?= Url::toRoute(['/directory/edit/directories', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
                     $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
             data : "del",
-            waitTag: "#waitQueryDataType",
-            errorTag: "#errorQueryDataType",
+            waitTag: "#waitQueryDirectories",
+            errorTag: "#errorQueryDirectories",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
                 if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
                     if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
                         if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
                             $.ajaxPostHelper({
-                                url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
+                                url : ("<?= Url::toRoute(['/directory/edit/directories', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
                                         dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
                                 data : "del",
-                                waitTag: "#waitQueryDataType",
-                                errorTag: "#errorQueryDataType",
+                                waitTag: "#waitQueryDirectories",
+                                errorTag: "#errorQueryDirectories",
                                 errorWaitTimeout: 5,
                                 onSuccess: function(dataObject) { 
-                                    $("#updateTypesTable").click();
+                                    $("#updateDirectoriesTable").click();
                                 }
                             });
                         }
                     }
                 } else {
-                    $("#updateTypesTable").click();
+                    $("#updateDirectoriesTable").click();
                 }
             }
-        });*/
+        });
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
@@ -135,7 +147,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         <td class="directory-min-width">
                             <span id="waitQueryDirectories" class="directory-hide-element">
                                 <nobr>
-                                    <img src="<?= directoryModule::getPublishPath('/img/wait.gif')?>">
+                                    <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                                     <span><?= directoryModule::ht('search', 'processing request')?></span>
                                 </nobr>
                             </span>
