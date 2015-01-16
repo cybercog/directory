@@ -530,7 +530,6 @@ class EditController extends Controller {
                                 directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
                     }
                     return ajaxJSONResponseHelper::createResponse(true);
-                    break;
                 default:
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
@@ -538,6 +537,19 @@ class EditController extends Controller {
         
         $model = new \app\modules\directory\models\search\DirectoriesSearch();
         $model->attributes = \Yii::$app->request->get('DirectoriesSearch');
+        
+        if(\Yii::$app->request->isPjax) {
+            $control = \Yii::$app->request->get('_pjax');
+
+            if($control == '#directoriesGridPjaxWidget') {
+                return $this->renderPartial('directories_grid', ['dataModel' => $model]);
+            } elseif(preg_match('/#directoriesCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) > 0) {
+                return $this->renderPartial('dialogs/directory-compact-grid', ['directoryDataModel' => $model, 'uid' => $matches['uid']]);
+            } else {
+                throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+            }
+        }
+        
         return $this->render('directories', ['dataModel' => $model]);
     }
     

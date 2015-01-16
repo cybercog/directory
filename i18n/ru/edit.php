@@ -55,4 +55,5 @@ return [
     'Create new directory' => 'Создать новый каталог',
     'Unknown command.' => 'Неизвестная команда.',
     'Add directory' => 'Добавить каталог',
+    'Select directory' => 'Выбрать каталог',
 ];

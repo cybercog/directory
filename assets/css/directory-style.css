@@ -355,3 +355,26 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     color: blue !important;
     font-weight: bold !important;
 }
+
+.directory-directory-item {
+    float: left;
+    border-radius: 4px;
+    padding: 4px 6px;
+    background-color: #ddd;
+}
+
+.directory-directory-item .directory-label {
+    margin-right: 7px;
+    float: left;
+}
+
+.directory-directory-item .directory-delete-directory-button {
+    float: right;
+}
+
+.directory-record-list {
+    margin-top: 4px;
+    padding: 7px;
+    border-top: #a3a2a2 solid 1px;
+    overflow: hidden;
+}

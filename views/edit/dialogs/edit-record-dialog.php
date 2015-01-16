@@ -25,7 +25,9 @@ $formItemModel = new \app\modules\directory\models\forms\RecordDataItemForm;
     //['name' => '/edit/dialogs/edit-type-dialog'],
     ['name' => '/edit/dialogs/edit-data-dialog'],
     ['name' => '/edit/dialogs/select-data-dialog'],
-    ['name' => '/helpers/table-paginator-js']
+    ['name' => '/edit/dialogs/select-directory-dialog'],
+    ['name' => '/helpers/table-paginator-js'],
+    ['name' => '/edit/dialogs/edit-directory-dialog']
     ]]) ?>
 
 <div class="directory-hide-element">
@@ -128,6 +130,7 @@ Dialog::begin([
                                 </td>
                             </tr>
                         </table>
+                        <div id="directory-record-list" class="directory-record-list"></div>
                     </div>
                 </div>
             </td>
@@ -174,6 +177,25 @@ Dialog::begin([
     </table>
 </div>
 
+<div class="directory-hide-element" id="directory-add-template<?=$uid?>">
+    <div class="directory-directory-item">
+        <table class="directory-modal-table">
+            <tr>
+                <td>
+                    <div class="directory-label" title="<?=$uid.'p1'?>"><?=$uid.'p1'?></div>
+                    <div class="directory-hide-element">few</div>
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="directory-edit-type-button directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
+                        <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     (function($) {
@@ -188,7 +210,7 @@ Dialog::begin([
                 $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
                 tmpEl.find(".directory-edit-type-button").button();
-                var ii=$("#record-form<?=$uid?> #dataArray table");
+                //var ii=$("#record-form<?=$uid?> #dataArray table");
                 $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().addRows(tmpEl);
             }
         }
@@ -229,6 +251,17 @@ Dialog::begin([
         });
         
         $("#record-form<?=$uid?> #addRecordToDirectory").button().click(function() {
+            $.selectDirectoryDialog(
+                    { onSuccess : function(dir) {
+                            if(dir !== undefined) {
+                                var counter = $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
+                                ++counter;
+                                var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
+                                $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                                $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
+                            }
+                        } 
+            });
         });
         
         $("#record-form<?=$uid?> #createNewDirectoryForAddRecord").button().click(function() {
@@ -238,6 +271,7 @@ Dialog::begin([
             if(p !== undefined) {
                 if(p.type !== undefined) {
                     $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
+                    $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
                     $("#record-form<?=$uid?> #dataArray table tbody").html("");
                     switch(p.type) {
                         case "new":

@@ -59,6 +59,13 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                             });
     });
     
+    $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
+    
+    $("#recordsGridPjaxWidget").on("click", ".directory-edit-type-button",
+        function() {
+        
+    });
+    
     $("#recordsGridPjaxWidget").on("pjax:start", function() {
         $("#waitQueryRecord").removeClass("directory-hide-element");
     }).on("pjax:end", function() {
