@@ -45,7 +45,8 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
     
     $("#addRecordItem").button().click(function() {
         $.editRecordDialog({
-            type : "new"
+            type : "new",
+            onSuccess : function() { $("#updateRecordTable").click(); }
         });
     });
 

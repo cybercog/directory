@@ -17,9 +17,11 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\forms\RecordForm;
 use app\modules\directory\models\forms\RecordDataItemForm;
 use app\modules\directory\models\forms\DirectoryForm;
+use app\modules\directory\models\forms\DirectoryItemForm;
 use app\modules\directory\models\db\Records;
 use app\modules\directory\models\db\RecordsData;
 use app\modules\directory\models\db\Directories;
+use app\modules\directory\models\db\RecordsDirectory;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -395,6 +397,21 @@ class EditController extends Controller {
                         }
                     }
                     
+                    $directoriesFormItems = [];
+                    $formDirectoriesItems = \Yii::$app->request->post('DirectoryItemForm');
+                    if(isset($formDirectoriesItems) && is_array($formDirectoriesItems) && (count($formDirectoriesItems) > 0)) {
+                        foreach ($formDirectoriesItems as $formDirectoriesItem) {
+                            $directoriesFormItem = new DirectoryItemForm;
+                            $directoriesFormItem->attributes = $formDirectoriesItem;
+                            if(!$directoriesFormItem->validate()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        modelErrorsToStringHelper::to($directoriesFormItem->errors));
+                            }
+                            $directoriesFormItems[] = $directoriesFormItem;
+                        }
+                    }
+                    
+                    $result = [];
                     $transaction = \Yii::$app->db->beginTransaction();
                     
                     try {
@@ -408,6 +425,7 @@ class EditController extends Controller {
                             
                             $result = $newRecord->attributes;
                             $result['items'] = [];
+                            $result['directories'] = [];
                             
                             foreach ($recordFormItems as $recordItem) {
                                 $newLinkData = new RecordsData;
@@ -425,12 +443,26 @@ class EditController extends Controller {
                                 $result['items'][] = $newLinkData->attributes;
                             }
                             
-                            return ajaxJSONResponseHelper::createResponse(true, $result);
+                            foreach ($directoriesFormItems as $directoriesFormItem) {
+                                $newLinkDirectory = new RecordsDirectory;
+                                $newLinkDirectory->record_id = $newRecord->id;
+                                $newLinkDirectory->directory_id = $directoriesFormItem->directoryId;
+                                $newLinkDirectory->visible = boolSaveHelper::boolean2string((boolean)$directoriesFormItem->visible);
+                                
+                                if(!$newLinkDirectory->save()) {
+                                    return ajaxJSONResponseHelper::createResponse(false, 
+                                            directoryModule::ht('edit', 'Error saving directory element in the database.'));
+                                }
+                                
+                                $result['directories'][] = $newLinkDirectory->attributes;
+                            }
+                            
                         } else {
 
                         }
                         
                         $transaction->commit();
+                        return ajaxJSONResponseHelper::createResponse(true, $result);
                     } catch (\Exception $ex) {
                         $transaction->rollBack();
                         return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
@@ -555,6 +587,10 @@ class EditController extends Controller {
     
     public function actionHierarchies() {
         return $this->render('hierarchies');
+    }
+
+    public function actionStatistic() {
+        return $this->render('statistic');
     }
 }
 

@@ -361,11 +361,17 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     border-radius: 4px;
     padding: 4px 6px;
     background-color: #ddd;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 .directory-directory-item .directory-label {
     margin-right: 7px;
     float: left;
+}
+
+.directory-directory-item table tr:hover {
+    background-color: #ddd;
 }
 
 .directory-directory-item .directory-delete-directory-button {
@@ -374,7 +380,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 
 .directory-record-list {
     margin-top: 4px;
-    padding: 7px;
+    padding: 7px 0;
     border-top: #a3a2a2 solid 1px;
     overflow: hidden;
 }

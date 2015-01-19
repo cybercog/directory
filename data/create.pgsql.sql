@@ -122,16 +122,13 @@ SELECT d.id AS id,
     d.visible AS visible
 FROM directories_t d;
 
-CREATE SEQUENCE records_directory_t_id_counter CYCLE;
 CREATE TABLE records_directory_t
 (
-    id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('records_directory_t_id_counter'),
     record_id INTEGER NOT NULL REFERENCES records_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     directory_id INTEGER NOT NULL REFERENCES directories_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     visible visible_type NOT NULL DEFAULT 'Y',
-    UNIQUE (record_id, directory_id)
+    PRIMARY KEY (record_id, directory_id)
 );
-CREATE INDEX records_directory_t_id_index ON records_directory_t (id);
 CREATE INDEX records_directory_t_record_id_index ON records_directory_t (record_id);
 CREATE INDEX records_directory_t_directory_id_index ON records_directory_t (directory_id);
 CREATE INDEX records_directory_t_visible_index ON records_directory_t (visible);
@@ -141,6 +138,7 @@ CREATE TABLE branches_t
 (
     id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('branches_t_id_counter'),
     name VARCHAR(255) NOT NULL,
+    description TEXT DEFAULT NULL,
     visible visible_type NOT NULL DEFAULT 'Y'
 );
 CREATE INDEX branches_t_id_index ON branches_t (id);

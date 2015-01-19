@@ -50,6 +50,10 @@ AppAsset::register($this);
             background: url(<?= directoryModule::getPublishImage('/hierarchy16.png'); ?>) no-repeat;
             padding-left: 20px;
         }
+        .directory-statictic-edit-button-icon {
+            background: url(<?= directoryModule::getPublishImage('/stat16.png'); ?>) no-repeat;
+            padding-left: 20px;
+        }
         .directory-add-button-icon {
             background: url(<?= directoryModule::getPublishImage('/add.png'); ?>) no-repeat;
             padding-left: 20px;
@@ -153,6 +157,19 @@ AppAsset::register($this);
                                                     </a>
                                                     <?php } else { ?>
                                                     <span class="directory-hierarchy-edit-button-icon">Иерархии</span>
+                                                    <?php } ?>
+                                                </nobr>
+                                            </div>
+                                        </td>
+                                        <td class="directory-min-width<?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/statistic') ? ' directory-panel-item-cell-selected': ''?>">
+                                            <div class="directory-edit-panel-item <?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/statistic') ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
+                                                <nobr>
+                                                    <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/statistic') { ?>
+                                                    <a href="<?= Url::toRoute(['/directory/edit/statistic'])?>">
+                                                        <span class="directory-statictic-edit-button-icon">Статистика</span>
+                                                    </a>
+                                                    <?php } else { ?>
+                                                    <span class="directory-statictic-edit-button-icon">Статистика</span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>

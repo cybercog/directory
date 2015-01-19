@@ -15,6 +15,7 @@ $uid = mt_rand(0, mt_getrandmax());
 
 $formModel = new \app\modules\directory\models\forms\RecordForm;
 $formItemModel = new \app\modules\directory\models\forms\RecordDataItemForm;
+$formDirectoryItemModel = new \app\modules\directory\models\forms\DirectoryItemForm;
 
 ?>
 
@@ -164,12 +165,12 @@ Dialog::begin([
                 <?=Html::hiddenInput(Html::getInputName($formItemModel, "[$uid]dataId"), null, ['id' => Html::getInputId($formItemModel, "[$uid]dataId")])?>
             </td>
             <td class="directory-min-width">
-                <div align="center"><?=Html::checkbox(Html::getInputName($formItemModel, "[$uid]visible"), $formItemModel->visible, ['id' => Html::getInputId($formItemModel, "[$uid]position")])?></div>
+                <div align="center"><?=Html::checkbox(Html::getInputName($formItemModel, "[$uid]visible"), $formItemModel->visible, ['id' => Html::getInputId($formItemModel, "[$uid]visible")])?></div>
             </td>
             <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]position"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]position"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
             <td class="directory-min-width"><?=Html::textInput(Html::getInputName($formItemModel, "[$uid]subPosition"), 0, ['id' => Html::getInputId($formItemModel, "[$uid]subPosition"), 'size' => 8, 'class' => 'directory-stretch-bar'])?></td>
             <td class="directory-min-width">
-                <div class="directory-edit-type-button directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
+                <div class="directory-edit-type-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
                     <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
                 </div>
             </td>
@@ -182,15 +183,22 @@ Dialog::begin([
         <table class="directory-modal-table">
             <tr>
                 <td>
-                    <div class="directory-label" title="<?=$uid.'p1'?>"><?=$uid.'p1'?></div>
-                    <div class="directory-hide-element">few</div>
+                    <div class="directory-label" title="<?=$uid.'p1'?>"><?=$uid.'p2'?></div>
+                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId'))?></div>
                 </td>
                 <td>&nbsp;</td>
                 <td>
-                    <div class="directory-edit-type-button directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
+                    <div class="directory-delete-directory directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
                         <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
                     </div>
                 </td>
+            </tr>
+        </table>
+        <table class="directory-modal-table directory-table">
+            <tr>
+                <td class="directory-min-width"><?= Html::activeCheckbox($formDirectoryItemModel, '['.$uid.'p3]visible', ['label' => null])?></td>
+                <td class="directory-min-width">&nbsp;</td>
+                <td>- <?= Html::activeLabel($formDirectoryItemModel, '['.$uid.'p3]visible')?></td>
             </tr>
         </table>
     </div>
@@ -209,7 +217,7 @@ Dialog::begin([
                 tmpEl.find("#<?=Html::getInputId($formItemModel, "[$uid]position")?>").attr("value", counter);
                 $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
-                tmpEl.find(".directory-edit-type-button").button();
+                tmpEl.find(".directory-edit-type-button").button().addClass("directory-small-button");
                 //var ii=$("#record-form<?=$uid?> #dataArray table");
                 $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().addRows(tmpEl);
             }
@@ -258,7 +266,11 @@ Dialog::begin([
                                 ++counter;
                                 var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
                                 $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", dir.original_name).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)));
+                                tmpEl.find('input[type=hidden]').val(dir.id);
+                                //tmpEl.find('input[type=checkbox]').val(dir.id);
                                 $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
+                                tmpEl.find(".directory-delete-directory").button({text : false});
                             }
                         } 
             });
@@ -267,12 +279,18 @@ Dialog::begin([
         $("#record-form<?=$uid?> #createNewDirectoryForAddRecord").button().click(function() {
         });
         
+        $("#record-form<?=$uid?> #directory-record-list").on("click", 
+                ".directory-delete-directory", function() {
+                    $(this).closest(".directory-directory-item").remove();
+        });
+        
         $.editRecordDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
                     $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
                     $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
                     $("#record-form<?=$uid?> #dataArray table tbody").html("");
+                    $("#record-form<?=$uid?> #directory-record-list").html("");
                     switch(p.type) {
                         case "new":
                             (function(p) {

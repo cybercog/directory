@@ -43,6 +43,7 @@ return [
     'Error saving type in the database.' => 'Ошибка при сохранении типа в базе данных.',
     'Error saving record in the database.' => 'Ошибка при сохранении записи в базе данных.',
     'Error saving record element in the database.' => 'Ошибка при сохранении элемента записи в базе данных.',
+    'Error saving directory element in the database.' => 'Ошибка при сохранении элемента записи в базе данных.',
     'Error saving directory in the database.' => 'Ошибка при сохранении каталога в базе данных.',
     'Error: invalid call parameters.' => 'Ошибка: некоррекные параметры вызова.',
     'Update table' => 'Обновить таблицу',
