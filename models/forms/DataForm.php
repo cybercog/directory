@@ -28,6 +28,7 @@ class DataForm extends Model {
             }
 
             if(!isset($type)) {
+                $this->addError('typeId', directoryModule::ht('edit', 'This type of data does not exist'));
                 return false;
             }
 

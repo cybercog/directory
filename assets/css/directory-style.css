@@ -384,3 +384,8 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     border-top: #a3a2a2 solid 1px;
     overflow: hidden;
 }
+
+.directory-dialog-max-hieght {
+    max-height: 450px;
+    overflow: auto;
+}

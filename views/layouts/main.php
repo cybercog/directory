@@ -78,10 +78,10 @@ AppAsset::register($this);
                                 <nobr>
                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/search/index') { ?>
                                     <a href="<?= Url::toRoute(['/directory/search/index'])?>" class="directory-a-no-decoration">
-                                        <span class="directory-search-button-icon">Поиск</span>
+                                        <span class="directory-search-button-icon"><?=directoryModule::ht('search', 'Search')?></span>
                                     </a>
                                     <?php } else { ?>
-                                    <span class="directory-search-button-icon">Поиск</span>
+                                    <span class="directory-search-button-icon"><?=directoryModule::ht('search', 'Search')?></span>
                                     <?php } ?>
                                 </nobr>
                             </div>
@@ -101,10 +101,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/types') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/types'])?>">
-                                                        <span class="directory-types-edit-button-icon">Типы</span>
+                                                        <span class="directory-types-edit-button-icon"><?=directoryModule::ht('edit', 'Types')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-types-edit-button-icon">Типы</span>
+                                                    <span class="directory-types-edit-button-icon"><?=directoryModule::ht('edit', 'Types')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>
@@ -114,10 +114,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/data') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/data'])?>">
-                                                        <span class="directory-data-edit-button-icon">Данные</span>
+                                                        <span class="directory-data-edit-button-icon"><?=directoryModule::ht('edit', 'Data')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-data-edit-button-icon">Данные</span>
+                                                    <span class="directory-data-edit-button-icon"><?=directoryModule::ht('edit', 'Data')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>
@@ -127,10 +127,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/directories') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/directories'])?>">
-                                                        <span class="directory-directory-edit-button-icon">Каталоги</span>
+                                                        <span class="directory-directory-edit-button-icon"><?=directoryModule::ht('edit', 'Directories')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-directory-edit-button-icon">Каталоги</span>
+                                                    <span class="directory-directory-edit-button-icon"><?=directoryModule::ht('edit', 'Directories')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>
@@ -140,10 +140,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/records') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/records'])?>">
-                                                        <span class="directory-record-edit-button-icon">Записи</span>
+                                                        <span class="directory-record-edit-button-icon"><?=directoryModule::ht('edit', 'Records')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-record-edit-button-icon">Записи</span>
+                                                    <span class="directory-record-edit-button-icon"><?=directoryModule::ht('edit', 'Records')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>
@@ -153,10 +153,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/hierarchies') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/hierarchies'])?>">
-                                                        <span class="directory-hierarchy-edit-button-icon">Иерархии</span>
+                                                        <span class="directory-hierarchy-edit-button-icon"><?=directoryModule::ht('edit', 'Hierarhies')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-hierarchy-edit-button-icon">Иерархии</span>
+                                                    <span class="directory-hierarchy-edit-button-icon"><?=directoryModule::ht('edit', 'Hierarhies')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>
@@ -166,10 +166,10 @@ AppAsset::register($this);
                                                 <nobr>
                                                     <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/statistic') { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/statistic'])?>">
-                                                        <span class="directory-statictic-edit-button-icon">Статистика</span>
+                                                        <span class="directory-statictic-edit-button-icon"><?=directoryModule::ht('edit', 'Statistic')?></span>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <span class="directory-statictic-edit-button-icon">Статистика</span>
+                                                    <span class="directory-statictic-edit-button-icon"><?=directoryModule::ht('edit', 'Statistic')?></span>
                                                     <?php } ?>
                                                 </nobr>
                                             </div>

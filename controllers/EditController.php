@@ -383,29 +383,35 @@ class EditController extends Controller {
                                 modelErrorsToStringHelper::to($recordForm->errors));
                     }
                     
+                    $counter = 0;
                     $recordFormItems = [];
                     $formItems = \Yii::$app->request->post('RecordDataItemForm');
                     if(isset($formItems) && is_array($formItems) && (count($formItems) > 0)) {
                         foreach ($formItems as $formItem) {
                             $recordFormItem = new RecordDataItemForm;
                             $recordFormItem->attributes = $formItem;
+                            ++$counter;
                             if(!$recordFormItem->validate()) {
                                 return ajaxJSONResponseHelper::createResponse(false, 
-                                        modelErrorsToStringHelper::to($recordFormItem->errors));
+                                        modelErrorsToStringHelper::to($recordFormItem->errors, 
+                                                '['.directoryModule::ht('edit', 'string').' - '.$counter.']'));
                             }
                             $recordFormItems[] = $recordFormItem;
                         }
                     }
                     
+                    $counter = 0;
                     $directoriesFormItems = [];
                     $formDirectoriesItems = \Yii::$app->request->post('DirectoryItemForm');
                     if(isset($formDirectoriesItems) && is_array($formDirectoriesItems) && (count($formDirectoriesItems) > 0)) {
                         foreach ($formDirectoriesItems as $formDirectoriesItem) {
                             $directoriesFormItem = new DirectoryItemForm;
                             $directoriesFormItem->attributes = $formDirectoriesItem;
+                            ++$counter;
                             if(!$directoriesFormItem->validate()) {
                                 return ajaxJSONResponseHelper::createResponse(false, 
-                                        modelErrorsToStringHelper::to($directoriesFormItem->errors));
+                                        modelErrorsToStringHelper::to($directoriesFormItem->errors, 
+                                                '['.directoryModule::ht('edit', 'string').' - '.$counter.']'));
                             }
                             $directoriesFormItems[] = $directoriesFormItem;
                         }

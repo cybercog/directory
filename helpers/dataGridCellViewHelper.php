@@ -12,8 +12,8 @@ class dataGridCellViewHelper {
     public static function getTextString($text) {
         return '<div class="directory-hide-element row-value">'.nl2br($text).'</div>'
                 . '<div class="row-display">'
-                .(strlen($text) <= 20 ? $text : 
-                        substr($text, 0, 20)
+                .(mb_strlen($text, 'utf8') <= 20 ? $text : 
+                        mb_substr($text, 0, 20, 'utf8')
                         .'...&nbsp;<img class="directory-show-full-text" title="'
                         .directoryModule::ht('edit', 'Show completely').'" '
                         . 'src="'.directoryModule::getPublishImage('/info16.png').'" />').'</div>';
@@ -27,11 +27,11 @@ class dataGridCellViewHelper {
     }
     
     public static function getValueDataString($type, $value, $text) {
-        $result = (strlen($value) <= 20 ? $value : substr($value, 0, 20).'...');
+        $result = (mb_strlen($value, 'utf8') <= 20 ? $value : mb_substr($value, 0, 20, 'utf8').'...');
         
         switch($type) {
             case 'string':
-                if(strlen($value) > 20) {
+                if(mb_strlen($value, 'utf8') > 20) {
                     $result = '<div class="row-display">'.$result.'&nbsp;'
                             . '<img class="directory-show-full-text" title="'
                             .directoryModule::ht('edit', 'Show completely').'" src="'

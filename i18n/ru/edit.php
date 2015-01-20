@@ -1,6 +1,9 @@
 <?php 
 
 return [
+    'Types' => 'Типы',
+    'Hierarhies' => 'Иерархии',
+    'Statistic' => 'Статистика',
     'string' => 'строка',
     'text' => 'текст',
     'image' => 'картинка',
@@ -57,4 +60,6 @@ return [
     'Unknown command.' => 'Неизвестная команда.',
     'Add directory' => 'Добавить каталог',
     'Select directory' => 'Выбрать каталог',
+    'The specified data element is not there' => 'Указанный элемент данных не существует',
+    'This type of data does not exist' => 'Указанный тип данных не существует',
 ];

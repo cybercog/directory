@@ -44,6 +44,8 @@ Dialog::begin([
     ],
 ]); ?>
     
+    <div class="directory-dialog-max-hieght">
+        
     <?php $form = ActiveForm::begin([
     'id' => 'record-form'.$uid,
         ]); ?>
@@ -84,10 +86,10 @@ Dialog::begin([
                             <table class="directory-modal-table directory-stretch-bar directory-record-item-form">
                                 <thead>
                                     <tr>
-                                        <td><nobr><?=directoryModule::ht('edit', 'Value')?></nobr></td>
+                                        <td><nobr><?=$formItemModel->getAttributeLabel('dataId')?></nobr></td>
                                         <td><nobr><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></nobr></td>
-                                        <td><nobr><?=directoryModule::ht('edit', 'Position')?></nobr></td>
-                                        <td><nobr><?=directoryModule::ht('edit', 'Sub.')?></nobr></td>
+                                        <td><nobr><?=$formItemModel->getAttributeLabel('position')?></nobr></td>
+                                        <td><nobr><?=$formItemModel->getAttributeLabel('subPosition')?></nobr></td>
                                         <td>&nbsp;</td>
                                     </tr>
                                 </thead>
@@ -143,6 +145,8 @@ Dialog::begin([
     </table>
 
     <?php ActiveForm::end(); ?>
+        
+    </div>
     
     <span id="waitDlgQuery" class="directory-hide-element">
         <nobr>
@@ -305,7 +309,7 @@ Dialog::begin([
                                                                         url : ("<?=Url::toRoute(['/directory/edit/records', 'cmd' => 'create'])?>"),
                                                                         data : $("#record-form<?=$uid?>").serialize(),
                                                                         waitTag : "#editRecordDialog<?=$uid?> #waitDlgQuery",
-                                                                        errorTag : "editRecordDialog<?=$uid?> #errorDlgQuery",
+                                                                        errorTag : "#editRecordDialog<?=$uid?> #errorDlgQuery",
                                                                         errorWaitTimeout : 5,
                                                                         onSuccess : function() { 
                                                                             $("#editRecordDialog<?=$uid?>").dialog("close");
