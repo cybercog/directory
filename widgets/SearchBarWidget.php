@@ -13,7 +13,7 @@ class SearchBarWidget extends Widget {
     public function init() {
         parent::init();
         
-        $this->getView()->registerCssFile(directoryModule::getPublishCSS());    
+        //$this->getView()->registerCssFile(directoryModule::getPublishCSS());    
     }
     
     public function run() {

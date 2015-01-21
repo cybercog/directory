@@ -389,3 +389,60 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     max-height: 450px;
     overflow: auto;
 }
+
+.directory-emply-directory-list {
+    text-align: center;
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    color: #4B4A45;
+    font-style: italic;
+}
+
+.directory-directory-list .directory-directory-list-count {
+    text-align: center;
+    background-color: yellow;
+    padding: 5px;
+    border-radius: 5px;
+    color: red;
+    font-weight: bold;
+}
+
+.directory-directory-list .directory-directory-list-items-parent {
+    position: relative;
+}
+
+.directory-directory-list .directory-directory-list-items-parent .directory-directory-list-arrow {
+    position: absolute;
+    border: 12px solid transparent;
+    border-bottom: 12px solid red;
+    left: 15px;
+    top: -12px;
+    display: none;
+}
+.directory-directory-list .directory-directory-list-items-parent .directory-directory-list-arrow-background {
+    position: absolute;
+    border: 11px solid transparent;
+    border-bottom: 11px solid yellow;
+    left: 16px;
+    top: -10px;
+    z-index: 100;
+    display: none;
+}
+
+.directory-directory-list .directory-directory-list-items-parent .directory-directory-list-items {
+    position: absolute;
+    left: 0;
+    top: 11px;
+    background-color: yellow;
+    border: red solid 1px;
+    border-radius: 5px;
+    padding: 5px;
+    display: none;
+}
+
+.directory-directory-list:hover .directory-directory-list-items-parent .directory-directory-list-arrow,
+.directory-directory-list:hover .directory-directory-list-items-parent .directory-directory-list-arrow-background,
+.directory-directory-list:hover .directory-directory-list-items-parent .directory-directory-list-items {
+    display: block;
+}

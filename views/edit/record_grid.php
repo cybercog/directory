@@ -2,6 +2,14 @@
 
 use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\dataGridCellViewHelper;
+use app\modules\directory\models\db\Directories;
+use app\modules\directory\widgets\DirectoryList;
+
+$directories = Directories::find()->all();
+$directoriesFilter = [];
+foreach ($directories as $directory) {
+    $directoriesFilter[$directory->id] = $directory->name;
+}
 
 ?>
 
@@ -24,6 +32,18 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         'label' => directoryModule::ht('edit', 'Value'),
                         'value' => function($data) {
                             return 'lll';//dataGridCellViewHelper::getValueDataString($data->type_type, $data->original_value, $data->original_text);
+                        }
+                    ],
+                    [
+                        'class' => 'yii\grid\DataColumn',
+                        'headerOptions' => ['class' => 'directory-min-width'],
+                        'format' => 'raw',
+                        'attribute' => 'directories',
+                        'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
+                        'filter' => $directoriesFilter,
+                        'label' => directoryModule::ht('edit', 'Directories'),
+                        'value' => function($data) {
+                            return DirectoryList::widget(['directories' => $data->directories]);
                         }
                     ],
                     [
@@ -55,5 +75,5 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
                         },
                     ]
                 ]
-            ]) ?>
+            ]); ?>
             <?php yii\widgets\Pjax::end(); ?>

@@ -2,21 +2,30 @@
 
 namespace app\modules\directory\models\search;
 
-use app\modules\directory\models\db\Records;
+use app\modules\directory\models\db\views\LowerRecords;
+use app\modules\directory\models\db\Directories;
 
 class RecordsSearch extends FilterModelBase {
     public $visible;
     public $value;
+    public $directories;
     
     public function rules() {
+        $directories = Directories::find()->all();
+        $directoriesRange = [];
+        foreach ($directories as $directory) {
+            $directoriesRange[] = $directory->name;
+        }
+        
         return [
             ['value', 'safe'],
             ['visible', 'yii\validators\RangeValidator', 'range' => ['Y', 'N']],
+            ['directories', 'yii\validators\RangeValidator', 'range' => $directoriesRange],
         ];
     }
     
     public function search() {
-        $query = Records::find();
+        $query = LowerRecords::find();
         
         $query->addOrderBy(['id' => SORT_ASC]);
         

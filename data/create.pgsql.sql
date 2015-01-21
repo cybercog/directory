@@ -133,6 +133,36 @@ CREATE INDEX records_directory_t_record_id_index ON records_directory_t (record_
 CREATE INDEX records_directory_t_directory_id_index ON records_directory_t (directory_id);
 CREATE INDEX records_directory_t_visible_index ON records_directory_t (visible);
 
+CREATE VIEW records_tolower_v AS
+SELECT r1.id AS id, r1.visible AS visible,
+    array_to_string(array(
+                            SELECT concat_ws(chr(3), rd2.directory_id, rd2.visible, d2.visible, d2.name, d2.description) AS d_info
+                            FROM records_directory_t rd2 
+                                INNER JOIN directories_t d2 ON d2.id=rd2.directory_id
+                            WHERE rd2.record_id=r1.id
+                    ), chr(4)) AS directories,
+    array_to_string(array(
+                            SELECT rd4.directory_id AS d_info
+                            FROM records_directory_t rd4 
+                            WHERE rd4.record_id=r1.id
+                    ), ':') AS directories_id,
+    array_to_string(array(
+                            SELECT concat_ws(chr(3), rd3.data_id, rd3.visible, rd3.position, rd3.sub_position,
+                                    d3.value, d3.text, d3.description, d3.visible, t3.type) AS r_info
+                            FROM records_data_t rd3
+                                    INNER JOIN data_t d3 ON d3.id=rd3.data_id
+                                    INNER JOIN types_t t3 ON t3.id=d3.type_id
+                            WHERE rd3.record_id=r1.id
+                    ), chr(4)) AS data,
+    array_to_string(array(
+                            SELECT concat_ws(chr(3), lower(d5.value), lower(d5.text), lower(d5.description)) AS r_info
+                            FROM records_data_t rd5
+                                    INNER JOIN data_t d5 ON d5.id=rd5.data_id
+                            WHERE rd5.record_id=r1.id
+                    ), chr(4)) AS data_lower
+FROM records_t r1;
+
+
 CREATE SEQUENCE branches_t_id_counter CYCLE;
 CREATE TABLE branches_t
 (
