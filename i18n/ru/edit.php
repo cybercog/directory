@@ -62,4 +62,6 @@ return [
     'Select directory' => 'Выбрать каталог',
     'The specified data element is not there' => 'Указанный элемент данных не существует',
     'This type of data does not exist' => 'Указанный тип данных не существует',
+    'Visibility catalog' => 'Видимость каталога',
+    'Visibility directory entry' => 'Видимость записи в каталоге',
 ];

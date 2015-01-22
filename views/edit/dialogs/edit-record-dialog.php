@@ -187,7 +187,11 @@ Dialog::begin([
         <table class="directory-modal-table">
             <tr>
                 <td>
-                    <div class="directory-label" title="<?=$uid.'p1'?>"><?=$uid.'p2'?></div>
+                    <div class="directory-label">
+                        <span><?=$uid.'p2'?></span>
+                        <img class="directory-hide-element" src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
+                        <div class="directory-hide-element"></div>
+                    </div>
                     <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId'))?></div>
                 </td>
                 <td>&nbsp;</td>
@@ -222,8 +226,11 @@ Dialog::begin([
                 $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p1", data.valueDisplay).replace(new RegExp("<?=$uid?>","g"), parseInt(counter)));
                 tmpEl.find(".directory-edit-type-button").button().addClass("directory-small-button");
-                //var ii=$("#record-form<?=$uid?> #dataArray table");
                 $("#record-form<?=$uid?> #dataArray table").tableJSPaginator().addRows(tmpEl);
+                $("#record-form<?=$uid?> #dataArray table").tooltip({
+                    content : function() { return $(this).closest("td").find(".row-value").html(); },
+                    items : ".directory-show-full-text"
+                });
             }
         }
         
@@ -272,9 +279,12 @@ Dialog::begin([
                                 $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", dir.original_name).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)));
                                 tmpEl.find('input[type=hidden]').val(dir.id);
-                                //tmpEl.find('input[type=checkbox]').val(dir.id);
                                 $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
                                 tmpEl.find(".directory-delete-directory").button({text : false});
+                                if(dir.description !== undefined) {
+                                }
+                                //alert(dir.description);
+                                //tmpEl
                             }
                         } 
             });

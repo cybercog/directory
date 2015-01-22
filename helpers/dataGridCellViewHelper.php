@@ -19,6 +19,13 @@ class dataGridCellViewHelper {
                         . 'src="'.directoryModule::getPublishImage('/info16.png').'" />').'</div>';
     }
     
+    public static function getShortTextString($text) {
+        return '<div class="directory-hide-element row-value">'.nl2br($text).'</div>'
+                . '<div class="row-display"><img class="directory-show-full-text" title="'
+                        .directoryModule::ht('edit', 'Show completely').'" '
+                        . 'src="'.directoryModule::getPublishImage('/info16.png').'" /></div>';
+    }
+    
     public static function getVisibleFlagString($visible) {
         return '<div align="center"><img src="'
                 .(boolSaveHelper::string2boolean($visible) ? 

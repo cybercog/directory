@@ -16,8 +16,8 @@ class DirectoryList extends Widget {
                 foreach ($exp as $dir) {
                     $dir_items = mb_split(chr(3), $dir);
                     if(count($dir_items) > 0) {
-                        $data[] = ['id' => $dir_items[0], 'rec_dir_visible' => $dir_items[1], 
-                            'dit_visible' => $dir_items[2], 'name' => $dir_items[3], 'description' => $dir_items[4]];
+                        $data[] = ['id' => $dir_items[0], 'record_visible' => $dir_items[1], 
+                            'visible' => $dir_items[2], 'name' => $dir_items[3], 'description' => $dir_items[4]];
                     }
                 }
             }
