@@ -30,6 +30,7 @@ class RecordsSearch extends FilterModelBase {
         $query->addOrderBy(['id' => SORT_ASC]);
         
         $query->andFilterWhere(['visible' => $this->visible]);
+        $query->andFilterWhere(['like', 'directories_id', $this->directories]);
         
         $this->_dataProvider = new \yii\data\ActiveDataProvider([
                     'query' => $query, 

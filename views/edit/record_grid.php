@@ -4,6 +4,7 @@ use app\modules\directory\directoryModule;
 use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\db\Directories;
 use app\modules\directory\widgets\DirectoryList;
+use app\modules\directory\widgets\RecordList;
 
 $directories = Directories::find()->all();
 $directoriesFilter = [];
@@ -31,7 +32,14 @@ foreach ($directories as $directory) {
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Value'),
                         'value' => function($data) {
-                            return 'lll';//dataGridCellViewHelper::getValueDataString($data->type_type, $data->original_value, $data->original_text);
+                            return RecordList::widget(
+                                    [
+                                        'Records' => $data->data, 
+                                        'outDBInfo' => true,
+                                        'expandPropertiesDefault' => false,
+                                        'expandProperiesCount' => true,
+                                        'expandPopup' => true
+                                    ]);
                         }
                     ],
                     [

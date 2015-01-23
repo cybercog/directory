@@ -383,11 +383,8 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     padding: 7px 0;
     border-top: #a3a2a2 solid 1px;
     overflow: hidden;
-}
-
-.directory-dialog-max-hieght {
-    max-height: 450px;
-    overflow: auto;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .directory-emply-directory-list {
@@ -487,4 +484,13 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 .directory-directory-list .directory-directory-list-items-parent .directory-directory-list-items td {
     white-space: nowrap;
     padding: 2px;
+}
+
+.directory-no-wrap {
+    white-space: nowrap;
+}
+
+.directory-records-max-height {
+    max-height: 200px;
+    overflow-y: auto;
 }

@@ -4,11 +4,6 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\directoryModule;
 ?>
 
-
-<!--<pre>
-<?=print_r($directories, true);?>
-</pre>-->
-
 <?php if(count($directories) > 0) { ?>
 <div class="directory-directory-list">
     <div class="directory-directory-list-count">
@@ -26,8 +21,9 @@ use app\modules\directory\directoryModule;
                     <tr>
                         <td class="my-first">
                             <span><?=$directory['name']?></span>
+                            <img <?php if(!isset($directory['description'])) { ?>class="directory-hide-element"<?php } ?> src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
                             <div class="directory-description-data directory-hide-element"><?=$directory['description']?></div>
-                            <div class="row-data directory-hide-element"><?=  json_encode($directory)?></div>
+                            <div class="row-data directory-hide-element"><?=json_encode($directory)?></div>
                         </td>
                         <td class="my-visible" title="<?=directoryModule::ht('edit', 'Visibility catalog')?>"><?=dataGridCellViewHelper::getVisibleFlagString($directory['visible'])?></td>
                         <td class="my-visible" title="<?=directoryModule::ht('edit', 'Visibility directory entry')?>"><?=dataGridCellViewHelper::getVisibleFlagString($directory['record_visible'])?></td>
@@ -47,8 +43,8 @@ use app\modules\directory\directoryModule;
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     $(".directory-directory-list .directory-directory-list-items table tr td.my-first").tooltip({
-        content : function() { return $(this).find(".directory-description-data").html(); },
-        items : "td"
+        content : function() { return $(this).closest("td").find(".directory-description-data").html(); },
+        items : "img"
     });
     $(".directory-directory-list .directory-directory-list-items table tr td.my-visible").tooltip();
     

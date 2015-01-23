@@ -64,7 +64,6 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
     
     $("#recordsGridPjaxWidget").on("click", ".directory-edit-type-button",
         function() {
-        
     });
     
     $("#recordsGridPjaxWidget").on("pjax:start", function() {

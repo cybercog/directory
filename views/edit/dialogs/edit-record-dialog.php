@@ -44,8 +44,6 @@ Dialog::begin([
     ],
 ]); ?>
     
-    <div class="directory-dialog-max-hieght">
-        
     <?php $form = ActiveForm::begin([
     'id' => 'record-form'.$uid,
         ]); ?>
@@ -82,14 +80,14 @@ Dialog::begin([
                                 </td>
                             </tr>
                         </table>
-                        <div id="dataArray">
+                        <div id="dataArray" class="directory-records-max-height">
                             <table class="directory-modal-table directory-stretch-bar directory-record-item-form">
                                 <thead>
                                     <tr>
-                                        <td><nobr><?=$formItemModel->getAttributeLabel('dataId')?></nobr></td>
-                                        <td><nobr><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></nobr></td>
-                                        <td><nobr><?=$formItemModel->getAttributeLabel('position')?></nobr></td>
-                                        <td><nobr><?=$formItemModel->getAttributeLabel('subPosition')?></nobr></td>
+                                        <td class="directory-no-wrap"><?=$formItemModel->getAttributeLabel('dataId')?></td>
+                                        <td class="directory-no-wrap"><?=dataGridCellViewHelper::getVisibleFlagString('Y')?></td>
+                                        <td class="directory-no-wrap"><?=$formItemModel->getAttributeLabel('position')?></td>
+                                        <td class="directory-no-wrap"><?=$formItemModel->getAttributeLabel('subPosition')?></td>
                                         <td>&nbsp;</td>
                                     </tr>
                                 </thead>
@@ -146,8 +144,6 @@ Dialog::begin([
 
     <?php ActiveForm::end(); ?>
         
-    </div>
-    
     <span id="waitDlgQuery" class="directory-hide-element">
         <nobr>
             <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
@@ -269,28 +265,34 @@ Dialog::begin([
             });
         });
         
+        var AddRecordToDirectory = function(dir) {
+            if(dir !== undefined) {
+                var counter = $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
+                ++counter;
+                var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
+                $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", ((dir.original_name === undefined) ? dir.name : dir.original_name)).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)));
+                tmpEl.find('input[type=hidden]').val(dir.id);
+                $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
+                tmpEl.find(".directory-delete-directory").button({text : false});
+                var description = (dir.original_description === undefined) ? dir.description : dir.original_description;
+                if((description !== undefined) && (description.length > 0)) {
+                    tmpEl.find(".directory-label div").html(description);
+                    tmpEl.find(".directory-label").tooltip( {
+                        content : function() { return $(tmpEl).find(".directory-label div").html(); },
+                        items : "img"
+                    });
+                    tmpEl.find(".directory-label img").removeClass("directory-hide-element");
+                }
+            }
+        };
+        
         $("#record-form<?=$uid?> #addRecordToDirectory").button().click(function() {
-            $.selectDirectoryDialog(
-                    { onSuccess : function(dir) {
-                            if(dir !== undefined) {
-                                var counter = $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
-                                ++counter;
-                                var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
-                                $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
-                                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", dir.original_name).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)));
-                                tmpEl.find('input[type=hidden]').val(dir.id);
-                                $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
-                                tmpEl.find(".directory-delete-directory").button({text : false});
-                                if(dir.description !== undefined) {
-                                }
-                                //alert(dir.description);
-                                //tmpEl
-                            }
-                        } 
-            });
+            $.selectDirectoryDialog({ onSuccess : AddRecordToDirectory });
         });
         
-        $("#record-form<?=$uid?> #createNewDirectoryForAddRecord").button().click(function() {
+        $("#record-form<?=$uid?> #createNewDirectoryForAddRecord").button().click( function() { 
+            $.editDirectoryDialog({ type : 'new', onSuccess : AddRecordToDirectory }); 
         });
         
         $("#record-form<?=$uid?> #directory-record-list").on("click", 
