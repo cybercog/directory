@@ -1,3 +1,7 @@
+
+
 <pre>
-    <?= print_r($records, true);?>
+    <?php 
+    
+    echo print_r($records, true);?>
 </pre>

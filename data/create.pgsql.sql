@@ -136,7 +136,7 @@ CREATE INDEX records_directory_t_visible_index ON records_directory_t (visible);
 CREATE VIEW records_tolower_v AS
 SELECT r1.id AS id, r1.visible AS visible,
     array_to_string(array(
-                            SELECT concat_ws(chr(3), rd2.directory_id, rd2.visible, d2.visible, d2.name, d2.description) AS d_info
+                            SELECT concat_ws(chr(3), rd2.directory_id, chr(7), rd2.visible, chr(7), d2.visible, chr(7), d2.name, chr(7), d2.description) AS d_info
                             FROM records_directory_t rd2 
                                 INNER JOIN directories_t d2 ON d2.id=rd2.directory_id
                             WHERE rd2.record_id=r1.id
@@ -147,8 +147,8 @@ SELECT r1.id AS id, r1.visible AS visible,
                             WHERE rd4.record_id=r1.id
                     ), ':') AS directories_id,
     array_to_string(array(
-                            SELECT concat_ws(chr(3), rd3.data_id, rd3.visible, rd3.position, rd3.sub_position,
-                                    d3.value, d3.text, d3.description, d3.visible, t3.type) AS r_info
+                            SELECT concat_ws(chr(3), rd3.data_id, chr(7), rd3.visible, chr(7), rd3.position, chr(7), rd3.sub_position,
+                                    chr(7), t3.type, chr(7), d3.visible, chr(7), d3.value, chr(7), d3.text, chr(7), d3.description) AS r_info
                             FROM records_data_t rd3
                                     INNER JOIN data_t d3 ON d3.id=rd3.data_id
                                     INNER JOIN types_t t3 ON t3.id=d3.type_id
