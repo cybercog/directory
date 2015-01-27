@@ -387,7 +387,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     overflow-y: auto;
 }
 
-.directory-emply-directory-list {
+.directory-empty-directory-list {
     text-align: center;
     background-color: #ccc;
     padding: 5px;
@@ -493,4 +493,44 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 .directory-records-max-height {
     max-height: 200px;
     overflow-y: auto;
+}
+
+.directory-empty-record-data {
+    text-align: center;
+    background-color: #3399ff;
+    padding: 5px;
+    border-radius: 5px;
+    color: #0000cc;
+    font-style: italic;
+}
+
+.directory-no-empty-record-data {
+    border-radius: 5px;
+    border: #4399ff dotted 1px;
+    background-color: #ffff99;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.directory-no-empty-record-data .directory-no-empty-record-data-item {
+    white-space: nowrap;
+}
+
+.directory-no-empty-record-data .directory-no-empty-record-data-item + div {
+    margin-left: 100px;
+}
+
+.directory-no-empty-record-data-b1, 
+.directory-no-empty-record-data-b2 {
+    font-weight: bolder;
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #e0e0ff;
+    border: #000 solid 1px;
+    cursor: pointer;
+}
+
+.directory-no-empty-record-data-b1:hover, 
+.directory-no-empty-record-data-b2:hover {
+    background-color: white;
 }

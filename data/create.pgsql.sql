@@ -148,7 +148,8 @@ SELECT r1.id AS id, r1.visible AS visible,
                     ), ':') AS directories_id,
     array_to_string(array(
                             SELECT concat_ws(chr(3), rd3.data_id, chr(7), rd3.visible, chr(7), rd3.position, chr(7), rd3.sub_position,
-                                    chr(7), t3.type, chr(7), d3.visible, chr(7), d3.value, chr(7), d3.text, chr(7), d3.description) AS r_info
+                                    chr(7), t3.type, chr(7), d3.visible, chr(7), d3.value, chr(7), d3.text, chr(7), d3.description,
+                                    chr(7), t3.name, chr(7), t3.description) AS r_info
                             FROM records_data_t rd3
                                     INNER JOIN data_t d3 ON d3.id=rd3.data_id
                                     INNER JOIN types_t t3 ON t3.id=d3.type_id

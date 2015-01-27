@@ -35,8 +35,8 @@ use app\modules\directory\directoryModule;
     </div>
 </div>
 <?php } else { ?>
-<div class="directory-emply-directory-list">
-    <span>(нет)</span>
+<div class="directory-empty-directory-list">
+    <span>(<?=directoryModule::ht('search', 'no')?>)</span>
 </div>
 <?php } ?>
 

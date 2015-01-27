@@ -17,42 +17,30 @@ class RecordList extends Widget {
         
         if($data) {
             foreach ($data as $item) {
-                if(isset($data[$item[2]])) {
-                    
+                $new_item = ['data_id' => $item[0], 'visible' => $item[1], 
+                        'position' => $item[2], 'sub_position' => $item[3],
+                        'type' => $item[4], 'value' => $item[6],
+                        'text' => $item[7], 'description' => $item[8],
+                        'data_visible' => $item[5], 'type_name' => $item[9], 'type_description' => $item[10]];
+                
+                if(isset($data_out[$new_item['position']])) {
+                    if(isset($data_out[$new_item['position']][$new_item['sub_position']])) {
+                        $sub_position = $new_item['sub_position'];
+                        while(true) {
+                            ++$sub_position;
+                            if(!isset($data_out[$new_item['position']][$sub_position])) {
+                                $data_out[$new_item['position']][$sub_position] = $new_item;
+                                break;
+                            }
+                        }
+                    } else {
+                        $data_out[$new_item['position']][$new_item['sub_position']] = $new_item;
+                    }
+                } else {
+                    $data_out[$new_item['position']] = [$new_item['sub_position'] => $new_item];
                 }
             }
         }
-        
-        /*
-        if(isset($this->Records) && is_string($this->Records) && (mb_strlen($this->Records) > 0)) {
-            $exp = mb_split(chr(4), $this->Records);
-            if(count($exp) > 0) {
-                foreach ($exp as $data_item) {
-                    $data[] = mb_split(chr(3), $data_item);
-                    $data_items = mb_split(chr(3), $record);
-                    if(isset($data[$data_items[2]])) {
-                        $temp = $data[$data_items[2]];
-                        $counter = $data_items[2];
-                        while (isset($temp)) {
-                            ++$counter;
-                            if(isset($data[$counter])) {
-                                $temp2 = $temp;
-                                $temp = $data[$counter];
-                                $data[$counter] = $temp2;
-                            } else {
-                                $data[$counter] = $temp;
-                                unset($temp);
-                            }
-                        }
-                    }
-                    $data[$data_items[2]] = ['data_id' => $data[0], 'visible' => $data[1], 
-                        'position' => $data[2], 'sub_position' => $data[3],
-                        'type' => $data[4], 'value' => $data[6],
-                        'text' => $data[7], 'description' => $data[8],
-                        'data_visible' => $data[5]];
-                }
-            }
-        }*/
         
         return $this->render('record-list', ['records' => $data_out]);
     }
