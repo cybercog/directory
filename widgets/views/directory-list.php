@@ -34,11 +34,6 @@ use app\modules\directory\directoryModule;
         </div>
     </div>
 </div>
-<?php } else { ?>
-<div class="directory-empty-directory-list">
-    <span>(<?=directoryModule::ht('search', 'no')?>)</span>
-</div>
-<?php } ?>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
@@ -58,3 +53,10 @@ use app\modules\directory\directoryModule;
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+
+<?php } else { ?>
+<div class="directory-empty-directory-list">
+    <span>(<?=directoryModule::ht('search', 'no')?>)</span>
+</div>
+<?php } ?>
+

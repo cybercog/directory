@@ -19,6 +19,7 @@ foreach ($directories as $directory) {
                 'timeout' => directoryModule::$SETTING['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false, 
+                'linkSelector' => '#recordsGridPjaxWidget a:not(.directory-data-file-download)',
                 'id' => 'recordsGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'recordsGridWidget',

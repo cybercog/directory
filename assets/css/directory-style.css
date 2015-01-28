@@ -509,15 +509,16 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     border: #4399ff dotted 1px;
     background-color: #ffff99;
     overflow: hidden;
-    padding: 5px;
+    /*margin: 5px;*/
+    padding: 2px;
 }
 
-.directory-no-empty-record-data .directory-no-empty-record-data-item {
+.directory-no-empty-record-data .directory-no-empty-record-data-item .directory-record-data-item {
     white-space: nowrap;
-}
-
-.directory-no-empty-record-data .directory-no-empty-record-data-item + div {
-    margin-left: 100px;
+    float: left;
+    padding: 2px 5px;
+    border: #4399ff dotted 1px;
+    margin: 2px;
 }
 
 .directory-no-empty-record-data-b1, 
@@ -526,11 +527,42 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     padding: 3px;
     border-radius: 3px;
     background-color: #e0e0ff;
-    border: #000 solid 1px;
+    border: #e0e0ff solid 1px;
     cursor: pointer;
 }
 
 .directory-no-empty-record-data-b1:hover, 
 .directory-no-empty-record-data-b2:hover {
+    border-color: red;
+}
+
+.directory-no-empty-record-data-b {
+    border-radius: 5px 5px 0 0;
+    border-color: red;
+    border-bottom-color: white;
     background-color: white;
 }
+
+.directory-no-empty-record-data-b-menu-substrate {
+    position: relative;
+}
+
+.directory-no-empty-record-data-b-menu-substrate .directory-no-empty-record-data-b-menu-border {
+    position: absolute;
+    height: 1px;
+    left: 1px;
+    right: 1px;
+    top: -1px;
+    bottom: 0;
+    background-color: white;
+    z-index: 100;
+}
+
+.directory-no-empty-record-data-b-menu-substrate .directory-no-empty-record-data-b-menu-content {
+    position: absolute;
+    border: red solid 1px;
+    background-color: white;
+    border-radius: 0 5px 5px 5px;
+    top: -1px;
+}
+
