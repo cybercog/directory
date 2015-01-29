@@ -188,7 +188,7 @@ Dialog::begin([
                         <img class="directory-hide-element" src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
                         <div class="directory-hide-element"></div>
                     </div>
-                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId'))?></div>
+                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId', $uid.'p4'))?></div>
                 </td>
                 <td>&nbsp;</td>
                 <td>
@@ -271,12 +271,12 @@ Dialog::begin([
                 ++counter;
                 var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
                 $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
-                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", ((dir.original_name === undefined) ? dir.name : dir.original_name)).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)));
-                tmpEl.find('input[type=hidden]').val(dir.id);
+                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", ((dir.original_name === undefined) ? dir.name : dir.original_name)).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)).replace("<?=$uid?>p4", dir.id));
+                //tmpEl.find('input[name=hidden]').val(dir.id);
                 $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
                 tmpEl.find(".directory-delete-directory").button({text : false});
                 var description = (dir.original_description === undefined) ? dir.description : dir.original_description;
-                if((description !== undefined) && (description.length > 0)) {
+                if((description === undefined) ? (description.length > 0) : false) {
                     tmpEl.find(".directory-label div").html(description);
                     tmpEl.find(".directory-label").tooltip( {
                         content : function() { return $(tmpEl).find(".directory-label div").html(); },
@@ -342,6 +342,9 @@ Dialog::begin([
                             })(p);
                             break;
                         case "edit":
+                            (function(p){
+                                
+                            })(p);
                             break;
                         default:
                             if(p.onError !== undefined) {

@@ -4,6 +4,7 @@ return [
     'Directory' => 'Справочник',
     'Search' => 'Поиск',
     'no' => 'нет',
+    'empty' => 'пусто',
     'Download' => 'Скачать',
     'processing request' => 'обработка запроса',
     'Request sent.\nWait!' => 'Запрос отправлен.\nДождитесь завершения!',

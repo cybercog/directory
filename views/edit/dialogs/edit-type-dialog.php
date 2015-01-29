@@ -213,9 +213,12 @@ Dialog::begin([
                                             {
                                                 text : "<?= directoryModule::ht('edit', 'Apply')?>",
                                                 click : function() {
+                                                    $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").removeAttr("disabled");
+                                                    var formData = $("#type-data-form<?=$uid?>").serialize();
+                                                    $("#type-data-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'type')?>']").attr("disabled", "disabled");
                                                     $.ajaxPostHelper({
                                                         url : ("<?=Url::toRoute(['/directory/edit/types', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.id),
-                                                        data : $("#type-data-form<?=$uid?>").serialize(),
+                                                        data : formData,
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
                                                         errorWaitTimeout: 5,

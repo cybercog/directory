@@ -83,7 +83,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
         /*$.ajaxPostHelper({
-            url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+            url : ("<?= Url::toRoute(['/directory/edit/records', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
                     $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
             data : "del",
             waitTag: "#waitQueryDataType",
@@ -94,7 +94,7 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
                     if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
                         if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
                             $.ajaxPostHelper({
-                                url : ("<?= Url::toRoute(['/directory/edit/types', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
+                                url : ("<?= Url::toRoute(['/directory/edit/records', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
                                         dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
                                 data : "del",
                                 waitTag: "#waitQueryDataType",

@@ -31,6 +31,7 @@ class RecordsSearch extends FilterModelBase {
         
         $query->andFilterWhere(['visible' => $this->visible]);
         $query->andFilterWhere(['like', 'directories_id', $this->directories]);
+        $query->andFilterWhere(['like', 'data_lower', mb_strtolower($this->value, 'UTF-8')]);
         
         $this->_dataProvider = new \yii\data\ActiveDataProvider([
                     'query' => $query, 
