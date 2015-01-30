@@ -10,6 +10,7 @@ use app\modules\directory\directoryModule;
         <div><?=count($directories)?></div>
         <div>&#9660;</div>
     </div>
+    <div class="row-data directory-hide-element directories-data"><?=json_encode($directories)?></div>
     <div class="directory-directory-list-items-parent">
         <div class="directory-directory-list-arrow"></div>
         <div class="directory-directory-list-arrow-background"></div>
@@ -23,7 +24,6 @@ use app\modules\directory\directoryModule;
                             <span><?=$directory['name']?></span>
                             <img <?php if(!isset($directory['description'])) { ?>class="directory-hide-element"<?php } ?> src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
                             <div class="directory-description-data directory-hide-element"><?=$directory['description']?></div>
-                            <div class="row-data directory-hide-element"><?=json_encode($directory)?></div>
                         </td>
                         <td class="my-visible" title="<?=directoryModule::ht('edit', 'Visibility catalog')?>"><?=dataGridCellViewHelper::getVisibleFlagString($directory['visible'])?></td>
                         <td class="my-visible" title="<?=directoryModule::ht('edit', 'Visibility directory entry')?>"><?=dataGridCellViewHelper::getVisibleFlagString($directory['record_visible'])?></td>

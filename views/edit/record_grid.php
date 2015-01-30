@@ -5,6 +5,7 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\db\Directories;
 use app\modules\directory\widgets\DirectoryList;
 use app\modules\directory\widgets\RecordList;
+use app\modules\directory\helpers\boolSaveHelper;
 
 $directories = Directories::find()->all();
 $directoriesFilter = [];
@@ -40,7 +41,8 @@ foreach ($directories as $directory) {
                                         'expandPropertiesDefault' => false,
                                         'expandProperiesCount' => true,
                                         'expandPopup' => true
-                                    ]);
+                                    ]).
+                                    '<div class="record-id directory-hide-element">'.json_encode(['id' => $data->id, 'visible' => boolSaveHelper::string2boolean($data->visible)])."</div>";
                         }
                     ],
                     [

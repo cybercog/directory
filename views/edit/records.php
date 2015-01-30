@@ -9,6 +9,7 @@ use app\modules\directory\widgets\SingletonRenderHelper;
 use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule::ht('edit', 'Records');
+$uid = mt_rand(0, mt_getrandmax());
 
 ?>
 
@@ -62,8 +63,28 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
     
     $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
     
-    $("#recordsGridPjaxWidget").on("click", ".directory-edit-type-button",
-        function() {
+    $("#recordsGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
+        var data = undefined;
+        var directories = undefined;
+        
+        try {
+            data = $.parseJSON($(this).closest("tr").find(".data-data").text());
+        } catch(e) { 
+        }
+        try {
+            directories = $.parseJSON($(this).closest("tr").find(".directories-data").text());
+        } catch(e) { 
+        }
+        
+        $.editRecordDialog({
+            type : "edit",
+            data : {
+                record : $.parseJSON($(this).closest("tr").find(".record-id").text()),
+                data : data,
+                directories : directories
+            },
+            onSuccess : function() { $("#updateRecordTable").click(); }
+        });
     });
     
     $("#recordsGridPjaxWidget").on("pjax:start", function() {
@@ -82,35 +103,17 @@ $this->title = directoryModule::ht('search', 'Directory').' - '.directoryModule:
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
-        /*$.ajaxPostHelper({
+        $.ajaxPostHelper({
             url : ("<?= Url::toRoute(['/directory/edit/records', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
-                    $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
+                    $(this).closest("tr").find(".record-id").text()),
             data : "del",
-            waitTag: "#waitQueryDataType",
-            errorTag: "#errorQueryDataType",
+            waitTag: "#waitQueryRecord",
+            errorTag: "#errorQueryRecord",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
-                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
-                        if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
-                            $.ajaxPostHelper({
-                                url : ("<?= Url::toRoute(['/directory/edit/records', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
-                                        dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
-                                data : "del",
-                                waitTag: "#waitQueryDataType",
-                                errorTag: "#errorQueryDataType",
-                                errorWaitTimeout: 5,
-                                onSuccess: function(dataObject) { 
-                                    $("#updateTypesTable").click();
-                                }
-                            });
-                        }
-                    }
-                } else {
-                    $("#updateTypesTable").click();
-                }
+                $("#updateRecordTable").click();
             }
-        });*/
+        });
     });
 
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>

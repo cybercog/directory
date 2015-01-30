@@ -61,8 +61,8 @@ class DataForm extends Model {
     
     public function rules() {
         return [
-            ['value', 'string', 'min' => 3, 'max' => 255],
-            ['text', 'string', 'min' => 3],
+            ['value', 'string', 'min' => 1, 'max' => 255],
+            ['text', 'string', 'min' => 1],
             [['description', 'keywords'], 'safe'],
             [['value', 'text', 'typeId'], 'required'],
             ['visible', 'boolean'],

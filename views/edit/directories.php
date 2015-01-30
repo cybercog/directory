@@ -97,7 +97,7 @@ $uid = mt_rand(0, mt_getrandmax());
             errorTag: "#errorQueryDirectories",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
+                /*if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
                     if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
                         if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
                             $.ajaxPostHelper({
@@ -115,7 +115,8 @@ $uid = mt_rand(0, mt_getrandmax());
                     }
                 } else {
                     $("#updateDirectoriesTable").click();
-                }
+                }*/
+                $("#updateDirectoriesTable").click();
             }
         });
     });

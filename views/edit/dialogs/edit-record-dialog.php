@@ -188,7 +188,7 @@ Dialog::begin([
                         <img class="directory-hide-element" src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
                         <div class="directory-hide-element"></div>
                     </div>
-                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId', $uid.'p4'))?></div>
+                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId'), $uid.'p4')?></div>
                 </td>
                 <td>&nbsp;</td>
                 <td>
@@ -343,7 +343,35 @@ Dialog::begin([
                             break;
                         case "edit":
                             (function(p){
-                                
+                                $("#editRecordDialog<?=$uid?>").
+                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit record')?>").
+                                        dialog("option", "buttons", 
+                                                        [
+                                                            {
+                                                                text : "<?= directoryModule::ht('edit', 'Apply')?>",
+                                                                click : function() { 
+                                                                    /*$.ajaxPostHelper({
+                                                                        url : ("<?=Url::toRoute(['/directory/edit/records', 'cmd' => 'create'])?>"),
+                                                                        data : $("#record-form<?=$uid?>").serialize(),
+                                                                        waitTag : "#editRecordDialog<?=$uid?> #waitDlgQuery",
+                                                                        errorTag : "#editRecordDialog<?=$uid?> #errorDlgQuery",
+                                                                        errorWaitTimeout : 5,
+                                                                        onSuccess : function() { 
+                                                                            $("#editRecordDialog<?=$uid?>").dialog("close");
+                                                                            if(p.onSuccess !== undefined) {
+                                                                                p.onSuccess();
+                                                                            }
+                                                                        }
+                                                                    });*/
+                                                                }
+                                                            },
+                                                            {
+                                                                text : "<?= directoryModule::ht('edit', 'Close')?>",
+                                                                click : function() { $("#editRecordDialog<?=$uid?>").dialog("close"); }
+                                                            }
+                                                        ]
+                                        ).
+                                        dialog("open");
                             })(p);
                             break;
                         default:

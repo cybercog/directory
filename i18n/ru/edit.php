@@ -64,4 +64,5 @@ return [
     'This type of data does not exist' => 'Указанный тип данных не существует',
     'Visibility catalog' => 'Видимость каталога',
     'Visibility directory entry' => 'Видимость записи в каталоге',
+    'Edit record' => 'Редактировать запись',
 ];

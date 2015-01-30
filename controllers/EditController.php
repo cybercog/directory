@@ -136,7 +136,7 @@ class EditController extends Controller {
     }
     
     public function actionData() {
-        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
+        if($cmd = \Yii::$app->request->get('cmd', false)) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
             switch ($cmd) {
@@ -475,7 +475,17 @@ class EditController extends Controller {
                     }
                     break;
                 case 'delete':
-                    break;
+                    if(\Yii::$app->request->get('id', false)) {
+                        try {
+                            Records::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                        } catch (\Exception $ex) {
+                            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                        }
+                    } else {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
+                    }
+                    return ajaxJSONResponseHelper::createResponse(true);
                 default:
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }
@@ -546,20 +556,7 @@ class EditController extends Controller {
                 case 'delete':
                     if(\Yii::$app->request->get('id', false)) {
                         try {
-                            if(\Yii::$app->request->get('confirm', 'no') == 'yes') {
-                                Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
-                            } else {// не сформированы --- добавить позже
-                                /*$dataCount = Data::find()->where('type_id=:id', 
-                                                [':id' => \Yii::$app->request->get('id')])->with('type')->count();
-                                if($dataCount > 0) {
-                                    return ajaxJSONResponseHelper::createResponse(true, 'query', 
-                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
-                                                'id' => \Yii::$app->request->get('id', false)]);
-                                } else {
-                                    Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
-                                }*/
-                                Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
-                            }
+                            Directories::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
                         } catch (\Exception $ex) {
                             return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                         }
