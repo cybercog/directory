@@ -16,9 +16,10 @@ use app\modules\directory\directoryModule;
                 <div class="directory-no-empty-record-data-b-menu-border directory-hide-element"></div>
                 <div class="directory-no-empty-record-data-b-menu-content directory-hide-element">
                     <table class="directory-modal-table directory-data-record-list">
-                    <?php foreach ($records as $record1layer) : 
+                    <?php foreach ($records as $recordKey => $record1layer) : 
                         $keys = array_keys($record1layer); 
-                             for ($i = 0; $i < count($keys); ++$i) : ?>
+                             for ($i = 0; $i < count($keys); ++$i) : 
+                                 $records[$recordKey][$keys[$i]]['html'] = dataGridCellViewHelper::getValueDataString($record1layer[$keys[$i]]['type'], $record1layer[$keys[$i]]['value'], $record1layer[$keys[$i]]['text']);?>
                         <tr>
                             <td class="directory-min-width">
                                 <span><?=$record1layer[$keys[$i]]['type_name']?></span>
@@ -49,7 +50,7 @@ use app\modules\directory\directoryModule;
                             <?php for ($i = 0; $i < count($keys); ++$i) : ?>
                                 <td class="directory-min-width">
                                     <div class="directory-record-data-item">
-                                    <?= dataGridCellViewHelper::getValueDataString($record1layer[$keys[$i]]['type'], $record1layer[$keys[$i]]['value'], $record1layer[$keys[$i]]['text']);?>
+                                    <?=dataGridCellViewHelper::getValueDataString($record1layer[$keys[$i]]['type'], $record1layer[$keys[$i]]['value'], $record1layer[$keys[$i]]['text']);?>
                                     </div>
                                 </td>
                             <?php endfor; ?>
@@ -65,7 +66,10 @@ use app\modules\directory\directoryModule;
         </td>
         <td>
             <div class="directory-no-empty-record-data">
-                <div class="directory-hide-element data-data"><?=  json_encode($records)?></div>
+                <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
+                    //var hh<?=  mt_rand(0, mt_getrandmax())?> = '<?=json_encode($records)?>';
+                <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
+                <div class="directory-hide-element data-data"><?=json_encode($records)?></div>
                 <div class="directory-no-empty-record-data-item">
         <?php 
             reset($records);

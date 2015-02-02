@@ -11,7 +11,7 @@ use app\modules\directory\directoryModule;
         <div>&#9660;</div>
     </div>
     <div class="row-data directory-hide-element directories-data"><?=json_encode($directories)?></div>
-    <div class="directory-directory-list-items-parent">
+    <div class="directory-directory-list-items-parent directory-hide-element">
         <div class="directory-directory-list-arrow"></div>
         <div class="directory-directory-list-arrow-background"></div>
         <div class="directory-directory-list-arrow-substrate"></div>
@@ -45,10 +45,16 @@ use app\modules\directory\directoryModule;
     
     $(".directory-directory-list .directory-directory-list-count").click(function() {
         $(".directory-directory-list .directory-directory-list-count").removeClass("directory-directory-list-count-down");
-        $(this).addClass("directory-directory-list-count-down");
-        $(document).one("click", function() { 
-            $(".directory-directory-list .directory-directory-list-count").removeClass("directory-directory-list-count-down");
-        });
+        $(".directory-directory-list .directory-directory-list-items-parent").addClass("directory-hide-element");
+        $(this).addClass("directory-directory-list-count-down").closest(".directory-directory-list").find(".directory-directory-list-items-parent").removeClass("directory-hide-element");
+        var oneClickHandler = function(eventObject) {
+            if($(eventObject.target).closest(".directory-directory-list-items-parent").length === 0) {
+                $(".directory-directory-list .directory-directory-list-count").removeClass("directory-directory-list-count-down");
+                $(".directory-directory-list .directory-directory-list-items-parent").addClass("directory-hide-element");
+                $(document).off('click', oneClickHandler);
+            }
+        };
+        $(document).on("click", oneClickHandler);
         return false;
     });
     

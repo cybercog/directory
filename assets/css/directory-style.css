@@ -441,7 +441,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     left: 15px;
     top: -15px;
     z-index: 99;
-    display: none;
+    /*display: none;*/
 }
 .directory-directory-list-items-parent .directory-directory-list-arrow-substrate {
     position: absolute;
@@ -450,7 +450,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     top: -3px;
     z-index: 99;
     height: 15px;
-    display: none;
+    /*display: none;*/
 }
 .directory-directory-list-items-parent .directory-directory-list-arrow-background {
     position: absolute;
@@ -459,7 +459,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     left: 16px;
     top: -13px;
     z-index: 100;
-    display: none;
+    /*display: none;*/
 }
 
 .directory-directory-list-items-parent .directory-directory-list-items {
@@ -470,7 +470,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
     border: red solid 1px;
     border-radius: 5px;
     padding: 5px;
-    display: none;
+    /*display: none;*/
     z-index: 99;
 }
 

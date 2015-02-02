@@ -97,25 +97,6 @@ $uid = mt_rand(0, mt_getrandmax());
             errorTag: "#errorQueryDirectories",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                /*if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
-                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> == "query") {
-                        if(confirm(dataObject.<?=ajaxJSONResponseHelper::additionalField?>.message)) {
-                            $.ajaxPostHelper({
-                                url : ("<?= Url::toRoute(['/directory/edit/directories', 'cmd' => 'delete', 'confirm' => 'yes', 'id' => $uid])?>").replace("<?=$uid?>", 
-                                        dataObject.<?=ajaxJSONResponseHelper::additionalField?>.id),
-                                data : "del",
-                                waitTag: "#waitQueryDirectories",
-                                errorTag: "#errorQueryDirectories",
-                                errorWaitTimeout: 5,
-                                onSuccess: function(dataObject) { 
-                                    $("#updateDirectoriesTable").click();
-                                }
-                            });
-                        }
-                    }
-                } else {
-                    $("#updateDirectoriesTable").click();
-                }*/
                 $("#updateDirectoriesTable").click();
             }
         });
