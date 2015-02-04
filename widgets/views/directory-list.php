@@ -10,7 +10,7 @@ use app\modules\directory\directoryModule;
         <div><?=count($directories)?></div>
         <div>&#9660;</div>
     </div>
-    <div class="row-data directory-hide-element directories-data"><?=json_encode($directories)?></div>
+    <textarea class="row-data directory-hide-element directories-data"><?=\yii\helpers\Json::encode($directories)?></textarea>
     <div class="directory-directory-list-items-parent directory-hide-element">
         <div class="directory-directory-list-arrow"></div>
         <div class="directory-directory-list-arrow-background"></div>

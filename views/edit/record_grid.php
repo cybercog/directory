@@ -42,7 +42,10 @@ foreach ($directories as $directory) {
                                         'expandProperiesCount' => true,
                                         'expandPopup' => true
                                     ]).
-                                    '<div class="record-id directory-hide-element">'.json_encode(['id' => $data->id, 'visible' => boolSaveHelper::string2boolean($data->visible)])."</div>";
+                                    '<textarea class="record-id directory-hide-element">'.
+                                    \yii\helpers\Json::encode(
+                                            ['id' => $data->id, 
+                                                'visible' => boolSaveHelper::string2boolean($data->visible)])."</textarea>";
                         }
                     ],
                     [

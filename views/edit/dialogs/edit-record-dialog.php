@@ -300,13 +300,20 @@ Dialog::begin([
                     $(this).closest(".directory-directory-item").remove();
         });
         
+        $("#editRecordDialog<?=$uid?>").dialog(
+            {
+                open : function(event, ui) {
+                    $("#record-form<?=$uid?> #dataArray table tbody").html("");
+                    $("#record-form<?=$uid?> #directory-record-list").html("");
+                }
+            }
+        );
+        
         $.editRecordDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
                     $("#data-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
                     $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
-                    $("#record-form<?=$uid?> #dataArray table tbody").html("");
-                    $("#record-form<?=$uid?> #directory-record-list").html("");
                     switch(p.type) {
                         case "new":
                             (function(p) {
@@ -343,6 +350,16 @@ Dialog::begin([
                             break;
                         case "edit":
                             (function(p){
+                                $("#record-form<?=$uid?>").trigger('reset');
+                                //id в параметрах запроса
+                                $("#record-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.record.visible);
+                                if(p.data.data !== undefined) {
+                                    alert("data");
+                                }
+                                if(p.data.directories !== undefined) {
+                                    alert("directories");
+                                }
+                            
                                 $("#editRecordDialog<?=$uid?>").
                                         dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit record')?>").
                                         dialog("option", "buttons", 

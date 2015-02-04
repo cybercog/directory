@@ -2,11 +2,10 @@
 use yii\web\View;
 use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\directoryModule;
+
+
 ?>
-
-
-    
-                
+               
 <?php if(count($records) > 0) : ?>
 <table class="directory-modal-table">
     <tr>
@@ -66,10 +65,7 @@ use app\modules\directory\directoryModule;
         </td>
         <td>
             <div class="directory-no-empty-record-data">
-                <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
-                    //var hh<?=  mt_rand(0, mt_getrandmax())?> = '<?=json_encode($records)?>';
-                <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
-                <div class="directory-hide-element data-data"><?=json_encode($records)?></div>
+                <textarea class="directory-hide-element data-data"><?=\yii\helpers\Json::encode($records)?></textarea>
                 <div class="directory-no-empty-record-data-item">
         <?php 
             reset($records);
@@ -96,8 +92,7 @@ use app\modules\directory\directoryModule;
                 closest("td").find(".directory-no-empty-record-data-b-menu-content, .directory-no-empty-record-data-b-menu-border").
                 removeClass("directory-hide-element");
         var oneClickHandler = function(eventObject) {
-            if(//!$(eventObject.target).hasClass("directory-no-empty-record-data-b-menu-content") || 
-                    ($(eventObject.target).closest(".directory-no-empty-record-data-b-menu-content").length === 0)) {
+            if($(eventObject.target).closest(".directory-no-empty-record-data-b-menu-content").length === 0) {
                 $(".directory-no-empty-record-data-b1").removeClass("directory-no-empty-record-data-b");
                 $(".directory-no-empty-record-data-b-menu-content, .directory-no-empty-record-data-b-menu-border").addClass("directory-hide-element");
                 $(document).off('click', oneClickHandler);
@@ -119,8 +114,7 @@ use app\modules\directory\directoryModule;
                 closest("td").find(".directory-no-empty-record-data-b-menu-content, .directory-no-empty-record-data-b-menu-border").
                 removeClass("directory-hide-element");
         var oneClickHandler = function(eventObject) {
-            if(//!$(eventObject.target).hasClass("directory-no-empty-record-data-b-menu-content") || 
-                    ($(eventObject.target).closest(".directory-no-empty-record-data-b-menu-content").length === 0)) {
+            if($(eventObject.target).closest(".directory-no-empty-record-data-b-menu-content").length === 0) {
                 $(".directory-no-empty-record-data-b2").removeClass("directory-no-empty-record-data-b").html("&plus;");
                 $(".directory-no-empty-record-data-b-menu-content, .directory-no-empty-record-data-b-menu-border").addClass("directory-hide-element");
                 $(document).off('click', oneClickHandler);
