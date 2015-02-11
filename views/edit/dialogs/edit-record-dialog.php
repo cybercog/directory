@@ -354,10 +354,32 @@ Dialog::begin([
                                 //id в параметрах запроса
                                 $("#record-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.record.visible);
                                 if(p.data.data !== undefined) {
-                                    alert("data");
+                                    for (var i = 0; i < p.data.data.length; i++) {
+                                        if(i in p.data.data) {
+                                            addDataToTable(p.data.data[i]);
+                                        }
+                                    }
                                 }
+                                /*
+
+CREATE VIEW directories_tolower_v AS
+SELECT d.id AS id,
+    lower(d.name) AS name,
+    d.name AS original_name,
+    lower(d.description) AS description,
+    d.description AS original_description,
+    d.visible AS visible
+FROM directories_t d;
+                                      */
                                 if(p.data.directories !== undefined) {
-                                    alert("directories");
+                                    for (var i = 0; i < p.data.directories.length; i++) {
+                                        if(i in p.data.directories) {
+                                            AddRecordToDirectory(
+                                                    {
+                                                        id: p.data.directories[i].data_id
+                                                    });
+                                        }
+                                    }
                                 }
                             
                                 $("#editRecordDialog<?=$uid?>").

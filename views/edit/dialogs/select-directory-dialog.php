@@ -79,7 +79,6 @@ Dialog::begin([
                     var p = $("#selectDirectoryDialog<?=$uid?>").data("<?=$uid?>");
                     if((p !== undefined) && (p.onSuccess !== undefined)) {
                         var dir = $.parseJSON($(this).closest("tr").find("td .directory-row-data").text());
-                        //type.typeDiaplay = $(this).closest("tr").find("td:eq(1)").text();
                         p.onSuccess(dir);
                     }
         });
