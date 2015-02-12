@@ -24,7 +24,7 @@ AppAsset::register($this);
 <body class="directory-layout directory-base-font">
 <?php $this->beginBody() ?>
 
-
+    
     <?php if(false) { ?><style><?php } ob_start(); ?>
         .directory-search-button-icon {
             background: url(<?= directoryModule::getPublishImage('/search-button-icon.png'); ?>) no-repeat;

@@ -430,41 +430,54 @@ class EditController extends Controller {
                             }
                             
                             $result = $newRecord->attributes;
-                            $result['items'] = [];
-                            $result['directories'] = [];
-                            
-                            foreach ($recordFormItems as $recordItem) {
-                                $newLinkData = new RecordsData;
-                                $newLinkData->record_id = $newRecord->id;
-                                $newLinkData->data_id = $recordItem->dataId;
-                                $newLinkData->visible = boolSaveHelper::boolean2string((boolean)$recordItem->visible);
-                                $newLinkData->position = $recordItem->position;
-                                $newLinkData->sub_position = $recordItem->subPosition;
-                                
-                                if(!$newLinkData->save()) {
-                                    return ajaxJSONResponseHelper::createResponse(false, 
-                                            directoryModule::ht('edit', 'Error saving record element in the database.'));
-                                }
-                                
-                                $result['items'][] = $newLinkData->attributes;
-                            }
-                            
-                            foreach ($directoriesFormItems as $directoriesFormItem) {
-                                $newLinkDirectory = new RecordsDirectory;
-                                $newLinkDirectory->record_id = $newRecord->id;
-                                $newLinkDirectory->directory_id = $directoriesFormItem->directoryId;
-                                $newLinkDirectory->visible = boolSaveHelper::boolean2string((boolean)$directoriesFormItem->visible);
-                                
-                                if(!$newLinkDirectory->save()) {
-                                    return ajaxJSONResponseHelper::createResponse(false, 
-                                            directoryModule::ht('edit', 'Error saving directory element in the database.'));
-                                }
-                                
-                                $result['directories'][] = $newLinkDirectory->attributes;
-                            }
                             
                         } else {
+                            if(\Yii::$app->request->get('id', false)) {
+                                Records::updateAll(['visible' => boolSaveHelper::boolean2string((boolean)$recordForm->visible)], 
+                                        'id=:id', [':id' => \Yii::$app->request->get('id')]);
+                                
+                                $result['id'] = \Yii::$app->request->get('id');
+                                $result['visible'] = \Yii::$app->request->get('id');
+                                
+                                RecordsData::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
+                                RecordsDirectory::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
+                            } else {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
+                            }
+                        }
 
+                        $result['items'] = [];
+                        $result['directories'] = [];
+                        
+                        foreach ($recordFormItems as $recordItem) {
+                            $newLinkData = new RecordsData;
+                            $newLinkData->record_id = $result['id'];
+                            $newLinkData->data_id = $recordItem->dataId;
+                            $newLinkData->visible = boolSaveHelper::boolean2string((boolean)$recordItem->visible);
+                            $newLinkData->position = $recordItem->position;
+                            $newLinkData->sub_position = $recordItem->subPosition;
+                            
+                            if(!$newLinkData->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving record element in the database.'));
+                            }
+                            
+                            $result['items'][] = $newLinkData->attributes;
+                        }
+                        
+                        foreach ($directoriesFormItems as $directoriesFormItem) {
+                            $newLinkDirectory = new RecordsDirectory;
+                            $newLinkDirectory->record_id = $result['id'];
+                            $newLinkDirectory->directory_id = $directoriesFormItem->directoryId;
+                            $newLinkDirectory->visible = boolSaveHelper::boolean2string((boolean)$directoriesFormItem->visible);
+                            
+                            if(!$newLinkDirectory->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving directory element in the database.'));
+                            }
+                            
+                            $result['directories'][] = $newLinkDirectory->attributes;
                         }
                         
                         $transaction->commit();

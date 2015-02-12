@@ -68,11 +68,12 @@ $uid = mt_rand(0, mt_getrandmax());
         var directories = undefined;
         
         try {
-            data = $.parseJSON($(this).closest("tr").find(".data-data").text())[0];
+            //alert($(this).closest("tr").find(".data-data").text());
+            data = $.parseJSON($(this).closest("tr").find(".data-data").text());
         } catch(e) { 
         }
         try {
-            directories = $.parseJSON($(this).closest("tr").find(".directories-data").text())[0];
+            directories = $.parseJSON($(this).closest("tr").find(".directories-data").text());
         } catch(e) { 
         }
         

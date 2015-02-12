@@ -14,6 +14,7 @@ class RecordList extends Widget {
     public function run() {
         $data = \app\modules\directory\helpers\dbStringParser::ParseStringL2($this->Records);
         $data_out = [];
+        $flat_data_out = [];
         
         if($data) {
             foreach ($data as $item) {
@@ -22,6 +23,7 @@ class RecordList extends Widget {
                         'type' => $item[4], 'value' => $item[6],
                         'text' => $item[7], 'description' => $item[8],
                         'data_visible' => $item[5], 'type_name' => $item[9], 'type_description' => $item[10]];
+                $flat_data_out[] = $new_item;
                 
                 if(isset($data_out[$new_item['position']])) {
                     if(isset($data_out[$new_item['position']][$new_item['sub_position']])) {
@@ -42,6 +44,6 @@ class RecordList extends Widget {
             }
         }
         
-        return $this->render('record-list', ['records' => $data_out]);
+        return $this->render('record-list', ['records' => $data_out, 'flat_records' => $flat_data_out]);
     }
 }

@@ -276,7 +276,7 @@ Dialog::begin([
                 $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
                 tmpEl.find(".directory-delete-directory").button({text : false});
                 var description = (dir.original_description === undefined) ? dir.description : dir.original_description;
-                if((description === undefined) ? (description.length > 0) : false) {
+                if((description !== undefined) ? (description.length > 0) : false) {
                     tmpEl.find(".directory-label div").html(description);
                     tmpEl.find(".directory-label").tooltip( {
                         content : function() { return $(tmpEl).find(".directory-label div").html(); },
@@ -300,15 +300,6 @@ Dialog::begin([
                     $(this).closest(".directory-directory-item").remove();
         });
         
-        $("#editRecordDialog<?=$uid?>").dialog(
-            {
-                open : function(event, ui) {
-                    $("#record-form<?=$uid?> #dataArray table tbody").html("");
-                    $("#record-form<?=$uid?> #directory-record-list").html("");
-                }
-            }
-        );
-        
         $.editRecordDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
@@ -317,6 +308,8 @@ Dialog::begin([
                     switch(p.type) {
                         case "new":
                             (function(p) {
+                                $("#record-form<?=$uid?> #dataArray table tbody").html("");
+                                $("#record-form<?=$uid?> #directory-record-list").html("");
                                 $("#editRecordDialog<?=$uid?>").
                                         dialog("option", "title", "<?= directoryModule::ht('edit', 'Create a new item')?>").
                                         dialog("option", "buttons", 
@@ -330,10 +323,10 @@ Dialog::begin([
                                                                         waitTag : "#editRecordDialog<?=$uid?> #waitDlgQuery",
                                                                         errorTag : "#editRecordDialog<?=$uid?> #errorDlgQuery",
                                                                         errorWaitTimeout : 5,
-                                                                        onSuccess : function() { 
+                                                                        onSuccess : function(dataObject) { 
                                                                             $("#editRecordDialog<?=$uid?>").dialog("close");
                                                                             if(p.onSuccess !== undefined) {
-                                                                                p.onSuccess();
+                                                                                p.onSuccess(dataObject);
                                                                             }
                                                                         }
                                                                     });
@@ -350,35 +343,26 @@ Dialog::begin([
                             break;
                         case "edit":
                             (function(p){
+                                $("#record-form<?=$uid?> #dataArray table tbody").html("");
+                                $("#record-form<?=$uid?> #directory-record-list").html("");
                                 $("#record-form<?=$uid?>").trigger('reset');
                                 //id в параметрах запроса
                                 $("#record-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.record.visible);
                                 if(p.data.data !== undefined) {
-                                    for (var i = 0; i < p.data.data.length; i++) {
-                                        if(i in p.data.data) {
-                                            addDataToTable(p.data.data[i]);
-                                        }
+                                    for(var i in p.data.data) {
+                                        p.data.data[i]["valueDisplay"] = p.data.data[i].html;
+                                        p.data.data[i].id = p.data.data[i].data_id;
+                                        addDataToTable(p.data.data[i]);
                                     }
                                 }
-                                /*
-
-CREATE VIEW directories_tolower_v AS
-SELECT d.id AS id,
-    lower(d.name) AS name,
-    d.name AS original_name,
-    lower(d.description) AS description,
-    d.description AS original_description,
-    d.visible AS visible
-FROM directories_t d;
-                                      */
                                 if(p.data.directories !== undefined) {
-                                    for (var i = 0; i < p.data.directories.length; i++) {
-                                        if(i in p.data.directories) {
-                                            AddRecordToDirectory(
-                                                    {
-                                                        id: p.data.directories[i].data_id
-                                                    });
-                                        }
+                                    for(var i in p.data.directories) {
+                                        AddRecordToDirectory(
+                                                {
+                                                    id : p.data.directories[i].id,
+                                                    original_name : p.data.directories[i].name,
+                                                    visible : p.data.directories[i].visible
+                                                });
                                     }
                                 }
                             
@@ -389,19 +373,19 @@ FROM directories_t d;
                                                             {
                                                                 text : "<?= directoryModule::ht('edit', 'Apply')?>",
                                                                 click : function() { 
-                                                                    /*$.ajaxPostHelper({
-                                                                        url : ("<?=Url::toRoute(['/directory/edit/records', 'cmd' => 'create'])?>"),
+                                                                    $.ajaxPostHelper({
+                                                                        url : ("<?=Url::toRoute(['/directory/edit/records', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.record.id),
                                                                         data : $("#record-form<?=$uid?>").serialize(),
                                                                         waitTag : "#editRecordDialog<?=$uid?> #waitDlgQuery",
                                                                         errorTag : "#editRecordDialog<?=$uid?> #errorDlgQuery",
                                                                         errorWaitTimeout : 5,
-                                                                        onSuccess : function() { 
+                                                                        onSuccess : function(dataObject) { 
                                                                             $("#editRecordDialog<?=$uid?>").dialog("close");
                                                                             if(p.onSuccess !== undefined) {
-                                                                                p.onSuccess();
+                                                                                p.onSuccess(dataObject);
                                                                             }
                                                                         }
-                                                                    });*/
+                                                                    });
                                                                 }
                                                             },
                                                             {
