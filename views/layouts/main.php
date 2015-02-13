@@ -148,10 +148,11 @@ AppAsset::register($this);
                                                 </nobr>
                                             </div>
                                         </td>
-                                        <td class="directory-min-width<?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchies') ? ' directory-panel-item-cell-selected': ''?>">
-                                            <div class="directory-edit-panel-item <?= (\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchies') ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
+                                        <td class="directory-min-width<?= ((\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchies') || (\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchy')) ? ' directory-panel-item-cell-selected': ''?>">
+                                            <div class="directory-edit-panel-item <?= ((\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchies') || (\Yii::$app->controller->action->uniqueId == 'directory/edit/hierarchy')) ? 'directory-nav-panel-item-button-selected': 'directory-edit-panel-item-button'?>">
                                                 <nobr>
-                                                    <?php if(\Yii::$app->controller->action->uniqueId != 'directory/edit/hierarchies') { ?>
+                                                    <?php if((\Yii::$app->controller->action->uniqueId != 'directory/edit/hierarchies')
+                                                            && (\Yii::$app->controller->action->uniqueId != 'directory/edit/hierarchy')) { ?>
                                                     <a href="<?= Url::toRoute(['/directory/edit/hierarchies'])?>">
                                                         <span class="directory-hierarchy-edit-button-icon"><?=directoryModule::ht('edit', 'Hierarhies')?></span>
                                                     </a>

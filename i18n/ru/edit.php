@@ -3,6 +3,7 @@
 return [
     'Types' => 'Типы',
     'Hierarhies' => 'Иерархии',
+    'Hierarhy' => 'Иерархия',
     'Statistic' => 'Статистика',
     'string' => 'строка',
     'text' => 'текст',

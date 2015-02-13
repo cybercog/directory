@@ -604,6 +604,15 @@ class EditController extends Controller {
     public function actionHierarchies() {
         return $this->render('hierarchies');
     }
+    
+    public function actionHierarchy() {
+        if(!\Yii::$app->request->get('name', false)) {
+            $this->redirect(\yii\helpers\Url::toRoute('/directory/edit/hierarchies'));
+            return false;
+        }
+        
+        return $this->render('hierarchy');
+    }
 
     public function actionStatistic() {
         return $this->render('statistic');
