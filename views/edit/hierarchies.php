@@ -16,7 +16,7 @@ $uid = mt_rand(0, mt_getrandmax());
     ['name' => '/helpers/publish-result-css'],
     ['name' => '/helpers/publish-types-css'],
     //['name' => '/helpers/ajax-widget-reload-helper'],
-    ['name' => '/edit/dialogs/edit-directory-dialog']
+    ['name' => '/edit/dialogs/edit-hierarchy-dialog']
     ]]) ?>
 
 
@@ -40,6 +40,15 @@ $uid = mt_rand(0, mt_getrandmax());
     ]) ?>
 
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
+    
+    $("#createNewHierarchy").button({text : false}).click(function() {
+        $.editHierachyDialog({type:"new"});
+    });
+
+    $("#updateHierarchiesTable").button({text : false}).click(function() {
+        
+    });
+    
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 
 <table class="directory-modal-table directory-stretch-bar">
@@ -49,7 +58,7 @@ $uid = mt_rand(0, mt_getrandmax());
                 <table class="directory-modal-table directory-stretch-bar">
                     <tr>
                         <td class="directory-min-width">
-                            <button id="createNewDirectory">
+                            <button id="createNewHierarchy">
                                 <nobr>
                                     <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
                                 </nobr>
@@ -57,7 +66,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         </td>
                         <td class="directory-min-width">&nbsp;</td>
                         <td class="directory-min-width">
-                            <button id="updateDirectoriesTable">
+                            <button id="updateHierarchiesTable">
                                 <nobr>
                                     <span class="directory-update-button-icon"><?= directoryModule::ht('edit', 'Update table')?></span>
                                 </nobr>
@@ -65,14 +74,14 @@ $uid = mt_rand(0, mt_getrandmax());
                         </td>
                         <td>&nbsp;</td>
                         <td class="directory-min-width">
-                            <span id="waitQueryDirectories" class="directory-hide-element">
+                            <span id="waitQueryHierarchies" class="directory-hide-element">
                                 <nobr>
                                     <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                                     <span><?= directoryModule::ht('search', 'processing request')?></span>
                                 </nobr>
                             </span>
-                            <div id="errorQueryDirectories" class="directory-error-msg directory-hide-element"></div>
-                            <div id="okQueryDirectories" class="directory-ok-msg directory-hide-element"></div>
+                            <div id="errorQueryHierarchies" class="directory-error-msg directory-hide-element"></div>
+                            <div id="okQueryHierarchies" class="directory-ok-msg directory-hide-element"></div>
                         </td>
                     </tr>
                 </table>

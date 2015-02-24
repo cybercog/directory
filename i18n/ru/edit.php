@@ -66,4 +66,5 @@ return [
     'Visibility catalog' => 'Видимость каталога',
     'Visibility directory entry' => 'Видимость записи в каталоге',
     'Edit record' => 'Редактировать запись',
+    'Create new hierarchy'=> 'Создать новую иерархию',
 ];
