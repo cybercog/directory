@@ -187,6 +187,27 @@ CREATE INDEX hierarhies_directory_t_record_id_index ON hierarhies_directory_t (h
 CREATE INDEX hierarhies_directory_t_directory_id_index ON hierarhies_directory_t (directory_id);
 CREATE INDEX hierarhies_directory_t_visible_index ON hierarhies_directory_t (visible);
 
+CREATE VIEW hierarchies_tolower_v AS
+SELECT h1.id AS id,
+    h1.name AS name,
+    lower(h1.name) AS original_name,
+    h1.description AS description,
+    lower(h1.description) AS original_description,
+    h1.visible AS visible,
+    array_to_string(array(
+                            SELECT concat_ws(chr(3), hd2.directory_id, chr(7), hd2.visible, chr(7), d2.visible, chr(7), d2.name, chr(7), d2.description) AS d_info
+                            FROM hierarhies_directory_t hd2 
+                                INNER JOIN directories_t d2 ON d2.id=hd2.directory_id
+                            WHERE hd2.hierarhy_id=h1.id
+                    ), chr(4)) AS directories,
+    array_to_string(array(
+                            SELECT hd4.directory_id AS d_info
+                            FROM hierarhies_directory_t hd4 
+                            WHERE hd4.hierarhy_id=h1.id
+                    ), ':') AS directories_id
+FROM hierarhies_t h1;
+
+
 CREATE SEQUENCE branches_t_id_counter CYCLE;
 CREATE TABLE branches_t
 (

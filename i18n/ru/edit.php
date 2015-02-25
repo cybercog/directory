@@ -2,6 +2,7 @@
 
 return [
     'Types' => 'Типы',
+    'Title' => 'Название',
     'Hierarhies' => 'Иерархии',
     'Hierarhy' => 'Иерархия',
     'Statistic' => 'Статистика',

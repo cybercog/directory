@@ -13,11 +13,14 @@ use app\modules\directory\helpers\ajaxJSONResponseHelper;
 $uid = mt_rand(0, mt_getrandmax());
 
 $formModel = new \app\modules\directory\models\forms\HierarchyForm();
+$formDirectoryItemModel = new \app\modules\directory\models\forms\DirectoryItemForm;
 
 ?>
 
 <?= SingletonRenderHelper::widget(['viewsRequire' => [
-    ['name' => '/helpers/ajax-post-helper']
+    ['name' => '/helpers/ajax-post-helper'],
+    ['name' => '/edit/dialogs/select-directory-dialog'],
+    ['name' => '/edit/dialogs/edit-directory-dialog']
     ]]) ?>
 
 <div class="directory-hide-element">
@@ -83,6 +86,36 @@ Dialog::begin([
                 </div>
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <div class="directory-record-data-list">
+                    <span class="diretory-record-label"><?= directoryModule::ht('edit', 'Directories')?></span>
+                    <div class="directory-record-data-list-border">
+                        <table class="directory-stretch-bar">
+                            <tr>
+                                <td class="directory-min-width">
+                                    <div id="addHierarchToDirectory">
+                                        <nobr>
+                                            <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Add directory')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td class="directory-min-width">&nbsp;</td>
+                                <td class="directory-min-width">
+                                    <div id="createNewDirectoryForAddHierarchy">
+                                        <nobr>
+                                            <span class="directory-new-button-icon"><?= directoryModule::ht('edit', 'New')?>...</span>
+                                        </nobr>
+                                    </div>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                        <div id="directory-record-list" class="directory-record-list"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
     </table>
     <div>
         <span id="wait<?=$uid?>" class="directory-hide-element">
@@ -103,17 +136,85 @@ Dialog::begin([
 
 </div>
 
+
+<div class="directory-hide-element" id="directory-add-template<?=$uid?>">
+    <div class="directory-directory-item">
+        <table class="directory-modal-table">
+            <tr>
+                <td>
+                    <div class="directory-label">
+                        <span><?=$uid.'p2'?></span>
+                        <img class="directory-hide-element" src="<?=directoryModule::getPublishImage('/info16.png')?>"/>
+                        <div class="directory-hide-element"></div>
+                    </div>
+                    <div class="directory-hide-element"><?=Html::hiddenInput(Html::getInputName($formDirectoryItemModel, '['.$uid.'p3]directoryId'), $uid.'p4')?></div>
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="directory-delete-directory directory-small-button" title="<?=directoryModule::ht('edit', 'Edit data type')?>">
+                        <img src="<?=directoryModule::getPublishImage('/delete-item.png')?>" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="directory-modal-table directory-table">
+            <tr>
+                <td class="directory-min-width"><?= Html::activeCheckbox($formDirectoryItemModel, '['.$uid.'p3]visible', ['label' => null])?></td>
+                <td class="directory-min-width">&nbsp;</td>
+                <td>- <?= Html::activeLabel($formDirectoryItemModel, '['.$uid.'p3]visible')?></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
 
     (function($) {
         
+        var AddRecordToDirectory = function(dir) {
+            if(dir !== undefined) {
+                var counter = $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
+                ++counter;
+                var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
+                $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
+                tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", ((dir.original_name === undefined) ? dir.name : dir.original_name)).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)).replace("<?=$uid?>p4", dir.id));
+                $("#hierarchy-form<?=$uid?> #directory-record-list").append(tmpEl);
+                tmpEl.find(".directory-delete-directory").button({text : false});
+                var description = (dir.original_description === undefined) ? dir.description : dir.original_description;
+                if((description !== undefined) ? (description.length > 0) : false) {
+                    tmpEl.find(".directory-label div").html(description);
+                    tmpEl.find(".directory-label").tooltip( {
+                        content : function() { return $(tmpEl).find(".directory-label div").html(); },
+                        items : "img"
+                    });
+                    tmpEl.find(".directory-label img").removeClass("directory-hide-element");
+                }
+            }
+        };
+        
+        $("#hierarchy-form<?=$uid?> #addHierarchToDirectory").button().click(function() {
+            $.selectDirectoryDialog({ onSuccess : AddRecordToDirectory });
+        });
+        
+        $("#hierarchy-form<?=$uid?> #createNewDirectoryForAddHierarchy").button().click(function() {
+            $.editDirectoryDialog({ type : 'new', onSuccess : AddRecordToDirectory }); 
+        });
+        
+        $("#hierarchy-form<?=$uid?> #directory-record-list").on("click", 
+                ".directory-delete-directory", function() {
+                    $(this).closest(".directory-directory-item").remove();
+        });
+        
         $.editHierachyDialog = function(p) {
             if(p !== undefined) {
                 if(p.type !== undefined) {
+                    $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", 0);
                     switch(p.type) {
                         case 'new':
                                 $("#hierarchy-form<?=$uid?>").trigger('reset');
+                                $("#hierarchy-form<?=$uid?> #directory-record-list").html("");
                                 $("#editHierachyDialog<?=$uid?>").
                                         dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new hierarchy')?>").
                                         dialog("option", "buttons", 
@@ -121,14 +222,14 @@ Dialog::begin([
                                             {
                                                 text : "<?= directoryModule::ht('edit', 'Create new hierarchy')?>",
                                                 click : function() {
-                                                    /*$.ajaxPostHelper({
-                                                        url : ("<?=Url::toRoute(['/directory/edit/directories', 'cmd' => 'create'])?>"),
-                                                        data : $("#directory-form<?=$uid?>").serialize(),
+                                                    $.ajaxPostHelper({
+                                                        url : ("<?=Url::toRoute(['/directory/edit/hierarchies', 'cmd' => 'create'])?>"),
+                                                        data : $("#hierarchy-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
                                                         errorWaitTimeout : 5,
                                                         onSuccess : function(dataObject) { 
-                                                            $("#editDirectoryDialog<?=$uid?>").dialog("close");
+                                                            $("#editHierachyDialog<?=$uid?>").dialog("close");
                                                             if(p.onSuccess !== undefined) {
                                                                 if((dataObject !== undefined) &&
                                                                         (dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined)) {
@@ -138,7 +239,7 @@ Dialog::begin([
                                                                 }
                                                             }
                                                         }
-                                                    });*/
+                                                    });
                                                 }
                                             },
                                             {

@@ -46,9 +46,44 @@ $uid = mt_rand(0, mt_getrandmax());
     });
 
     $("#updateHierarchiesTable").button({text : false}).click(function() {
-        
+            $.pjax.reload('#hierarchiesGridPjaxWidget', 
+                            {
+                                push : false,
+                                replace : false,
+                                timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
+                                url : $("#hierarchiesGridWidget").yiiGridView("data").settings.filterUrl
+                            });
     });
-    
+
+    $("#hierarchiesGridPjaxWidget").on("pjax:start", function() {
+        $("#waitQueryHierarchies").removeClass("directory-hide-element");
+    }).on("pjax:end", function() {
+        $("#waitQueryHierarchies").addClass("directory-hide-element");
+        $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
+    }).on("pjax:error", function(eventObject) {
+        eventObject.preventDefault();
+        $("#waitQueryHierarchies").addClass("directory-hide-element");
+        $("#errorQueryHierarchies").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
+        setTimeout(function() { $("#errorQueryHierarchies").addClass("directory-hide-element"); }, 5000);
+    }).on("pjax:timeout", function(eventObject) {
+        eventObject.preventDefault();
+    }).tooltip({
+        content : function() { return $(this).closest("td").find(".row-value").html(); },
+        items : ".directory-show-full-text"
+    }).on("click", ".directory-delete-type-button", function() {
+        /*$.ajaxPostHelper({
+            url : ("<?= Url::toRoute(['/directory/edit/directories', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+                    $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
+            data : "del",
+            waitTag: "#waitQueryDirectories",
+            errorTag: "#errorQueryDirectories",
+            errorWaitTimeout: 5,
+            onSuccess: function(dataObject) { 
+                $("#updateDirectoriesTable").click();
+            }
+        });*/
+    });
+
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
 
 <table class="directory-modal-table directory-stretch-bar">

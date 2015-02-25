@@ -2,9 +2,9 @@
 
 namespace app\modules\directory\models\search;
 
-use app\modules\directory\models\db\views\LowerDirectories;
+use app\modules\directory\models\db\views\LowerHierarchies;
 
-class DirectoriesSearch extends FilterModelBase {
+class HierarhiesSearch extends FilterModelBase {
     public $name;
     public $description;
     public $visible;
@@ -17,7 +17,7 @@ class DirectoriesSearch extends FilterModelBase {
     }
     
     public function search() {
-        $query = LowerDirectories::find();
+        $query = LowerHierarchies::find();
         
         $query->addOrderBy(['id' => SORT_ASC]);
 

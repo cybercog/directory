@@ -17,11 +17,14 @@ use app\modules\directory\helpers\dataGridCellViewHelper;
 use app\modules\directory\models\forms\RecordForm;
 use app\modules\directory\models\forms\RecordDataItemForm;
 use app\modules\directory\models\forms\DirectoryForm;
+use app\modules\directory\models\forms\HierarchyForm;
 use app\modules\directory\models\forms\DirectoryItemForm;
 use app\modules\directory\models\db\Records;
 use app\modules\directory\models\db\RecordsData;
 use app\modules\directory\models\db\Directories;
 use app\modules\directory\models\db\RecordsDirectory;
+use app\modules\directory\models\db\Hierahies;
+use app\modules\directory\models\db\HierarchiesDirectory;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -602,7 +605,121 @@ class EditController extends Controller {
     }
     
     public function actionHierarchies() {
-        return $this->render('hierarchies');
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            switch ($cmd) {
+                case 'create':
+                case 'update':
+                    $hierarchyForm = new HierarchyForm;
+                    $hierarchyForm->attributes = \Yii::$app->request->post('HierarchyForm');
+                    if(!$hierarchyForm->validate()) {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                modelErrorsToStringHelper::to($hierarchyForm->errors));
+                    }
+                    
+                    $counter = 0;
+                    $directoriesFormItems = [];
+                    $formDirectoriesItems = \Yii::$app->request->post('DirectoryItemForm');
+                    if(isset($formDirectoriesItems) && is_array($formDirectoriesItems) && (count($formDirectoriesItems) > 0)) {
+                        foreach ($formDirectoriesItems as $formDirectoriesItem) {
+                            $directoriesFormItem = new DirectoryItemForm;
+                            $directoriesFormItem->attributes = $formDirectoriesItem;
+                            ++$counter;
+                            if(!$directoriesFormItem->validate()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        modelErrorsToStringHelper::to($directoriesFormItem->errors, 
+                                                '['.directoryModule::ht('edit', 'string').' - '.$counter.']'));
+                            }
+                            $directoriesFormItems[] = $directoriesFormItem;
+                        }
+                    }
+                    
+                    $result = [];
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    
+                    try {
+                        if($cmd === 'create') {
+                            $hierarchy = new Hierahies;
+                            $hierarchy->name = $hierarchyForm->name;
+                            $hierarchy->description = !isset($hierarchyForm->description) || strlen($hierarchyForm->description) === 0 ? null : $hierarchyForm->description;
+                            $hierarchy->visible = boolSaveHelper::boolean2string((boolean)$hierarchyForm->visible);
+                            
+                            if(!$hierarchy->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving directory in the database.'));
+                            }
+                            
+                            $result = $hierarchy->attributes;
+                            
+                        } else {
+                            if(\Yii::$app->request->get('id', false)) {
+                                Hierahies::updateAll([
+                                    'name' => $directoryForm->name,
+                                    'description' => !isset($directoryForm->description) || strlen($directoryForm->description) === 0 ? null : $directoryForm->description,
+                                    'visible' => boolSaveHelper::boolean2string((boolean)$directoryForm->visible)
+                                        ], 'id = :id', [':id' => \Yii::$app->request->get('id')]);
+                                Records::updateAll(['visible' => boolSaveHelper::boolean2string((boolean)$recordForm->visible)], 
+                                        'id=:id', [':id' => \Yii::$app->request->get('id')]);
+                                
+                                $result['id'] = \Yii::$app->request->get('id');
+                                $result['visible'] = \Yii::$app->request->get('id');
+                                
+                                RecordsData::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
+                                RecordsDirectory::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
+                            } else {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));
+                            }
+                        }
+
+                        $result['directories'] = [];
+                        
+                        foreach ($directoriesFormItems as $directoriesFormItem) {
+                            $newLinkDirectory = new HierarchiesDirectory;
+                            $newLinkDirectory->hierarhy_id = $result['id'];
+                            $newLinkDirectory->directory_id = $directoriesFormItem->directoryId;
+                            $newLinkDirectory->visible = boolSaveHelper::boolean2string((boolean)$directoriesFormItem->visible);
+                            
+                            if(!$newLinkDirectory->save()) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('edit', 'Error saving directory element in the database.'));
+                            }
+                            
+                            $result['directories'][] = $newLinkDirectory->attributes;
+                        }
+                        
+                        $transaction->commit();
+                        return ajaxJSONResponseHelper::createResponse(true, $result);
+                    } catch (\Exception $ex) {
+                        $transaction->rollBack();
+                        return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                    }
+                    
+                    break;
+                case 'delete':
+                    break;
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+            }
+        }
+        
+        $model = new \app\modules\directory\models\search\HierarhiesSearch();
+        $model->attributes = \Yii::$app->request->get('HierarhiesSearch');
+        
+        if(\Yii::$app->request->isPjax) {
+            $control = \Yii::$app->request->get('_pjax');
+
+            if($control == '#hierarchiesGridPjaxWidget') {
+                return $this->renderPartial('hierarchies_grid', ['dataModel' => $model]);
+            } elseif(preg_match('/#hierarchiesCompactGridPjaxWidget(?P<uid>[\d]+)/', $control, $matches) > 0) {
+                return $this->renderPartial('dialogs/hierarchies-compact-grid', ['directoryDataModel' => $model, 'uid' => $matches['uid']]);
+            } else {
+                throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+            }
+        }
+        
+        return $this->render('hierarchies', ['dataModel' => $model]);
     }
     
     public function actionHierarchy() {

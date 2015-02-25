@@ -82,7 +82,7 @@ $uid = mt_rand(0, mt_getrandmax());
         eventObject.preventDefault();
         $("#waitQueryDirectories").addClass("directory-hide-element");
         $("#errorQueryDirectories").removeClass("directory-hide-element").html("<nobr><?= directoryModule::ht('search', 'Error connecting to server.')?></nobr>");
-        setTimeout(function() { $("#errorQueryDataType").addClass("directory-hide-element"); }, 5000);
+        setTimeout(function() { $("#errorQueryDirectories").addClass("directory-hide-element"); }, 5000);
     }).on("pjax:timeout", function(eventObject) {
         eventObject.preventDefault();
     }).tooltip({

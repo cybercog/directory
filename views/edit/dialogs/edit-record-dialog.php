@@ -123,12 +123,6 @@ Dialog::begin([
                                     </div>
                                 </td>
                                 <td>&nbsp;</td>
-                                <td class="directory-min-width">
-                                    <span id="prevButton" class="directory-small-button directory-navigation">&larr;</span>
-                                </td>
-                                <td class="directory-min-width">
-                                    <span id="nextButton" class="directory-small-button directory-navigation">&rarr;</span>
-                                </td>
                             </tr>
                         </table>
                         <div id="directory-record-list" class="directory-record-list"></div>
@@ -272,7 +266,6 @@ Dialog::begin([
                 var tmpEl = $("#directory-add-template<?=$uid?> .directory-directory-item").clone();
                 $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>", counter);
                 tmpEl.html(tmpEl.html().replace("<?=$uid?>p2", ((dir.original_name === undefined) ? dir.name : dir.original_name)).replace(new RegExp("<?=$uid?>p3","g"), parseInt(counter)).replace("<?=$uid?>p4", dir.id));
-                //tmpEl.find('input[name=hidden]').val(dir.id);
                 $("#record-form<?=$uid?> #directory-record-list").append(tmpEl);
                 tmpEl.find(".directory-delete-directory").button({text : false});
                 var description = (dir.original_description === undefined) ? dir.description : dir.original_description;

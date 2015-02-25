@@ -22,7 +22,7 @@ use app\modules\directory\helpers\boolSaveHelper;
                         'format' => 'raw',
                         'attribute' => 'name',
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
-                        'label' => directoryModule::ht('edit', 'Type name'),
+                        'label' => directoryModule::ht('edit', 'Title'),
                         'value' => function($data) {
                             $row = $data->attributes;
                             $row['visible'] = boolSaveHelper::string2boolean($row['visible']);
