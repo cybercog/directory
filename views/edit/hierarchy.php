@@ -28,7 +28,7 @@ $uid = mt_rand(0, mt_getrandmax());
         ],
         [
             'label' => directoryModule::ht('edit', 'Hierarhies'),
-            'url' => Url::toRoute('/directory/edit/hierarhies')
+            'url' => Url::toRoute('/directory/edit/hierarchies')
         ],
         directoryModule::ht('edit', 'Hierarhy')
     ]

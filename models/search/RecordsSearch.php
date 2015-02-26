@@ -10,24 +10,27 @@ class RecordsSearch extends FilterModelBase {
     public $value;
     public $directories;
     
-    public function rules() {
+    private $directoriesRange = [];
+    
+    public function __construct( $config = [] ) {
+        parent::__construct($config);
+
         $directories = Directories::find()->all();
-        $directoriesRange = [];
         foreach ($directories as $directory) {
-            $directoriesRange[] = $directory->name;
+            $this->directoriesRange[] = $directory->name;
         }
-        
+    }
+    
+    public function rules() {
         return [
             ['value', 'safe'],
             ['visible', 'yii\validators\RangeValidator', 'range' => ['Y', 'N']],
-            ['directories', 'yii\validators\RangeValidator', 'range' => $directoriesRange],
+            ['directories', 'yii\validators\RangeValidator', 'range' => $this->directoriesRange],
         ];
     }
     
     public function search() {
         $query = LowerRecords::find();
-        
-        $query->addOrderBy(['id' => SORT_ASC]);
         
         $query->andFilterWhere(['visible' => $this->visible]);
         $query->andFilterWhere(['like', 'directories_id', $this->directories]);
@@ -37,8 +40,15 @@ class RecordsSearch extends FilterModelBase {
                     'query' => $query, 
                     'pagination' => ['pageSize' => $this->pagination]]);
         
-        $this->_dataProvider->sort->attributes['value'] = 
-                ['asc' => ['id' => SORT_ASC], 'desc' => ['id' => SORT_DESC]];
+        if(\Yii::$app->request->get($this->_dataProvider->sort->sortParam, false) === false) {
+            $query->addOrderBy(['id' => SORT_ASC]);
+        }
+        
+        $this->_dataProvider->sort->attributes = 
+            [
+                'visible' => ['asc' => ['visible' => SORT_ASC], 'desc' => ['visible' => SORT_DESC]],
+                'value' => ['asc' => ['id' => SORT_ASC], 'desc' => ['id' => SORT_DESC]]
+            ];
         
         return $this->_dataProvider;
     }

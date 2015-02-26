@@ -8,11 +8,9 @@ abstract class FilterModelBase extends Model {
     protected $_dataProvider;
     public $pagination = 20;
 
-    abstract public function search();
-
-    /*public function buildModels() {
-        return $this->_dataProvider->getModels();
-    }*/
+    public function search() {
+        return $this->_dataProvider;
+    }
 
     public function getDataProvider() {
         return $this->_dataProvider;

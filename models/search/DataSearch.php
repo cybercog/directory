@@ -22,8 +22,6 @@ class DataSearch extends FilterModelBase {
     public function search() {
         $query = LowerData::find();
         
-        $query->addOrderBy(['id' => SORT_ASC]);
-        
         $query->andFilterWhere(['like', 'description', mb_strtolower($this->description, 'UTF-8')]);
         $query->andFilterWhere(['or', ['like', 'value', mb_strtolower($this->value, 'UTF-8')], ['like', 'text', mb_strtolower($this->value, 'UTF-8')]]);
         $query->andFilterWhere(['like', 'type_name', mb_strtolower($this->type_name, 'UTF-8')]);
@@ -33,6 +31,10 @@ class DataSearch extends FilterModelBase {
         $this->_dataProvider = new \yii\data\ActiveDataProvider([
                     'query' => $query, 
                     'pagination' => ['pageSize' => $this->pagination]]);
+        
+        if(\Yii::$app->request->get($this->_dataProvider->sort->sortParam, false) === false) {
+            $query->addOrderBy(['id' => SORT_ASC]);
+        }
         
         return $this->_dataProvider;
     }

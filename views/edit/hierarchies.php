@@ -42,7 +42,7 @@ $uid = mt_rand(0, mt_getrandmax());
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     $("#createNewHierarchy").button({text : false}).click(function() {
-        $.editHierachyDialog({type:"new"});
+        $.editHierachyDialog({type : "new", onSuccess : function() { $("#updateHierarchiesTable").click(); }});
     });
 
     $("#updateHierarchiesTable").button({text : false}).click(function() {
@@ -53,6 +53,12 @@ $uid = mt_rand(0, mt_getrandmax());
                                 timeout : <?=directoryModule::$SETTING['pjaxDefaultTimeout']?>, 
                                 url : $("#hierarchiesGridWidget").yiiGridView("data").settings.filterUrl
                             });
+    });
+    
+    $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
+    
+    $("#directoriesGridPjaxWidget").on("click", ".directory-edit-type-button", 
+        function() {
     });
 
     $("#hierarchiesGridPjaxWidget").on("pjax:start", function() {

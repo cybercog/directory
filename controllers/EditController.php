@@ -723,7 +723,7 @@ class EditController extends Controller {
     }
     
     public function actionHierarchy() {
-        if(!\Yii::$app->request->get('name', false)) {
+        if(!\Yii::$app->request->get('id', false)) {
             $this->redirect(\yii\helpers\Url::toRoute('/directory/edit/hierarchies'));
             return false;
         }
