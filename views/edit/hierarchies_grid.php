@@ -36,7 +36,7 @@ foreach ($directories as $directory) {
                             $row = $data->attributes;
                             $row['visible'] = boolSaveHelper::string2boolean($row['visible']);
                             return '<a href="'.Url::toRoute(['/directory/edit/hierarchy', 'id' => $data->id]).'">'.$data->original_name.
-                                    '</a><div class="directory-hide-element directory-row-data">'.
+                                    '</a><div class="directory-hide-element directory-row-data data-data">'.
                                     json_encode($row).'</div>';
                         }
                     ],

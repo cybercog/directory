@@ -249,6 +249,40 @@ Dialog::begin([
                                         ]).dialog("open");
                             break;
                         case 'edit':
+                                $("#hierarchy-form<?=$uid?>").trigger('reset');
+                                $("#hierarchy-form<?=$uid?> #directory-record-list").html("");
+                                $("#editHierachyDialog<?=$uid?>").
+                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new hierarchy')?>").
+                                        dialog("option", "buttons", 
+                                        [
+                                            {
+                                                text : "<?= directoryModule::ht('edit', 'Create new hierarchy')?>",
+                                                click : function() {
+                                                    $.ajaxPostHelper({
+                                                        url : ("<?=Url::toRoute(['/directory/edit/hierarchies', 'cmd' => 'create'])?>"),
+                                                        data : $("#hierarchy-form<?=$uid?>").serialize(),
+                                                        waitTag : "#wait<?=$uid?>",
+                                                        errorTag : "#error<?=$uid?>",
+                                                        errorWaitTimeout : 5,
+                                                        onSuccess : function(dataObject) { 
+                                                            $("#editHierachyDialog<?=$uid?>").dialog("close");
+                                                            if(p.onSuccess !== undefined) {
+                                                                if((dataObject !== undefined) &&
+                                                                        (dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined)) {
+                                                                    p.onSuccess(dataObject.<?=ajaxJSONResponseHelper::messageField?>);
+                                                                } else {
+                                                                   p.onSuccess();
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            },
+                                            {
+                                                text : "<?= directoryModule::ht('edit', 'Close')?>",
+                                                click : function() {$("#editHierachyDialog<?=$uid?>").dialog("close"); }
+                                            }
+                                        ]).dialog("open");
                             break;
                         default:
                             if(p.onError !== undefined) {

@@ -113,7 +113,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         <td class="directory-min-width">
                             <button id="createNewDirectory">
                                 <nobr>
-                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
+                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new directory')?>...</span>
                                 </nobr>
                             </button>
                         </td>

@@ -101,7 +101,7 @@ class EditController extends Controller {
                                                 [':id' => \Yii::$app->request->get('id')])->with('type')->count();
                                 if($dataCount > 0) {
                                     return ajaxJSONResponseHelper::createResponse(true, 'query', 
-                                            ['message' => directoryModule::ht('edit', 'With the type of associated data. When you delete a type type, they will be removed. Remove?'),
+                                            ['message' => directoryModule::ht('edit', 'With the type of associated {param} data. When you delete a type, they will be removed. Remove?', ['param'=>$dataCount]),
                                                 'id' => \Yii::$app->request->get('id', false)]);
                                 } else {
                                     Types::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
@@ -698,7 +698,17 @@ class EditController extends Controller {
                     
                     break;
                 case 'delete':
-                    break;
+                    if(\Yii::$app->request->get('id', false)) {
+                        try {
+                            Hierahies::deleteAll('id=:id', [':id' => \Yii::$app->request->get('id')]);
+                        } catch (\Exception $ex) {
+                            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                        }
+                    } else {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                directoryModule::ht('search', 'Do not pass parameters <{parametr}>.', ['parametr' => 'id']));
+                    }
+                    return ajaxJSONResponseHelper::createResponse(true);
                 default:
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
             }

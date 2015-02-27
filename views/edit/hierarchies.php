@@ -57,8 +57,27 @@ $uid = mt_rand(0, mt_getrandmax());
     
     $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
     
-    $("#directoriesGridPjaxWidget").on("click", ".directory-edit-type-button", 
-        function() {
+    $("#directoriesGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
+        var data = undefined;
+        var directories = undefined;
+        
+        try {
+            data = $.parseJSON($(this).closest("tr").find(".data-data").text());
+        } catch(e) { 
+        }
+        try {
+            directories = $.parseJSON($(this).closest("tr").find(".directories-data").text());
+        } catch(e) { 
+        }
+        
+        $.editRecordDialog({
+            type : "edit",
+            data : {
+                hierachy : data,
+                directories : directories
+            },
+            onSuccess : function() { $("#updateRecordTable").click(); }
+        });
     });
 
     $("#hierarchiesGridPjaxWidget").on("pjax:start", function() {
@@ -77,17 +96,17 @@ $uid = mt_rand(0, mt_getrandmax());
         content : function() { return $(this).closest("td").find(".row-value").html(); },
         items : ".directory-show-full-text"
     }).on("click", ".directory-delete-type-button", function() {
-        /*$.ajaxPostHelper({
-            url : ("<?= Url::toRoute(['/directory/edit/directories', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
+        $.ajaxPostHelper({
+            url : ("<?= Url::toRoute(['/directory/edit/hierarchies', 'cmd' => 'delete', 'id' => $uid])?>").replace("<?=$uid?>", 
                     $.parseJSON($(this).closest("tr").find("td .directory-row-data").text()).id),
             data : "del",
-            waitTag: "#waitQueryDirectories",
+            waitTag: "#waitQueryHierarchies",
             errorTag: "#errorQueryDirectories",
             errorWaitTimeout: 5,
             onSuccess: function(dataObject) { 
-                $("#updateDirectoriesTable").click();
+                $("#updateHierarchiesTable").click();
             }
-        });*/
+        });
     });
 
 <?php $this->registerJs(ob_get_clean(), View::POS_READY); if(false) { ?></script><?php } ?>
@@ -101,7 +120,7 @@ $uid = mt_rand(0, mt_getrandmax());
                         <td class="directory-min-width">
                             <button id="createNewHierarchy">
                                 <nobr>
-                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new type')?>...</span>
+                                    <span class="directory-add-button-icon"><?= directoryModule::ht('edit', 'Create new hierarchy')?>...</span>
                                 </nobr>
                             </button>
                         </td>
