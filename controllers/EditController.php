@@ -440,7 +440,7 @@ class EditController extends Controller {
                                         'id=:id', [':id' => \Yii::$app->request->get('id')]);
                                 
                                 $result['id'] = \Yii::$app->request->get('id');
-                                $result['visible'] = \Yii::$app->request->get('id');
+                                //$result['visible'] = \Yii::$app->request->get('id');
                                 
                                 RecordsData::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
                                 RecordsDirectory::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
@@ -655,18 +655,14 @@ class EditController extends Controller {
                         } else {
                             if(\Yii::$app->request->get('id', false)) {
                                 Hierahies::updateAll([
-                                    'name' => $directoryForm->name,
-                                    'description' => !isset($directoryForm->description) || strlen($directoryForm->description) === 0 ? null : $directoryForm->description,
-                                    'visible' => boolSaveHelper::boolean2string((boolean)$directoryForm->visible)
+                                    'name' => $hierarchyForm->name,
+                                    'description' => !isset($hierarchyForm->description) || strlen($hierarchyForm->description) === 0 ? null : $hierarchyForm->description,
+                                    'visible' => boolSaveHelper::boolean2string((boolean)$hierarchyForm->visible)
                                         ], 'id = :id', [':id' => \Yii::$app->request->get('id')]);
-                                Records::updateAll(['visible' => boolSaveHelper::boolean2string((boolean)$recordForm->visible)], 
-                                        'id=:id', [':id' => \Yii::$app->request->get('id')]);
                                 
                                 $result['id'] = \Yii::$app->request->get('id');
-                                $result['visible'] = \Yii::$app->request->get('id');
                                 
-                                RecordsData::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
-                                RecordsDirectory::deleteAll('record_id=:record_id', [':record_id' => $result['id']]);
+                                HierarchiesDirectory::deleteAll('hierarhy_id=:hierarhy_id', [':hierarhy_id' => $result['id']]);
                             } else {
                                 return ajaxJSONResponseHelper::createResponse(false, 
                                         directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'id']));

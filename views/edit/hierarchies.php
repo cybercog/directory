@@ -57,7 +57,7 @@ $uid = mt_rand(0, mt_getrandmax());
     
     $(".directory-edit-type-button, .directory-delete-type-button").button({text : false});
     
-    $("#directoriesGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
+    $("#hierarchiesGridPjaxWidget").on("click", ".directory-edit-type-button", function() {
         var data = undefined;
         var directories = undefined;
         
@@ -70,13 +70,13 @@ $uid = mt_rand(0, mt_getrandmax());
         } catch(e) { 
         }
         
-        $.editRecordDialog({
+        $.editHierachyDialog({
             type : "edit",
             data : {
                 hierachy : data,
                 directories : directories
             },
-            onSuccess : function() { $("#updateRecordTable").click(); }
+            onSuccess : function() { $("#updateHierarchiesTable").click(); }
         });
     });
 

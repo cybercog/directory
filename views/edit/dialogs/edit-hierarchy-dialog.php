@@ -173,7 +173,7 @@ Dialog::begin([
 
     (function($) {
         
-        var AddRecordToDirectory = function(dir) {
+        var AddHierarchyToDirectory = function(dir) {
             if(dir !== undefined) {
                 var counter = $("#directory-add-template<?=$uid?>").prop("field-counter<?=$uid?>");
                 ++counter;
@@ -195,11 +195,11 @@ Dialog::begin([
         };
         
         $("#hierarchy-form<?=$uid?> #addHierarchToDirectory").button().click(function() {
-            $.selectDirectoryDialog({ onSuccess : AddRecordToDirectory });
+            $.selectDirectoryDialog({ onSuccess : AddHierarchyToDirectory });
         });
         
         $("#hierarchy-form<?=$uid?> #createNewDirectoryForAddHierarchy").button().click(function() {
-            $.editDirectoryDialog({ type : 'new', onSuccess : AddRecordToDirectory }); 
+            $.editDirectoryDialog({ type : 'new', onSuccess : AddHierarchyToDirectory }); 
         });
         
         $("#hierarchy-form<?=$uid?> #directory-record-list").on("click", 
@@ -251,15 +251,31 @@ Dialog::begin([
                         case 'edit':
                                 $("#hierarchy-form<?=$uid?>").trigger('reset');
                                 $("#hierarchy-form<?=$uid?> #directory-record-list").html("");
+                                
+                                //id в параметрах запроса
+                                $("#hierarchy-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'visible')?>']").prop("checked", p.data.hierachy.visible);
+                                $("#hierarchy-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'name')?>']").val(p.data.hierachy.original_name);
+                                $("#hierarchy-form<?=$uid?> [name='<?=Html::getInputName($formModel, 'description')?>']").val(p.data.hierachy.original_description);
+                                if(p.data.directories !== undefined) {
+                                    for(var i in p.data.directories) {
+                                        AddHierarchyToDirectory(
+                                                {
+                                                    id : p.data.directories[i].id,
+                                                    original_name : p.data.directories[i].name,
+                                                    visible : p.data.directories[i].visible
+                                                });
+                                    }
+                                }
+                                
                                 $("#editHierachyDialog<?=$uid?>").
-                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Create new hierarchy')?>").
+                                        dialog("option", "title", "<?= directoryModule::ht('edit', 'Edit hierarchy')?>").
                                         dialog("option", "buttons", 
                                         [
                                             {
-                                                text : "<?= directoryModule::ht('edit', 'Create new hierarchy')?>",
+                                                text : "<?= directoryModule::ht('edit', 'Edit hierarchy')?>",
                                                 click : function() {
                                                     $.ajaxPostHelper({
-                                                        url : ("<?=Url::toRoute(['/directory/edit/hierarchies', 'cmd' => 'create'])?>"),
+                                                        url : ("<?=Url::toRoute(['/directory/edit/hierarchies', 'cmd' => 'update', 'id' => $uid])?>").replace("<?=$uid?>", p.data.hierachy.id),
                                                         data : $("#hierarchy-form<?=$uid?>").serialize(),
                                                         waitTag : "#wait<?=$uid?>",
                                                         errorTag : "#error<?=$uid?>",
