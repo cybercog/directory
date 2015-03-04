@@ -734,7 +734,17 @@ class EditController extends Controller {
             return false;
         }
         
-        return $this->render('hierarchy');
+        try {
+            $hierarchy = Hierahies::find()->where('id=:id', [':id'=>\Yii::$app->request->get('id')])->one();
+        } catch (\Exception $ex) {
+            
+        }
+        
+        if(!isset($hierarchy)) {
+            throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+        }
+        
+        return $this->render('hierarchy', ['hierarchy'=>$hierarchy]);
     }
 
     public function actionStatistic() {

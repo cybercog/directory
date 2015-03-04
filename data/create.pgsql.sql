@@ -189,10 +189,10 @@ CREATE INDEX hierarhies_directory_t_visible_index ON hierarhies_directory_t (vis
 
 CREATE VIEW hierarchies_tolower_v AS
 SELECT h1.id AS id,
-    h1.name AS name,
-    lower(h1.name) AS original_name,
-    h1.description AS description,
-    lower(h1.description) AS original_description,
+    lower(h1.name) AS name,
+    h1.name AS original_name,
+    lower(h1.description) AS description,
+    h1.description AS original_description,
     h1.visible AS visible,
     array_to_string(array(
                             SELECT concat_ws(chr(3), hd2.directory_id, chr(7), hd2.visible, chr(7), d2.visible, chr(7), d2.name, chr(7), d2.description) AS d_info

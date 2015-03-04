@@ -18,7 +18,7 @@ $uid = mt_rand(0, mt_getrandmax());
     }
 <?php $this->registerCss(ob_get_clean()); if(false) { ?></style><?php } ?>
 
-<h1 class="directory-h1 directory-records-h1-icon"><?= directoryModule::ht('edit', 'Hierarhy')?></h1>
+<h1 class="directory-h1 directory-records-h1-icon"><?= directoryModule::ht('edit', 'Hierarhy')?> - <?=$hierarchy->name?></h1>
 
 <?= Breadcrumbs::widget([
     'links' => [
@@ -30,6 +30,16 @@ $uid = mt_rand(0, mt_getrandmax());
             'label' => directoryModule::ht('edit', 'Hierarhies'),
             'url' => Url::toRoute('/directory/edit/hierarchies')
         ],
-        directoryModule::ht('edit', 'Hierarhy').' - '
+        $hierarchy->name
     ]
     ]) ?>
+
+<pre>
+<?php 
+
+$f=$hierarchy->getRootBranches()->all();
+foreach ($f as $f1) {
+    echo $f1->name;
+}
+?>
+</pre>

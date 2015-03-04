@@ -20,6 +20,7 @@ foreach ($directories as $directory) {
                 'timeout' => directoryModule::$SETTING['pjaxDefaultTimeout'], 
                 'enablePushState' => false, 
                 'enableReplaceState' => false,
+                'linkSelector' => '#hierarchiesGridPjaxWidget a:not(.directory-hierarchy-link)',
                 'id' => 'hierarchiesGridPjaxWidget']); ?>
             <?= yii\grid\GridView::widget([
                 'id' => 'hierarchiesGridWidget',
@@ -35,7 +36,7 @@ foreach ($directories as $directory) {
                         'value' => function($data) {
                             $row = $data->attributes;
                             $row['visible'] = boolSaveHelper::string2boolean($row['visible']);
-                            return '<a href="'.Url::toRoute(['/directory/edit/hierarchy', 'id' => $data->id]).'">'.$data->original_name.
+                            return '<a class="directory-hierarchy-link" href="'.Url::toRoute(['/directory/edit/hierarchy', 'id' => $data->id]).'">'.$data->original_name.
                                     '</a><div class="directory-hide-element directory-row-data data-data">'.
                                     json_encode($row).'</div>';
                         }
