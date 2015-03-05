@@ -43,3 +43,17 @@ foreach ($f as $f1) {
 }
 ?>
 </pre>
+
+
+<table class="directory-modal-table directory-stretch-bar">
+    <tr>
+        <td>
+            <div>
+                <div></div>
+            </div>
+        </td>
+        <td>
+            <div></div>
+        </td>
+    </tr>
+</table>

@@ -6,10 +6,7 @@ use yii\base\Widget;
 
 class RecordList extends Widget {
     public $Records = null;
-    public $outDBInfo = false;
-    public $expandPropertiesDefault = true;
-    public $expandProperiesCount = false;
-    public $expandPopup = false;
+    public $template = 'record-list';
 
     public function run() {
         $data = \app\modules\directory\helpers\dbStringParser::ParseStringL2($this->Records);
@@ -44,6 +41,6 @@ class RecordList extends Widget {
             }
         }
         
-        return $this->render('record-list', ['records' => $data_out, 'flat_records' => $flat_data_out]);
+        return $this->render($this->template, ['records' => $data_out, 'flat_records' => $flat_data_out]);
     }
 }

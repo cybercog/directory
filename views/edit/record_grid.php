@@ -34,14 +34,7 @@ foreach ($directories as $directory) {
                         'filterInputOptions' => ['class' => 'directory-stretch-bar directory-grid-filter-control'],
                         'label' => directoryModule::ht('edit', 'Value'),
                         'value' => function($data) {
-                            return RecordList::widget(
-                                    [
-                                        'Records' => $data->data, 
-                                        'outDBInfo' => true,
-                                        'expandPropertiesDefault' => false,
-                                        'expandProperiesCount' => true,
-                                        'expandPopup' => true
-                                    ]).
+                            return RecordList::widget(['Records' => $data->data]).
                                     '<textarea class="record-id directory-hide-element">'.
                                     \yii\helpers\Json::encode(
                                             ['id' => $data->id, 
