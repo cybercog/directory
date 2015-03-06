@@ -34,26 +34,5 @@ $uid = mt_rand(0, mt_getrandmax());
     ]
     ]) ?>
 
-<pre>
-<?php 
 
-$f=$hierarchy->getRootBranches()->all();
-foreach ($f as $f1) {
-    echo $f1->name;
-}
-?>
-</pre>
-
-
-<table class="directory-modal-table directory-stretch-bar">
-    <tr>
-        <td>
-            <div>
-                <div></div>
-            </div>
-        </td>
-        <td>
-            <div></div>
-        </td>
-    </tr>
-</table>
+<?= app\modules\directory\widgets\HierarchyWidget::widget(['hierarchy'=>$hierarchy]); ?>
