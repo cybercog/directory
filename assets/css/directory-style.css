@@ -616,3 +616,19 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 .directory-tree-node-pic-wrap:hover {
     background-color: #e0e0ff;
 }
+
+.directory-tree-node-line-end {
+    max-width: 14px;
+    min-width: 14px;
+    height: 12px;
+    border-left: #ccc dotted 1px !important;
+    border-bottom: #ccc dotted 1px !important;
+}
+
+.directory-tree-node-line-end-bottom {
+    height: 100%;
+}
+
+.directory-tree-node-line-middle {
+    border-left: #ccc dotted 1px !important;
+}

@@ -1,10 +1,30 @@
 <?php 
 use app\modules\directory\directoryModule;
+use app\modules\directory\widgets\SingletonRenderHelper;
 ?>
+
+<?php ob_start();?>
+<div class="directory-hide-element">
+    <table>
+        <tr>
+            <td class="directory-min-width"></td>
+            <td class="directory-min-width directory-tree-node-line-end"></td>
+            <td rowspan="2"></td>
+            <td rowspan="2">(Пусто)<br />(Пусто)<br />(Пусто)</td>
+        </tr>
+        <tr>
+            <td class="directory-min-width"></td>
+            <td class="directory-min-width directory-tree-node-line-end-bottom directory-tree-node-line-middle"></td>
+        </tr>
+    </table>
+</div>
+
+<?= SingletonRenderHelper::widget(['htmlRequire' => ['tree-content-182'=>ob_get_clean()]])?>
+
 
 <table class="directory-modal-table directory-stretch-bar">
     <tr>
-        <td class="directory-min-width">
+        <td class="directory-min-width" colspan="2">
             <div class="directory-tree-node-pic-wrap">
                 <img src="<?= directoryModule::getPublishImage('/plus.png'); ?>" />
                 <img class="directory-hide-element" src="<?= directoryModule::getPublishImage('/minus.png'); ?>" />
@@ -14,7 +34,7 @@ use app\modules\directory\directoryModule;
         <td><?=$brabch->name?></td>
     </tr>
     <tr>
-        <td colspan="3">
+        <td colspan="4">
             <span id="waitQueryHierarchyTree" class="directory-hide-element">
                 <nobr>
                     <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
@@ -26,8 +46,9 @@ use app\modules\directory\directoryModule;
         </td>
     </tr>
     <tr>
-        <td style="padding-left: 10px;;"><div style="width: 100%; height: 100%; background-color: red;"></div></td>
+        <td class="directory-min-width"></td>
+        <td class="directory-min-width"></td>
+        <td class="directory-min-width"></td>
         <td></td>
-        <td>(Пусто)</td>
     </tr>
 </table>
