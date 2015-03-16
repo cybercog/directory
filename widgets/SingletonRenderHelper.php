@@ -7,9 +7,7 @@ use yii\base\Widget;
 
 class SingletonRenderHelper extends Widget {
     protected static $globalViews = [];
-    protected static $globalhtmls = [];
     public $viewsRequire;
-    public $htmlRequire;
     
     public function run() {
         $require = function($view) {
@@ -27,16 +25,6 @@ class SingletonRenderHelper extends Widget {
                 is_array($this->viewsRequire)) {
             foreach ($this->viewsRequire as $view) {
                 $render .= $require($view);
-            }
-        }
-        
-        if(isset($this->htmlRequire) &&
-                is_array($this->htmlRequire)) {
-            foreach ($this->htmlRequire as $key=>$html) {
-                if(!isset(self::$globalhtmls[$key])) {
-                    self::$globalhtmls[$key] = true;
-                    $render .= $html;
-                }
             }
         }
         

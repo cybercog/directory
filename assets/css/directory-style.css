@@ -620,7 +620,7 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 .directory-tree-node-line-end {
     max-width: 14px;
     min-width: 14px;
-    height: 12px;
+    height: 10px;
     border-left: #ccc dotted 1px !important;
     border-bottom: #ccc dotted 1px !important;
 }

@@ -5,11 +5,18 @@ namespace app\modules\directory\widgets;
 use yii\base\Widget;
 
 class HierarchBranch extends Widget {
-    public $brabch;
+    public $branch;
     public $previevSelector;
-    
+    public $branchTemplateSelector;
+    public $treeRootTag;
+    public $hierarchyID;
+
     public function run() {
         return $this->render('hierarchy-branch', 
-                ['brabch'=>  $this->brabch, 'previevSelector'=>  $this->previevSelector]);
+                ['branch'=>  $this->branch, 
+                    'previevSelector'=>  $this->previevSelector,
+                    'branchTemplateSelector'=>  $this->branchTemplateSelector,
+                    'treeRootTag'=>  $this->treeRootTag,
+                    'hierarchyID'=>  $this->hierarchyID]);
     }
 }
