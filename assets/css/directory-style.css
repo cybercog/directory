@@ -632,3 +632,43 @@ table.directory-record-item-form tr:nth-child(even) td:nth-child(odd) {
 .directory-tree-node-line-middle {
     border-left: #ccc dotted 1px !important;
 }
+
+.directory-branch-name-element {
+    cursor: pointer;
+    border-bottom: #3399ff dotted 1px;
+    color: #3399ff;
+    padding: 2px 4px;
+}
+
+.directory-branch-name-element:hover {
+    border-bottom-color: red;
+    color: red;
+}
+
+.directory-branch-name-element-selected {
+    border: none;
+    color: white;
+    background-color: #3399ff;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.directory-branch-name-element-selected:hover {
+    color: white;
+}
+
+.directory-btn-tree {
+    border: #3399ff solid 1px;
+    background-color: #ccccff;
+    padding: 1px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.directory-btn-tree:hover {
+    background-color: #99ccff;
+}
+
+.directory-table-vertical-line {
+    border-left: #ccc dotted 1px !important;
+}

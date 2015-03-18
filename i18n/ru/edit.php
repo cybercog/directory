@@ -5,6 +5,7 @@ return [
     'Title' => 'Название',
     'Hierarhies' => 'Иерархии',
     'Hierarhy' => 'Иерархия',
+    'Branches' => 'Ветки',
     'Statistic' => 'Статистика',
     'string' => 'строка',
     'text' => 'текст',
@@ -71,4 +72,9 @@ return [
     'Edit record' => 'Редактировать запись',
     'Edit hierarchy' => 'Редактировать иерархию',
     'Create new hierarchy'=> 'Создать новую иерархию',
+    'Create new branch'=> 'Создать новую ветку',
+    'Create a new root branch'=> 'Создать новую корневую ветку',
+    'Create a new subsidiary branch'=> 'Создать новую дочернюю ветку',
+    'Edit the selected branch'=> 'Редактировать выбранную ветку',
+    'Delete the selected branch'=> 'Уадлить выбранную ветку',
 ];

@@ -729,15 +729,27 @@ class EditController extends Controller {
     }
     
     public function actionHierarchy() {
-        if(!\Yii::$app->request->get('id', false)) {
-            $this->redirect(\yii\helpers\Url::toRoute('/directory/edit/hierarchies'));
-            return false;
+//        if(!\Yii::$app->request->get('id', false)) {
+//            $this->redirect(\yii\helpers\Url::toRoute('/directory/edit/hierarchies'));
+//            return false;
+//        }
+//        
+        if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            switch (\Yii::$app->request->get('cmd', false)) {
+                case 'get-child':
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+                case 'get-records':
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+                default:
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+            }
         }
         
         try {
             $hierarchy = Hierahies::find()->where('id=:id', [':id'=>\Yii::$app->request->get('id')])->one();
         } catch (\Exception $ex) {
-            
+            //return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
         }
         
         if(!isset($hierarchy)) {

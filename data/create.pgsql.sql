@@ -213,44 +213,52 @@ CREATE TABLE branches_t
 (
     id INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('branches_t_id_counter'),
     name VARCHAR(255) NOT NULL,
-    description TEXT DEFAULT NULL,
-    visible visible_type NOT NULL DEFAULT 'Y'
+    description TEXT DEFAULT NULL
 );
 CREATE INDEX branches_t_id_index ON branches_t (id);
 CREATE INDEX branches_t_name_index ON branches_t (name);
-CREATE INDEX branches_t_visible_index ON branches_t (visible);
 
 CREATE TABLE branches_hierarhies_t
 (
     branch_root_id INTEGER NOT NULL REFERENCES branches_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     hierarhy_id INTEGER NOT NULL REFERENCES hierarhies_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+    position INTEGER DEFAULT 0,
     visible visible_type NOT NULL DEFAULT 'Y',
     PRIMARY KEY (branch_root_id, hierarhy_id)
 );
 CREATE INDEX branches_hierarhies_t_branch_root_id_index ON branches_hierarhies_t (branch_root_id);
 CREATE INDEX branches_hierarhies_t_hierarhy_id_index ON branches_hierarhies_t (hierarhy_id);
+CREATE INDEX branches_hierarhies_t_position_index ON branches_hierarhies_t (position);
 CREATE INDEX branches_hierarhies_t_visible_index ON branches_hierarhies_t (visible);
 
 CREATE TABLE branches_branches_t
 (
+    hierarchy_id INTEGER NOT NULL REFERENCES hierarhies_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     branch_this_id INTEGER NOT NULL REFERENCES branches_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     branch_child_id INTEGER NOT NULL REFERENCES branches_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+    position INTEGER DEFAULT 0,
     visible visible_type NOT NULL DEFAULT 'Y',
-    PRIMARY KEY (branch_this_id, branch_child_id)
+    PRIMARY KEY (hierarchy_id, branch_this_id, branch_child_id)
 );
+CREATE INDEX branches_branches_t_hierarchy_id_index ON branches_branches_t (hierarchy_id);
 CREATE INDEX branches_branches_t_branch_this_id_index ON branches_branches_t (branch_this_id);
 CREATE INDEX branches_branches_t_branch_child_id_index ON branches_branches_t (branch_child_id);
+CREATE INDEX branches_branches_t_position_index ON branches_branches_t (position);
 CREATE INDEX branches_branches_t_visible_index ON branches_branches_t (branch_this_id);
 
 CREATE TABLE records_branches_t
 (
+    hierarchy_id INTEGER NOT NULL REFERENCES hierarhies_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     branch_id INTEGER NOT NULL REFERENCES branches_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     record_id INTEGER NOT NULL REFERENCES records_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+    position INTEGER DEFAULT 0,
     visible visible_type NOT NULL DEFAULT 'Y',
-    PRIMARY KEY (branch_id, record_id)
+    PRIMARY KEY (hierarchy_id, branch_id, record_id)
 );
+CREATE INDEX records_branches_t_hierarchy_id_index ON records_branches_t (hierarchy_id);
 CREATE INDEX records_branches_t_branch_id_index ON records_branches_t (branch_id);
 CREATE INDEX records_branches_t_record_id_index ON records_branches_t (record_id);
+CREATE INDEX records_branches_t_position_index ON records_branches_t (position);
 CREATE INDEX records_branches_t_visible_index ON records_branches_t (visible);
 
 

@@ -10,7 +10,6 @@ class Hierahies extends ActiveRecord {
     }
     
     public function getRootBranches() {
-        //return $this->hasMany(BranchesHierarchies::className(), ['hierarhy_id'=>'id'])->viaTable(Branches::tableName(), ['branch_root_id'=>'id']);
         return $this->hasMany(Branches::className(), ['id'=>'branch_root_id'])->viaTable(BranchesHierarchies::tableName(), ['hierarhy_id'=>'id']);
     }
 }

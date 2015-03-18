@@ -10,6 +10,8 @@ class HierarchBranch extends Widget {
     public $branchTemplateSelector;
     public $treeRootTag;
     public $hierarchyID;
+    public $waitQueryItems;
+    public $errorQueryItems;
 
     public function run() {
         return $this->render('hierarchy-branch', 
@@ -17,6 +19,8 @@ class HierarchBranch extends Widget {
                     'previevSelector'=>  $this->previevSelector,
                     'branchTemplateSelector'=>  $this->branchTemplateSelector,
                     'treeRootTag'=>  $this->treeRootTag,
-                    'hierarchyID'=>  $this->hierarchyID]);
+                    'hierarchyID'=>  $this->hierarchyID,
+                    'waitQueryItems'=>  $this->waitQueryItems,
+                    'errorQueryItems'=>  $this->errorQueryItems]);
     }
 }
