@@ -1,7 +1,9 @@
 <?php 
 use app\modules\directory\directoryModule;
 use yii\web\View;
+use yii\helpers\Url;
 use app\modules\directory\widgets\SingletonRenderHelper;
+use app\modules\directory\helpers\ajaxJSONResponseHelper;
 
 yii\jui\JuiAsset::register($this);
 
@@ -68,14 +70,14 @@ yii\jui\JuiAsset::register($this);
                                     </td>
                                     <td>&nbsp;</td>
                                     <td class="directory-min-width">
-                                        <span id="waitQueryHierarchies" class="directory-hide-element">
+                                        <span id="waitQueryHierarchies<?=$uid?>" class="directory-hide-element">
                                             <nobr>
                                                 <img src="<?= directoryModule::getPublishImage('/wait.gif')?>">
                                                 <span><?= directoryModule::ht('search', 'processing request')?></span>
                                             </nobr>
                                         </span>
-                                        <div id="errorQueryHierarchies" class="directory-error-msg directory-hide-element"></div>
-                                        <div id="okQueryHierarchies" class="directory-ok-msg directory-hide-element"></div>
+                                        <div id="errorQueryHierarchies<?=$uid?>" class="directory-error-msg directory-hide-element"></div>
+                                        <div id="okQueryHierarchies<?=$uid?>" class="directory-ok-msg directory-hide-element"></div>
                                     </td>
                                 </tr>
                             </table>
@@ -87,19 +89,8 @@ yii\jui\JuiAsset::register($this);
     </tr>
     <tr>
         <td>
-            <div>
-                <?php 
-                $rootBranches = $hierarchy->getRootBranches()->all();
-                foreach ($rootBranches as $rootBranch) : 
-                    echo '<div>'.app\modules\directory\widgets\HierarchBranch::widget(
-                                ['branch'=>$rootBranch, 
-                                    'hierarchyID'=>$hierarchy->id,
-                                    'treeRootTag'=>'#tree-table-'.$uid,
-                                    'previevSelector'=>'#previev'.$uid, 
-                                    'branchTemplateSelector'=>'#branch-template-'.$uid,
-                                    'waitQueryItems'=>'#waitQueryHierarchyTreeSheets'.$uid,
-                                    'errorQueryItems'=>'#errorQueryHierarchyTreeSheets'.$uid]).'</div>';
-                endforeach; ?>
+            <div id="hierarchy-control-tree-<?=$uid?>">
+                <?=$this->render('hierarchy-tree', ['hierarchy' => $hierarchy, 'uid' => $uid])?>
             </div>
         </td>
         <td>
@@ -121,11 +112,30 @@ yii\jui\JuiAsset::register($this);
 <?php if(false) { ?><script type="text/javascript"><?php } ob_start(); ?>
     
     $("#createRootBranch<?=$uid?>").button({text : false}).click(function() {
-        
+        $.editBranchDialog(
+                {
+                    type : 'new',
+                    hierarchy : <?=$hierarchy->id?>,
+                    onSuccess : function() { $("#updateRootBranchTree<?=$uid?>").click(); }
+        });
     });
     
     $("#updateRootBranchTree<?=$uid?>").button({text : false}).click(function() {
-        
+        $.ajaxPostHelper({
+            url : ("<?=Url::toRoute(['/directory/edit/hierarchy', 'cmd' => 'uptate-hierarchy-tree', 'hierarchy'=>$hierarchy->id, 'uid'=>$uid])?>"),
+            data : null,
+            waitTag : "#waitQueryHierarchies<?=$uid?>",
+            errorTag : "#errorQueryHierarchies<?=$uid?>",
+            errorWaitTimeout : 5,
+            onSuccess : function(dataObject) {
+                if(dataObject !== undefined) {
+                    if(dataObject.<?=ajaxJSONResponseHelper::messageField?> !== undefined) {
+                        $("#hierarchy-control-tree-<?=$uid?>").html(dataObject.<?=ajaxJSONResponseHelper::messageField?>);
+                        $("#previev<?=$uid?>").html("");
+                    }
+                }
+            }
+        });
     });
     
 <?php $this->registerJs(ob_get_clean(), View::POS_READY, 'hierarchy-5548960005236'); if(false) { ?></script><?php } ?>

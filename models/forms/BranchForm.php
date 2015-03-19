@@ -1,6 +1,7 @@
 <?php
 
 namespace app\modules\directory\models\forms;
+use app\modules\directory\directoryModule;
 
 use yii\base\Model;
 

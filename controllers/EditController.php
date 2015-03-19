@@ -19,12 +19,17 @@ use app\modules\directory\models\forms\RecordDataItemForm;
 use app\modules\directory\models\forms\DirectoryForm;
 use app\modules\directory\models\forms\HierarchyForm;
 use app\modules\directory\models\forms\DirectoryItemForm;
+use app\modules\directory\models\forms\BranchForm;
 use app\modules\directory\models\db\Records;
 use app\modules\directory\models\db\RecordsData;
 use app\modules\directory\models\db\Directories;
 use app\modules\directory\models\db\RecordsDirectory;
 use app\modules\directory\models\db\Hierahies;
 use app\modules\directory\models\db\HierarchiesDirectory;
+use app\modules\directory\models\db\Branches;
+use app\modules\directory\models\db\BranchesBranches;
+use app\modules\directory\models\db\BranchesHierarchies;
+use app\modules\directory\models\db\RecordsBranches;
 
 class EditController extends Controller {
     public function __construct($id, $module, $config = array()) {
@@ -736,7 +741,80 @@ class EditController extends Controller {
 //        
         if(($cmd = \Yii::$app->request->get('cmd', false)) && \Yii::$app->request->isAjax) {
             \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
             switch (\Yii::$app->request->get('cmd', false)) {
+                case 'create-root-branch':
+                case 'create-child-branch':
+                    $form = new BranchForm;
+                    $form->attributes = \Yii::$app->request->post('BranchForm');
+                    
+                    if(!$form->validate()) {
+                        return ajaxJSONResponseHelper::createResponse(false, 
+                                modelErrorsToStringHelper::to($form->errors));
+                    }
+                    
+                    $transaction = \Yii::$app->db->beginTransaction();
+                    
+                    switch (\Yii::$app->request->get('cmd', false)) {
+                        case 'create-root-branch':
+                        case 'create-child-branch':
+                            if(!\Yii::$app->request->get('hierarchy', false)) {
+                                return ajaxJSONResponseHelper::createResponse(false, 
+                                        directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'hierarchy']));
+                            }
+                            
+                            try {
+                                $result = [];
+                                
+                                $new_branch = new Branches;
+                                $new_branch->name = $form->name;
+                                $new_branch->description = !empty($form->description) ? $form->description : null;
+                                if(!$new_branch->save()) {
+                                    return ajaxJSONResponseHelper::createResponse(false, 
+                                            directoryModule::ht('edit', 'Error saving branches in the database'));
+                                }
+                                
+                                $result['branch'] = $new_branch->attributes;
+                                
+                                if(\Yii::$app->request->get('cmd', false) == 'create-root-branch') {
+                                    $new_hierarachy_branch = new BranchesHierarchies;
+                                    $new_hierarachy_branch->branch_root_id = $new_branch->id;
+                                    $new_hierarachy_branch->position = $form->position;
+                                    $new_hierarachy_branch->hierarchy_id = \Yii::$app->request->get('hierarchy');
+                                    $new_hierarachy_branch->visible = boolSaveHelper::boolean2string((boolean)$form->visible);
+                                    if(!$new_hierarachy_branch->save()) {
+                                        return ajaxJSONResponseHelper::createResponse(false, 
+                                                directoryModule::ht('edit', 'Error saving links to the branch of the hierarchy in the database'));
+                                    }
+                                    
+                                    $result['hierarchy_link'] = $new_hierarachy_branch->attributes;
+                                }
+                                
+                                $transaction->commit();
+                            } catch (\Exception $ex) {
+                                $transaction->rollBack();
+                                return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                            }
+                            
+                            return ajaxJSONResponseHelper::createResponse(true, $result);
+                    }
+                    
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+                case 'uptate-hierarchy-tree':
+                    if(\Yii::$app->request->get('hierarchy', false)) {
+                        if(!\Yii::$app->request->get('uid', false)) {
+                            return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'uid']));
+                        }
+                        
+                        try {
+                            $hierarchy = Hierahies::find()->where('id=:id', [':id'=>\Yii::$app->request->get('hierarchy')])->one();
+                            return ajaxJSONResponseHelper::createResponse(true, $this->renderPartial('..\..\widgets\views\hierarchy-tree', ['hierarchy'=>$hierarchy, 'uid']));
+                        } catch (\Exception $ex) {
+                            return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
+                        }
+                    }
+                    
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'hierarchy']));
                 case 'get-child':
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
                 case 'get-records':

@@ -221,7 +221,7 @@ CREATE INDEX branches_t_name_index ON branches_t (name);
 CREATE TABLE branches_hierarhies_t
 (
     branch_root_id INTEGER NOT NULL REFERENCES branches_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-    hierarhy_id INTEGER NOT NULL REFERENCES hierarhies_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+    hierarchy_id INTEGER NOT NULL REFERENCES hierarhies_t (id) ON DELETE CASCADE ON UPDATE RESTRICT,
     position INTEGER DEFAULT 0,
     visible visible_type NOT NULL DEFAULT 'Y',
     PRIMARY KEY (branch_root_id, hierarhy_id)

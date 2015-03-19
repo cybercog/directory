@@ -77,4 +77,6 @@ return [
     'Create a new subsidiary branch'=> 'Создать новую дочернюю ветку',
     'Edit the selected branch'=> 'Редактировать выбранную ветку',
     'Delete the selected branch'=> 'Уадлить выбранную ветку',
+    'Error saving links to the branch of the hierarchy in the database'=>'Error saving links to the branch of the hierarchy in the database',
+    'Error saving branches in the database'=>'Ошибка сохранения ветки в базе данных',
 ];
