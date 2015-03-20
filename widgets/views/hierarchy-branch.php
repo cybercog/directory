@@ -84,7 +84,7 @@ $uid = mt_rand(0, mt_getrandmax());
     
     $("<?=$treeRootTag?>").on("click", ".directory-tree-node-pic-wrap", function() {
         $.ajaxPostHelper({
-            url : ("<?=Url::toRoute(['/directory/edit/hierarchy', 'cmd' => 'get-child', 'hierarchy' => $hierarchyID, 'branch'=>$uid])?>").replace("<?=$uid?>", $.parseJSON($(this).closest("td").find("textarea").text()).id),
+            url : ("<?=Url::toRoute(['/directory/edit/hierarchy', 'cmd' => 'get-child-branches', 'hierarchy' => $hierarchyID, 'branch'=>'branch'.$uid, 'uid'=>$uid])?>").replace("branch<?=$uid?>", $.parseJSON($(this).closest("td").find("textarea").text()).id),
             data : null,
             waitTag : $(this).closest("table").find("#waitQueryHierarchyTree"),
             errorTag : $(this).closest("table").find("#errorQueryHierarchyTree"),

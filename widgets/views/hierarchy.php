@@ -90,7 +90,18 @@ yii\jui\JuiAsset::register($this);
     <tr>
         <td>
             <div id="hierarchy-control-tree-<?=$uid?>">
-                <?=$this->render('hierarchy-tree', ['hierarchy' => $hierarchy, 'uid' => $uid])?>
+                <?php 
+                    $branches=$hierarchy->getRootBranches()->all();
+                    foreach ($branches as $rootBranch) : 
+                        echo '<div>'.app\modules\directory\widgets\HierarchBranch::widget(
+                                    ['branch'=>$rootBranch, 
+                                        'hierarchyID'=>$hierarchy->id,
+                                        'treeRootTag'=>'#tree-table-'.$uid,
+                                        'previevSelector'=>'#previev'.$uid, 
+                                        'branchTemplateSelector'=>'#branch-template-'.$uid,
+                                        'waitQueryItems'=>'#waitQueryHierarchyTreeSheets'.$uid,
+                                        'errorQueryItems'=>'#errorQueryHierarchyTreeSheets'.$uid]).'</div>';
+                    endforeach; ?>
             </div>
         </td>
         <td>

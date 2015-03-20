@@ -807,16 +807,46 @@ class EditController extends Controller {
                         }
                         
                         try {
-                            $hierarchy = Hierahies::find()->where('id=:id', [':id'=>\Yii::$app->request->get('hierarchy')])->one();
-                            return ajaxJSONResponseHelper::createResponse(true, $this->renderPartial('..\..\widgets\views\hierarchy-tree', ['hierarchy'=>$hierarchy, 'uid']));
+                            $branches = Branches::getHierarchyRootBranches(\Yii::$app->request->get('hierarchy'))->all();
+                            $uid = \Yii::$app->request->get('uid');
+                            $out = '';
+                            foreach ($branches as $branch) {
+                                $out.='<div>'.\app\modules\directory\widgets\HierarchBranch::widget(
+                                                    ['branch'=>$branch, 
+                                                        'hierarchyID'=>\Yii::$app->request->get('hierarchy'),
+                                                        'treeRootTag'=>'#tree-table-'.$uid,
+                                                        'previevSelector'=>'#previev'.$uid, 
+                                                        'branchTemplateSelector'=>'#branch-template-'.$uid,
+                                                        'waitQueryItems'=>'#waitQueryHierarchyTreeSheets'.$uid,
+                                                        'errorQueryItems'=>'#errorQueryHierarchyTreeSheets'.$uid]).'</div>';
+                            }
+                            
+                            return ajaxJSONResponseHelper::createResponse(true, $out);
+                            /*return ajaxJSONResponseHelper::createResponse(true, 
+                                    $this->renderPartial('..\..\widgets\views\hierarchy-tree', 
+                                            ['hierarchy_id'=>\Yii::$app->request->get('hierarchy'), 
+                                                'branches'=>Branches::getHierarchyRootBranches(\Yii::$app->request->get('hierarchy'))->all(), 
+                                                'uid'=>\Yii::$app->request->get('uid')]));*/
                         } catch (\Exception $ex) {
                             return ajaxJSONResponseHelper::createResponse(false, $ex->getMessage());
                         }
                     }
                     
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'hierarchy']));
-                case 'get-child':
-                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
+                case 'get-child-branches':
+                    if(\Yii::$app->request->get('hierarchy', false)) {
+                        if(!\Yii::$app->request->get('branch', false)) {
+                            return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'branch']));
+                        }
+                        
+                        if(!\Yii::$app->request->get('uid', false)) {
+                            return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'uid']));
+                        }
+                        
+                        return ajaxJSONResponseHelper::createResponse(true, Branches::getHierarchyChildBranches(\Yii::$app->request->get('branch'), \Yii::$app->request->get('hierarchy'))->asArray()->all());
+                    } 
+                    
+                    return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Do not pass parameters <{parameter}>.', ['parameter' => 'hierarchy']));
                 case 'get-records':
                     return ajaxJSONResponseHelper::createResponse(false, directoryModule::ht('search', 'Unknown command.'));
                 default:
